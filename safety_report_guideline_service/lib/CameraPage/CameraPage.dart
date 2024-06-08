@@ -4,6 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:media_scanner/media_scanner.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../CompletedForm/CompletedForm.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -53,6 +55,16 @@ class _CameraPageState extends State<CameraPage> {
       imagesList.add(file);
     });
     MediaScanner.loadMedia(path: file.path);
+
+    // 여기 바꾸는
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              CompletePage(),
+      )
+    );
+
   }
 
   void startCamera(int camera) {
@@ -73,6 +85,7 @@ class _CameraPageState extends State<CameraPage> {
   void initState() {
     super.initState();
     startCamera(selectedCameraIdx); // 0은 후면 카메라, 1은 전면 카메라
+    cameraToast();
   }
 
   @override
@@ -157,4 +170,17 @@ class _CameraPageState extends State<CameraPage> {
       ),
     );
   }
+}
+
+void cameraToast(){
+  Future.delayed(const Duration(seconds: 3), () {
+    Fluttertoast.showToast(
+      msg: '주변을 주시하세요.',
+      gravity: ToastGravity.TOP,
+      fontSize: 20,
+      backgroundColor: Colors.grey,
+      textColor: Colors.black,
+      toastLength: Toast.LENGTH_LONG,
+    );
+  });
 }
