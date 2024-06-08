@@ -1,29 +1,43 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
-class CircularTimer extends StatefulWidget {
-  const CircularTimer({super.key});
-
+class CameraTimerPage extends StatefulWidget {
   @override
-  _CircularTimerState createState() => _CircularTimerState();
+  _CameraTimerPageState createState() => _CameraTimerPageState();
 }
 
-class _CircularTimerState extends State<CircularTimer>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _CameraTimerPageState extends State<CameraTimerPage> {
+  int _timer = 60;
+  Timer? _countdownTimer;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 10),
-    );
-    _controller.forward();
+    _startCountdown();
+  }
+
+  void _startCountdown() {
+    _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_timer > 0) {
+        setState(() {
+          _timer--;
+        });
+      } else {
+        timer.cancel();
+        // 여기에 카메라 촬영 코드를 추가합니다.
+        _takePicture();
+      }
+    });
+  }
+
+  void _takePicture() {
+    // 카메라 촬영 로직을 여기에 추가합니다.
+    print('Picture taken!');
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _countdownTimer?.cancel();
     super.dispose();
   }
 
@@ -31,72 +45,96 @@ class _CircularTimerState extends State<CircularTimer>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Circular Timer'),
+        title: Text('Camera Timer'),
+        leading: Icon(Icons.menu),
       ),
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              painter: TimerPainter(
-                animation: _controller,
-                backgroundColor: Colors.grey,
-                color: Colors.blue,
-              ),
-              child: SizedBox(
-                width: 200.0,
-                height: 200.0,
-                child: Center(
-                  child: Text(
-                    '${(_controller.duration! * (1.0 - _controller.value)).inSeconds}s',
-                    style: const TextStyle(fontSize: 20.0),
+      body: Stack(
+        children: [
+          // 배경 이미지
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/main.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          // 타이머 표시
+          Center(
+            child: CircularProgressIndicatorWithText(
+              value: _timer / 10,
+              text: '$_timer',
+            ),
+          ),
+          // 하단의 원형 버튼
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.camera, size: 50.0),
+                    onPressed: () {
+                      setState(() {
+                        _timer = 10;
+                        _startCountdown();
+                      });
+                    },
                   ),
-                ),
+                  SizedBox(width: 20.0),
+                  IconButton(
+                    icon: Icon(Icons.refresh, size: 50.0),
+                    onPressed: () {
+                      setState(() {
+                        _timer = 10;
+                        _startCountdown();
+                      });
+                    },
+                  ),
+                ],
               ),
-            );
-          },
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class TimerPainter extends CustomPainter {
-  TimerPainter({
-    required this.animation,
-    required this.backgroundColor,
-    required this.color,
-  }) : super(repaint: animation);
+class CircularProgressIndicatorWithText extends StatelessWidget {
+  final double value;
+  final String text;
 
-  final Animation<double> animation;
-  final Color backgroundColor;
-  final Color color;
+  const CircularProgressIndicatorWithText({
+    Key? key,
+    required this.value,
+    required this.text,
+  }) : super(key: key);
 
   @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = backgroundColor
-      ..strokeWidth = 10.0
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke;
-
-    canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
-
-    paint.color = color;
-    double progress = (1.0 - animation.value) * 2 * 3.1415926535897932;
-    canvas.drawArc(
-      Offset.zero & size,
-      3.1415926535897932 * 1.5,
-      -progress,
-      false,
-      paint,
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        SizedBox(
+          width: 100,
+          height: 100,
+          child: CircularProgressIndicator(
+            value: value,
+            strokeWidth: 8.0,
+            backgroundColor: Colors.grey[300],
+            color: Colors.blue,
+          ),
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
-  }
-
-  @override
-  bool shouldRepaint(TimerPainter old) {
-    return animation.value != old.animation.value ||
-        color != old.color ||
-        backgroundColor != old.backgroundColor;
   }
 }

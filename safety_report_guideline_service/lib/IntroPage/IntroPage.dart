@@ -14,12 +14,13 @@ class IntroPage extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                MainScaffold(child: CameraPage(cameras: cameras))),
+                MainScaffold(child: CameraPage(cameras: cameras), title: '촬영',)),
       );
     });
 
-    return Scaffold(
-      body: Center(
+    return MainScaffold(
+      title: '시작화면',
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

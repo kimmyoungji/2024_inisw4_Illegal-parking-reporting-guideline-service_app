@@ -1,7 +1,14 @@
+import 'package:safety_report_guideline_service/CompletedForm/CompletedForm.dart';
+import 'package:safety_report_guideline_service/ReportForm/ReportForm.dart';
+
 import './IntroPage/IntroPage.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import './CommonWidget/MainScaffold.dart';
+import './AnalysisResult/AnalysisResult.dart';
+import './CommonWidget/MainScaffold.dart';
+import './CameraPage/Timer.dart';
+import './CameraPage/CameraPage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,11 +33,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: MainScaffold(
-        child: IntroPage(
-          cameras: cameras,
-        ),
-      ),
+
+      home: IntroPage(cameras: cameras),
+      // home: CameraPage(cameras: cameras),
+      // home: CameraTimerPage(),
+      // home: AnalysisResult(),
+      // home: ReportForm(),
+      // home: CompletedForm(),
+
     );
+
   }
 }
