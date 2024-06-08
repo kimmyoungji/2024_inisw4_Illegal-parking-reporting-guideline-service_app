@@ -18,17 +18,22 @@ class _CameraPageState extends State<CameraPage> {
   late Future<void> cameraValue;
   List<File> imagesList = [];
   String? reportType;
+  int selectedCameraIdx = 0;
   late Future<void> _initializeControllerFuture;
 
   Future<File> saveImage(XFile image) async {
-    final downlaodPath = await ExternalPath.getExternalStoragePublicDirectory(
+    final downloadPath = await ExternalPath.getExternalStoragePublicDirectory(
         ExternalPath.DIRECTORY_DOWNLOADS);
-    final fileName = '${DateTime.now().millisecondsSinceEpoch}.png';
-    final file = File('$downlaodPath/$fileName');
+    final fileName = '${DateTime
+        .now()
+        .millisecondsSinceEpoch}.png';
+    final file = File('$downloadPath/$fileName');
 
     try {
       await file.writeAsBytes(await image.readAsBytes());
-    } catch (_) {}
+    } catch (e) {
+      print("Error saving image: $e");
+    }
 
     return file;
   }
@@ -59,10 +64,15 @@ class _CameraPageState extends State<CameraPage> {
     cameraValue = cameraController.initialize();
   }
 
+  void switchCamera() {
+    selectedCameraIdx = selectedCameraIdx == 0 ? 1 : 0;
+    startCamera(selectedCameraIdx);
+  }
+
   @override
   void initState() {
-    startCamera(0); //0은 real camera, 1은 front camera
     super.initState();
+    startCamera(selectedCameraIdx); // 0은 후면 카메라, 1은 전면 카메라
   }
 
   @override
@@ -73,22 +83,13 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromRGBO(255, 255, 255, .7),
-        shape: const CircleBorder(),
-        onPressed: takePicture,
-        child: const Icon(
-          Icons.camera_alt,
-          size: 40,
-          color: Colors.black87,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Stack(
         children: [
-          FutureBuilder(
+          FutureBuilder<void>(
             future: cameraValue,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
@@ -98,7 +99,8 @@ class _CameraPageState extends State<CameraPage> {
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: SizedBox(
-                      width: 100,
+                      width: size.width,
+                      height: size.height,
                       child: CameraPreview(cameraController),
                     ),
                   ),
@@ -109,6 +111,47 @@ class _CameraPageState extends State<CameraPage> {
                 );
               }
             },
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: Colors.white,
+              height: 150,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Spacer(flex: 2),
+                  const SizedBox(
+                    width: 45,
+                  ), // 좌측에 빈 공간 생성
+                  const Spacer(flex: 3),
+                  Container(
+                    width: 80,
+                    height: 80,
+                    child: FloatingActionButton(
+                      backgroundColor: const Color(0xFF295FE5),
+                      shape: const CircleBorder(),
+                      onPressed: takePicture,
+                      child: const Icon(
+                        Icons.camera_alt,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const Spacer(flex: 3),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.switch_camera,
+                      color: Colors.black,
+                      size: 30,
+                    ),
+                    onPressed: switchCamera,
+                  ),
+                  const Spacer(flex: 2),
+                ],
+              ),
+            ),
           ),
         ],
       ),
