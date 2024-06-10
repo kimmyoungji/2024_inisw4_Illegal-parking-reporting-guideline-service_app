@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:safety_report_guideline_service/CommonWidget/MainScaffold.dart';
 
 class CameraTimerPage extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class _CameraTimerPageState extends State<CameraTimerPage> {
   }
 
   void _startCountdown() {
-    _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_timer > 0) {
         setState(() {
           _timer--;
@@ -43,12 +44,9 @@ class _CameraTimerPageState extends State<CameraTimerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Camera Timer'),
-        leading: Icon(Icons.menu),
-      ),
-      body: Stack(
+    return MainScaffold(
+      title: ' ',
+      child: Stack(
         children: [
           // 배경 이미지
           Positioned.fill(
@@ -73,7 +71,7 @@ class _CameraTimerPageState extends State<CameraTimerPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.camera, size: 50.0),
+                    icon: const Icon(Icons.camera, size: 50.0),
                     onPressed: () {
                       setState(() {
                         _timer = 10;
@@ -81,9 +79,9 @@ class _CameraTimerPageState extends State<CameraTimerPage> {
                       });
                     },
                   ),
-                  SizedBox(width: 20.0),
+                  const SizedBox(width: 20.0),
                   IconButton(
-                    icon: Icon(Icons.refresh, size: 50.0),
+                    icon: const Icon(Icons.refresh, size: 50.0),
                     onPressed: () {
                       setState(() {
                         _timer = 10;
@@ -128,7 +126,7 @@ class CircularProgressIndicatorWithText extends StatelessWidget {
         ),
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24.0,
             fontWeight: FontWeight.bold,
             color: Colors.white,

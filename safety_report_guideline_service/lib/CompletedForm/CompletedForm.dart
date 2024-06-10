@@ -5,19 +5,19 @@ class CompletedForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      title: '신고문 작성완료',
+      title: '신고문 작성 완료',
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '신고유형',
+            const Text(
+              '신고 유형',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text('횡단보도 불법주정차', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
+            const SizedBox(height: 8),
+            const Text('횡단보도 불법주정차', style: TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
@@ -32,8 +32,8 @@ class CompletedForm extends StatelessWidget {
                         left: 8,
                         child: Container(
                           color: Colors.black54,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(4.0),
                             child: Text(
                               '1차 촬영물',
                               style: TextStyle(
@@ -47,7 +47,7 @@ class CompletedForm extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Stack(
                     children: [
@@ -60,8 +60,8 @@ class CompletedForm extends StatelessWidget {
                         left: 8,
                         child: Container(
                           color: Colors.black54,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(4.0),
                             child: Text(
                               '2차 촬영물',
                               style: TextStyle(
@@ -77,31 +77,31 @@ class CompletedForm extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 16),
-            Text(
-              '발생지역',
+            const SizedBox(height: 16),
+            const Text(
+              '발생 지역',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 8),
+            const Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
+            const Text(
               '휴대전화',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text('010-9411-7238', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 8),
+            const Text('010-9411-7238', style: TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
+            const Text(
               '내용',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text(
-              '횡단보도 불법주정차 신고합니다. 같은 위치에 자주 불법 주정차를 하는 차량입니다.',
+            const SizedBox(height: 8),
+            const Text(
+              '횡단보도 불법 주정차 신고합니다. 같은 위치에 자주 불법 주정차를 하는 차량입니다.',
               style: TextStyle(fontSize: 16),
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               children: [
                 Expanded(
@@ -109,16 +109,16 @@ class CompletedForm extends StatelessWidget {
                     onPressed: () {
                       // 재촬영하기 버튼 누를 때 처리
                     },
-                    child: Text('재촬영하기'),
+                    child: const Text('재촬영하기'),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
                       // 신고하기 버튼 누를 때 처리
                     },
-                    child: Text('신고하기'),
+                    child: const Text('신고하기'),
                   ),
                 ),
               ],

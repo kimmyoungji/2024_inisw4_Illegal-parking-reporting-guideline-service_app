@@ -36,14 +36,15 @@ class _MainScaffoldState extends State<MainScaffold> {
           return AlertDialog(
             backgroundColor: Colors.white,
             alignment: Alignment.center,
-            title: Text(
-              "불법 주정차 신고 유형",
+            title: const Text(
+              "불법주정차 신고 유형",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
-            ), // 다이얼로그 제목
+            ), // 다이얼 로그 제목
             content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: List.generate(buttonLabels.length, (index){
@@ -52,27 +53,27 @@ class _MainScaffoldState extends State<MainScaffold> {
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.black,
-                            minimumSize: Size(300, 50)
+                            minimumSize: const Size(300, 50)
                         ),
                         onPressed: () {
                           print('${buttonLabels[index]} 버튼 클릭됨');
                         },
                         child: Text(
                             buttonLabels[index],
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white
                             )
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                     ],
                   );
                 })
-            ),// 다이얼로그 본문 내용
+            ),// 다이얼 로그 본문 내용
 
-            // actions. 사용자와 상호작용할 수 있도록 하는 역할
+            // actions. 사용자와 상호 작용할 수 있도록 하는 역할
           );
         }
     );
@@ -83,6 +84,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        centerTitle: true,
       ),
       drawer: Drawer(
         child: ListView(
@@ -113,7 +115,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                 height: 24.0,
               ),
               title: const Text(
-                '신고 유형 선택하기',
+                '신고 유형 선택 하기',
                 style: TextStyle(
                   color: Color(0xFF295FE5),
                 ),
@@ -121,7 +123,7 @@ class _MainScaffoldState extends State<MainScaffold> {
               selected: _isReportTypeSelected,
               selectedTileColor: Colors.grey[300],
               onTap: () {
-                print('신고유형 선택하기 선택됨'); // 신고 유형 선택하기 버튼 클릭 시 실행할 코드로 변경 필요
+                print('신고 유형 선택 하기 선택됨'); // 신고 유형 선택 하기 버튼 클릭 시 실행할 코드로 변경 필요
                 _showdial(context);
               },
             ),
