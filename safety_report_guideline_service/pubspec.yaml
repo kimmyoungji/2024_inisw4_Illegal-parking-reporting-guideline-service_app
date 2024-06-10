@@ -34,6 +34,10 @@ dependencies:
   gap: ^3.0.1
   external_path: ^1.0.3
   media_scanner: ^2.1.0
+  intl: ^0.17.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.3
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -43,6 +47,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.4.11
+  hive_generator: ^2.0.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -60,6 +66,8 @@ flutter:
     - assets/images/main.png
     - assets/images/widget logo.png
     - assets/images/report.png
+    - assets/images/Group 53.png
+    - assets/guideline/guideline.json
   fonts:
     - family: NotoSans
       fonts:

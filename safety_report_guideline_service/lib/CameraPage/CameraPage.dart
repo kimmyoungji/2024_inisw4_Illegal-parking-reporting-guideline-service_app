@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -24,6 +25,7 @@ class _CameraPageState extends State<CameraPage> {
   Future<File> saveImage(XFile image) async {
     final downloadPath = await ExternalPath.getExternalStoragePublicDirectory(
         ExternalPath.DIRECTORY_DOWNLOADS);
+    log('다운로드 경로: $downloadPath');
     final fileName = '${DateTime
         .now()
         .millisecondsSinceEpoch}.png';
