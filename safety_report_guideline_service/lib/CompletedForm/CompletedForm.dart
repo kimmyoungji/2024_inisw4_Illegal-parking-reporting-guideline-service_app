@@ -116,12 +116,6 @@ class _CompletePageState extends State<CompletePage> {
                 Row(
                   children: [
                     _buildLabelWithIcon('발생 지역', 'assets/images/logo.png'),
-                    OutlinedButton(
-                      onPressed: () {
-                        // 발생지역 변경 버튼 누를 때 처리
-                      },
-                      child: Text('변경'),
-                    ),
                   ],
                 ),
                 SizedBox(height: 8),
@@ -130,24 +124,22 @@ class _CompletePageState extends State<CompletePage> {
                 Row(
                   children: [
                     _buildLabelWithIcon('내용', 'assets/images/logo.png'),
-                    OutlinedButton(
-                      onPressed: () {
-                        // 내용 변경 버튼 누를 때 처리
-                      },
-                      child: Text('변경'),
-                    ),
                   ],
                 ),
                 SizedBox(height: 8),
-                Text(
-                  '${_prov.report_type.toString()} 불법주정차 신고합니다. 같은 위치에 자주 불법 주정차를 하는 차량입니다. 차량 번호 ${_prov.car_num.toString()}입니다.',
-                  style: TextStyle(fontSize: 16, color: Colors.blue,),
+                TextFormField(
+                  controller: TextEditingController(text: '${_prov.report_type.toString()} 불법주정차 신고합니다. 같은 위치에 자주 불법 주정차를 하는 차량입니다. 차량 번호 ${_prov.car_num.toString()}입니다.'),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
                 ),
                 SizedBox(height: 16),
                 _buildLabelWithIcon('휴대전화', 'assets/images/logo.png'),
                 SizedBox(height: 8),
                 TextFormField(
+                  controller: TextEditingController(text: '010'),
                   decoration: InputDecoration(
+                    border: OutlineInputBorder(),
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -188,13 +180,14 @@ class _CompletePageState extends State<CompletePage> {
                       child: ElevatedButton(
                         onPressed: checked_box?(){
                           // 신고하기 버튼 누를 때 처리
+                          //바로 화면 넘기기 ㅋ
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('신고하기 버튼이 눌렸습니다.'),
                             ),
                           );
                         }:null,
-                        child: Text('신고 하기'),
+                        child: Text('신고하기'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF295FE5), // 버튼 배경색
                           foregroundColor: Colors.white,

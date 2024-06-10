@@ -29,20 +29,8 @@ class Prov extends ChangeNotifier {
     }
   }
 
-  bool _check_backgroud= false;
-  bool get check_backgroud => _check_backgroud;
-
-  bool _check_object= true;
-  bool get check_object => _check_object;
-
-  bool _check_car_num= false;
-  bool get check_car_num => _check_car_num;
-
-  bool _check_1minute = true;
-  bool get check_1minute => _check_1minute;
-
-  bool _check_same_angle = false;
-  bool get check_same_angle => _check_same_angle;
+  List<bool> _check_result_list= [false, false, false, true];
+  List<bool> get check_result_list => _check_result_list;
 
   // 신고 유형: _report_type
   String _report_type = '소화전'; // 나중에 바꿔

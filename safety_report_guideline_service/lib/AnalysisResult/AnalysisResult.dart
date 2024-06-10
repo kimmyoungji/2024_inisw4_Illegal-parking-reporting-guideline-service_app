@@ -11,6 +11,8 @@ import '../CompletedForm/CompletedForm.dart';
 import '../ManageProvider.dart';
 import '../ReportTypeDialog/ReportTypeDialog.dart';
 
+
+
 class AnalysisResult extends StatelessWidget {
   final File imageFile;
   final List<CameraDescription> cameras;
@@ -22,15 +24,9 @@ class AnalysisResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _prov = Provider.of<Prov>(context);
-    List<bool> check_list = [
-      _prov.check_backgroud, //주변 배경
-      _prov.check_object,  //탐지
-      _prov.check_car_num, //차량번호
-      _prov.check_1minute, //1분 후
-      _prov.check_same_angle //같은 앵글
-    ];
-    int sum = check_list.fold(0, (prev, element) => element ? prev + 1 : prev);
-    double check_percent = sum/5;
+    List<bool> check_result_list = _prov.check_result_list;
+    int sum = check_result_list.fold(0, (prev, element) => element ? prev + 1 : prev);
+    double check_percent = sum/check_result_list.length;
 
     return Padding(
         padding: EdgeInsets.all(16.0),
@@ -55,11 +51,14 @@ class AnalysisResult extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  ElevatedButton(
-                    onPressed: () {
-                      _showdial(context);
-                    },
-                    child: Text('변경'),
+                  Visibility(
+                    visible: _prov.imagesList.length ==2 ? false : true,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _showdial(context);
+                        },
+                        child: Text('변경'),
+                      ),
                   ),
                 ],
               ),
@@ -91,11 +90,20 @@ class AnalysisResult extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16.0),
-              _buildChecklistItem('주변 배경이 사진에 잘 담김', check_list[0]),
-              _buildChecklistItem('${_prov.report_type.toString()}가 사진에 잘 나타남', check_list[1]),
-              _buildChecklistItem('차량 번호가 정확하게 나타남', check_list[2]),
-              _buildChecklistItem('1분 간격으로 2번 촬영하였음', check_list[3]),
-              _buildChecklistItem('두 사진이 동일한 각도에서 촬영됨', check_list[4]),
+              Column(
+                  children: List.generate(check_result_list.length, (index){
+                    return Column(
+                      children: [
+                        _buildChecklistItem('공룡abc', check_result_list[index]),
+                      ],
+                    );
+                  })
+              ),
+              // _buildChecklistItem('주변 배경이 사진에 잘 담김', check_result_list[0]),
+              // _buildChecklistItem('${_prov.report_type.toString()}가 사진에 잘 나타남', check_result_list[1]),
+              // _buildChecklistItem('차량 번호가 정확하게 나타남', check_result_list[2]),
+              // _buildChecklistItem('1분 간격으로 2번 촬영하였음', check_result_list[3]),
+              // _buildChecklistItem('두 사진이 동일한 각도에서 촬영됨', check_result_list[4]),
               SizedBox(height: 16.0),
               Row(
                 children: [
@@ -134,7 +142,7 @@ class AnalysisResult extends StatelessWidget {
                             ),
                           );
                           showDialog(
-                            barrierDismissible: false,
+                            barrierDismissible: true, // 나중에 false
                             context: context,
                             builder: (BuildContext context) {
                               return Dialog(
