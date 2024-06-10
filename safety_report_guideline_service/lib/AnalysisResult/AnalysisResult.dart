@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/CameraPage/CameraPage.dart';
 import 'package:safety_report_guideline_service/CameraPage/Timer.dart';
 import '../CommonWidget/MainScaffold.dart';
+import '../CompletedForm/CompletedForm.dart';
 import '../ManageProvider.dart';
 import '../ReportTypeDialog/ReportTypeDialog.dart';
 
@@ -30,9 +32,7 @@ class AnalysisResult extends StatelessWidget {
     int sum = check_list.fold(0, (prev, element) => element ? prev + 1 : prev);
     double check_percent = sum/5;
 
-    return MainScaffold(
-      title: '분석 결과',
-      child: Padding(
+    return Padding(
         padding: EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
@@ -75,18 +75,6 @@ class AnalysisResult extends StatelessWidget {
                           height: 300,
                           fit: BoxFit.cover,
                         ),
-                        Positioned(
-                          top: 8.0,
-                          left: 8.0,
-                          child: Text(
-                            '촬영 일시: ${DateTime.now()}',
-                            style: TextStyle(
-                              backgroundColor: Colors.white,
-                              color: Colors.black,
-                              fontSize: 12.0,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                     SizedBox(height: 16.0),
@@ -114,10 +102,12 @@ class AnalysisResult extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        _prov.pop_img();
+                        print(_prov.imagesList);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CameraPage(cameras: cameras),
+                              builder: (context) => MainScaffold(child: CameraPage(cameras: cameras), title: "촬영")
                           ),
                         );
                       },
@@ -128,13 +118,22 @@ class AnalysisResult extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CameraPage(cameras: cameras),
-                          ),
-                        );
-                        showDialog(
+                        if (_prov.imagesList.length ==2) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainScaffold(child:
+                                CompletePage(), title: '신고문 작성',)),
+                          );
+                        }
+                        else{
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainScaffold(child: CameraPage(cameras: cameras), title: "촬영")
+                            ),
+                          );
+                          showDialog(
                             barrierDismissible: false,
                             context: context,
                             builder: (BuildContext context) {
@@ -143,8 +142,9 @@ class AnalysisResult extends StatelessWidget {
                                 child: DialTimerScreen(),
                               );
                             },
+                          );
+                        }
 
-                        );
                       },
                       child: Text('계속하기'),
                     ),
@@ -154,7 +154,6 @@ class AnalysisResult extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 
@@ -181,3 +180,5 @@ Future<dynamic> _showdial(BuildContext context) {
       }
   );
 }
+
+

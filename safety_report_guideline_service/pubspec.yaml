@@ -39,6 +39,9 @@ dependencies:
   percent_indicator: ^4.2.2
   image: ^3.0.1
 
+  path_provider: ^2.0.2
+  image_picker: ^0.8.4+4
+  intl: ^0.17.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
@@ -64,6 +67,7 @@ flutter:
     - assets/images/main.png
     - assets/images/widget logo.png
     - assets/images/report.png
+    - assets/images/logo.png
   fonts:
     - family: NotoSans
       fonts:

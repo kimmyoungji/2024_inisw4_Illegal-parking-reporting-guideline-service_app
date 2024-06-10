@@ -39,24 +39,46 @@ class _DialTimerScreenState extends State<DialTimerScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Stack(
-        alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          CustomPaint(
-            painter: DialPainter(remainingTime / totalDuration),
-            child: Container(
-              width: 200,
-              height: 200,
+          SizedBox(height: 70), // 글자를 더 위로 올리기 위해 조절
+          Visibility(
+            visible: remainingTime > 0,
+            child: Text(
+              '60초 후에 재촬영 해주세요.',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
-          Text(
-            '$remainingTime',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+          SizedBox(height: 40), // 한글과 타이머 사이에 빈 박스 추가
+          Visibility(
+            visible: remainingTime > 0,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                CustomPaint(
+                  painter: DialPainter(remainingTime / totalDuration),
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                  ),
+                ),
+                Text(
+                  '$remainingTime',
+                  style: TextStyle(
+                    fontSize: 40, // 텍스트 크기 유지
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ),
+          Spacer(),
         ],
       ),
     );
@@ -71,7 +93,7 @@ class DialPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.blue.withOpacity(0.5)
+      ..color = Colors.white.withOpacity(0)
       ..style = PaintingStyle.fill;
 
     final center = Offset(size.width / 2, size.height / 2);
@@ -84,7 +106,7 @@ class DialPainter extends CustomPainter {
     final rect = Rect.fromCircle(center: center, radius: radius);
     final startAngle = -3.14 / 2; // 위쪽에서 시작
     final sweepAngle = -2 * 3.14 * fraction; // 오른쪽에서부터 반시계 방향으로 칠해지도록 음수로 설정
-    paint.color = Colors.white;
+    paint.color = Colors.blue;
 
     canvas.drawArc(rect, startAngle, sweepAngle, true, paint);
   }

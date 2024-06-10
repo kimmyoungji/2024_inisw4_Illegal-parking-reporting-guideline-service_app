@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 // late TestProv _TestProv;
@@ -8,6 +10,25 @@ import 'package:camera/camera.dart';
 
 
 class Prov extends ChangeNotifier {
+  // 진행 상태: 0(촬영 0번), 1(촬영 1번), 2(촬영 2번)  3(신고 완)
+  int _report_state = 0;
+
+  List<File> _imagesList = [];
+  List<File> get imagesList => _imagesList;
+
+  add_img(final file){
+    _imagesList.add(file);
+    if (_report_state == 0){
+
+    }
+  }
+
+  pop_img(){
+    if (_imagesList.isNotEmpty) {
+      _imagesList.removeLast();
+    }
+  }
+
   bool _check_backgroud= false;
   bool get check_backgroud => _check_backgroud;
 
@@ -55,14 +76,7 @@ class Prov extends ChangeNotifier {
     print('${_phone_num}으로 변경됨');
   }
 
-  // 진행 상태: 0(촬영 0번), 1(촬영 1번), 2(촬영 2번)  3(신고 완)
-  int report_state = 0;
 
-  check_state() {
-    if (report_state == 1) {
-
-    }
-  }
 }
 
 // Image img1 = Image(image: image);
