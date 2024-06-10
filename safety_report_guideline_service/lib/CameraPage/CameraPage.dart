@@ -4,8 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:media_scanner/media_scanner.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../CompletedForm/CompletedForm.dart';
+import 'package:safety_report_guideline_service/AnalysisResult/AnalysisResult.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -41,30 +40,33 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void takePicture() async {
-    XFile? image;
-
     if (cameraController.value.isTakingPicture ||
         !cameraController.value.isInitialized) {
       return;
     }
 
-    image = await cameraController.takePicture();
+    try {
+      DateTime captureTime = DateTime.now();
 
-    final file = await saveImage(image);
-    setState(() {
-      imagesList.add(file);
-    });
-    MediaScanner.loadMedia(path: file.path);
+      XFile image = await cameraController.takePicture();
+      final file = await saveImage(image);
+      setState(() {
+        imagesList.add(file);
+      });
+      MediaScanner.loadMedia(path: file.path);
 
-    // 여기 바꾸는
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>
-              CompletePage(),
-      )
-    );
-
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AnalysisResult(
+            imageFile: file,
+            cameras: widget.cameras,
+          ),
+        ),
+      );
+    } catch (e) {
+      print("Error taking picture: $e");
+    }
   }
 
   void startCamera(int camera) {
@@ -85,7 +87,6 @@ class _CameraPageState extends State<CameraPage> {
   void initState() {
     super.initState();
     startCamera(selectedCameraIdx); // 0은 후면 카메라, 1은 전면 카메라
-    cameraToast();
   }
 
   @override
@@ -131,13 +132,8 @@ class _CameraPageState extends State<CameraPage> {
               color: Colors.white,
               height: 150,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Spacer(flex: 2),
-                  const SizedBox(
-                    width: 45,
-                  ), // 좌측에 빈 공간 생성
-                  const Spacer(flex: 3),
                   Container(
                     width: 80,
                     height: 80,
@@ -152,16 +148,6 @@ class _CameraPageState extends State<CameraPage> {
                       ),
                     ),
                   ),
-                  const Spacer(flex: 3),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.switch_camera,
-                      color: Colors.black,
-                      size: 30,
-                    ),
-                    onPressed: switchCamera,
-                  ),
-                  const Spacer(flex: 2),
                 ],
               ),
             ),
@@ -170,17 +156,4 @@ class _CameraPageState extends State<CameraPage> {
       ),
     );
   }
-}
-
-void cameraToast(){
-  Future.delayed(const Duration(seconds: 3), () {
-    Fluttertoast.showToast(
-      msg: '주변을 주시하세요.',
-      gravity: ToastGravity.TOP,
-      fontSize: 20,
-      backgroundColor: Colors.grey,
-      textColor: Colors.black,
-      toastLength: Toast.LENGTH_LONG,
-    );
-  });
 }

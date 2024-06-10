@@ -27,21 +27,20 @@ class PhoneNumberFormatter extends TextInputFormatter {
   }
 }
 
-class CompletePage extends StatelessWidget {
+class CompletePage extends StatefulWidget {
+  @override
+  State<CompletePage> createState() => _CompletePageState();
+}
+
+class _CompletePageState extends State<CompletePage> {
+  bool checked_box = false;
+
   late Prov _prov;
+
   @override
   Widget build(BuildContext context) {
     _prov = Provider.of<Prov>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('신고문 작성'),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            // 메뉴 버튼 누를 때 처리
-          },
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -149,7 +148,6 @@ class CompletePage extends StatelessWidget {
               SizedBox(height: 8),
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'daf',
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
@@ -164,8 +162,12 @@ class CompletePage extends StatelessWidget {
                     width: 20,
                     height: 20,
                     child: Checkbox(
-                      value: false,
-                      onChanged: (checkValue) {},
+                      value: checked_box,
+                      onChanged: (value) {
+                        setState(() {
+                          checked_box = value!;
+                        });
+                      },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
@@ -184,9 +186,14 @@ class CompletePage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: checked_box?(){
                         // 신고하기 버튼 누를 때 처리
-                      },
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('신고하기 버튼이 눌렸습니다.'),
+                          ),
+                        );
+                      }:null,
                       child: Text('신고 하기'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF295FE5), // 버튼 배경색
@@ -199,7 +206,7 @@ class CompletePage extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      )
     );
   }
 

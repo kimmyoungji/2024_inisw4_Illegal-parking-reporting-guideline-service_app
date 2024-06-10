@@ -1,13 +1,39 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:safety_report_guideline_service/CameraPage/CameraPage.dart';
+import 'package:safety_report_guideline_service/CameraPage/Timer.dart';
 import '../CommonWidget/MainScaffold.dart';
+import '../ManageProvider.dart';
+import '../ReportTypeDialog/ReportTypeDialog.dart';
 
 class AnalysisResult extends StatelessWidget {
+  final File imageFile;
+  final List<CameraDescription> cameras;
+
+  AnalysisResult({super.key, required this.imageFile, required this.cameras});
+
+  late Prov _prov;
+
   @override
   Widget build(BuildContext context) {
+    _prov = Provider.of<Prov>(context);
+    List<bool> check_list = [
+      _prov.check_backgroud, //주변 배경
+      _prov.check_object,  //탐지
+      _prov.check_car_num, //차량번호
+      _prov.check_1minute, //1분 후
+      _prov.check_same_angle //같은 앵글
+    ];
+    int sum = check_list.fold(0, (prev, element) => element ? prev + 1 : prev);
+    double check_percent = sum/5;
+
     return MainScaffold(
       title: '분석 결과',
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -17,12 +43,12 @@ class AnalysisResult extends StatelessWidget {
                   Icon(Icons.report, color: Colors.orange),
                   SizedBox(width: 8.0),
                   Text(
-                    '신고유형:',
+                    '신고 유형:',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(width: 8.0),
                   Text(
-                    '횡단보도 불법주정차',
+                    _prov.report_type.toString(),
                     style: TextStyle(
                       color: Color(0xFF862633),
                       fontWeight: FontWeight.bold,
@@ -30,7 +56,9 @@ class AnalysisResult extends StatelessWidget {
                   ),
                   Spacer(),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _showdial(context);
+                    },
                     child: Text('변경'),
                   ),
                 ],
@@ -41,8 +69,8 @@ class AnalysisResult extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        Image.asset(
-                          'assets/images/main.png',
+                        Image.file(
+                          imageFile,
                           width: 300,
                           height: 300,
                           fit: BoxFit.cover,
@@ -51,7 +79,7 @@ class AnalysisResult extends StatelessWidget {
                           top: 8.0,
                           left: 8.0,
                           child: Text(
-                            '촬영일시: 2024/05/31 16:40:02',
+                            '촬영 일시: ${DateTime.now()}',
                             style: TextStyle(
                               backgroundColor: Colors.white,
                               color: Colors.black,
@@ -62,37 +90,62 @@ class AnalysisResult extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 16.0),
-                    Text('가이드라인 준수율'),
+                    Text('가이드 라인 준수율'),
                     SizedBox(height: 8.0),
                     LinearProgressIndicator(
-                      value: 0.68,
+                      value: check_percent,
                       backgroundColor: Colors.grey[300],
                       color: Colors.blue,
                     ),
                     SizedBox(height: 8.0),
-                    Text('68%'),
+                    Text('${check_percent*100}%'),
                   ],
                 ),
               ),
               SizedBox(height: 16.0),
-              _buildChecklistItem('주변 배경이 사진에 잘 담김', true),
-              _buildChecklistItem('횡단보도가 사진에 잘 나타남', true),
-              _buildChecklistItem('차량번호가 정확하게 나타남', true),
-              _buildChecklistItem('1분 간격으로 2번 촬영하였음', false),
-              _buildChecklistItem('두 사진이 동일한 각도에서 촬영됨', false),
+              _buildChecklistItem('주변 배경이 사진에 잘 담김', check_list[0]),
+              _buildChecklistItem('${_prov.report_type.toString()}가 사진에 잘 나타남', check_list[1]),
+              _buildChecklistItem('차량 번호가 정확하게 나타남', check_list[2]),
+              _buildChecklistItem('1분 간격으로 2번 촬영하였음', check_list[3]),
+              _buildChecklistItem('두 사진이 동일한 각도에서 촬영됨', check_list[4]),
               SizedBox(height: 16.0),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CameraPage(cameras: cameras),
+                          ),
+                        );
+                      },
                       child: Text('재촬영하기'),
                     ),
                   ),
                   SizedBox(width: 16.0),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CameraPage(cameras: cameras),
+                          ),
+                        );
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                backgroundColor: Colors.transparent,
+                                child: DialTimerScreen(),
+                              );
+                            },
+
+                        );
+                      },
                       child: Text('계속하기'),
                     ),
                   ),
@@ -117,4 +170,14 @@ class AnalysisResult extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<dynamic> _showdial(BuildContext context) {
+  return showDialog(
+      barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
+      context: context,
+      builder: (context) {
+        return Dial();
+      }
+  );
 }

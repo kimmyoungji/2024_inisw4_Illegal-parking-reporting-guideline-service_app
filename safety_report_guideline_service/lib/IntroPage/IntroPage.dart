@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../CameraPage/CameraPage.dart';
 import 'package:camera/camera.dart';
 import '../CommonWidget/MainScaffold.dart';
-
 class IntroPage extends StatelessWidget {
   final List<CameraDescription> cameras;
   const IntroPage({super.key, required this.cameras});

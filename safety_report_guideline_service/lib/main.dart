@@ -42,6 +42,8 @@ class MyApp extends StatelessWidget {
       ),
 
       home: IntroPage(cameras: cameras),
+      //DialTimerScreen(),
+      //IntroPage(cameras: cameras),
       // home: CameraPage(cameras: cameras),
       // home: CameraTimerPage(),
       // home: AnalysisResult(),
