@@ -4,6 +4,8 @@ import 'package:safety_report_guideline_service/ReportForm/ReportForm.dart';
 import './IntroPage/IntroPage.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:provider/provider.dart';
+import '../ManageProvider.dart';
 import './CommonWidget/MainScaffold.dart';
 import './AnalysisResult/AnalysisResult.dart';
 import './CommonWidget/MainScaffold.dart';
@@ -16,7 +18,12 @@ Future<void> main() async {
   // 사용 가능한 카메라 반환
   final cameras = await availableCameras();
   // 카메라 전달하기
-  runApp(MyApp(cameras: cameras));
+  runApp(
+      ChangeNotifierProvider(
+          create: (_) => Prov(),
+          child : MyApp(cameras: cameras)
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -35,6 +42,8 @@ class MyApp extends StatelessWidget {
       ),
 
       home: IntroPage(cameras: cameras),
+      //DialTimerScreen(),
+      //IntroPage(cameras: cameras),
       // home: CameraPage(cameras: cameras),
       // home: CameraTimerPage(),
       // home: AnalysisResult(),

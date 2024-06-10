@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/CameraPage/CameraPage.dart';
 import 'package:safety_report_guideline_service/CameraPage/Timer.dart';
 import '../CommonWidget/MainScaffold.dart';
+import '../ManageProvider.dart';
+import '../ReportTypeDialog/ReportTypeDialog.dart';
 
 class AnalysisResult extends StatefulWidget {
   final File imageFile;
@@ -22,6 +25,7 @@ class AnalysisResult extends StatefulWidget {
 
 class _AnalysisResultState extends State<AnalysisResult> {
   File? timestampedImage;
+  late Prov _prov;
 
   @override
   void initState() {
@@ -63,54 +67,24 @@ class _AnalysisResultState extends State<AnalysisResult> {
       barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
       context: context,
       builder: (context) {
-        List<String> buttonLabels = ['소화전', '교차로 모퉁이', '버스 정류소', '횡단보도', '어린이 보호구역', '인도'];
-
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          alignment: Alignment.center,
-          title: const Text(
-            "불법주정차 신고 유형",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ), // 다이얼 로그 제목
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(buttonLabels.length, (index) {
-              return Column(
-                children: [
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      minimumSize: const Size(300, 50),
-                    ),
-                    onPressed: () {
-                      print('${buttonLabels[index]} 버튼 클릭됨');
-                    },
-                    child: Text(
-                      buttonLabels[index],
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              );
-            }),
-          ), // 다이얼 로그 본문 내용
-        );
+        return Dial();
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    _prov = Provider.of<Prov>(context);
+    List<bool> check_list = [
+      _prov.check_backgroud, // 주변 배경
+      _prov.check_object, // 탐지
+      _prov.check_car_num, // 차량번호
+      _prov.check_1minute, // 1분 후
+      _prov.check_same_angle // 같은 앵글
+    ];
+    int sum = check_list.fold(0, (prev, element) => element ? prev + 1 : prev);
+    double check_percent = sum / 5;
+
     return FutureBuilder<File>(
       future: _addTimestamp(widget.imageFile), // 페이지 빌드 시마다 타임스탬프 추가
       builder: (context, snapshot) {
@@ -137,9 +111,9 @@ class _AnalysisResultState extends State<AnalysisResult> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 8.0),
-                        const Text(
-                          '횡단보도 불법주정차',
-                          style: TextStyle(
+                        Text(
+                          _prov.report_type.toString(),
+                          style: const TextStyle(
                             color: Color(0xFF862633),
                             fontWeight: FontWeight.bold,
                           ),
@@ -165,21 +139,21 @@ class _AnalysisResultState extends State<AnalysisResult> {
                           const Text('가이드 라인 준수율'),
                           const SizedBox(height: 8.0),
                           LinearProgressIndicator(
-                            value: 0.68,
+                            value: check_percent,
                             backgroundColor: Colors.grey[300],
                             color: Colors.blue,
                           ),
                           const SizedBox(height: 8.0),
-                          const Text('68%'),
+                          Text('${(check_percent * 100).toStringAsFixed(0)}%'),
                         ],
                       ),
                     ),
                     const SizedBox(height: 16.0),
-                    _buildChecklistItem('주변 배경이 사진에 잘 담김', true),
-                    _buildChecklistItem('횡단보도가 사진에 잘 나타남', true),
-                    _buildChecklistItem('차량 번호가 정확하게 나타남', true),
-                    _buildChecklistItem('1분 간격으로 2번 촬영하였음', false),
-                    _buildChecklistItem('두 사진이 동일한 각도에서 촬영됨', false),
+                    _buildChecklistItem('주변 배경이 사진에 잘 담김', check_list[0]),
+                    _buildChecklistItem('${_prov.report_type.toString()}가 사진에 잘 나타남', check_list[1]),
+                    _buildChecklistItem('차량 번호가 정확하게 나타남', check_list[2]),
+                    _buildChecklistItem('1분 간격으로 2번 촬영하였음', check_list[3]),
+                    _buildChecklistItem('두 사진이 동일한 각도에서 촬영됨', check_list[4]),
                     const SizedBox(height: 16.0),
                     Row(
                       children: [
@@ -203,8 +177,18 @@ class _AnalysisResultState extends State<AnalysisResult> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CameraTimerPage(),
+                                  builder: (context) => CameraPage(cameras: widget.cameras),
                                 ),
+                              );
+                              showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                    backgroundColor: Colors.transparent,
+                                    child: DialTimerScreen(),
+                                  );
+                                },
                               );
                             },
                             child: const Text('계속하기'),

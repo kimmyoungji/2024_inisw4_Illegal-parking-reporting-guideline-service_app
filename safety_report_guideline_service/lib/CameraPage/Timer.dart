@@ -1,96 +1,60 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:safety_report_guideline_service/CommonWidget/MainScaffold.dart';
+import 'package:flutter/material.dart';
 
-class CameraTimerPage extends StatefulWidget {
+class DialTimerScreen extends StatefulWidget {
   @override
-  _CameraTimerPageState createState() => _CameraTimerPageState();
+  _DialTimerScreenState createState() => _DialTimerScreenState();
 }
 
-class _CameraTimerPageState extends State<CameraTimerPage> {
-  int _timer = 60;
-  Timer? _countdownTimer;
+class _DialTimerScreenState extends State<DialTimerScreen> {
+  static const int totalDuration = 60; // 전체 시간 (초)
+  int remainingTime = totalDuration;
+  Timer? timer;
 
   @override
   void initState() {
     super.initState();
-    _startCountdown();
-  }
-
-  void _startCountdown() {
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_timer > 0) {
-        setState(() {
-          _timer--;
-        });
-      } else {
-        timer.cancel();
-        // 여기에 카메라 촬영 코드를 추가합니다.
-        _takePicture();
-      }
-    });
-  }
-
-  void _takePicture() {
-    // 카메라 촬영 로직을 여기에 추가합니다.
-    print('Picture taken!');
+    startTimer();
   }
 
   @override
   void dispose() {
-    _countdownTimer?.cancel();
+    timer?.cancel();
     super.dispose();
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (remainingTime > 0) {
+          remainingTime--;
+        } else {
+          timer.cancel(); // 끝내기
+          Navigator.of(context).pop();
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MainScaffold(
-      title: ' ',
+    return Center(
       child: Stack(
+        alignment: Alignment.center,
         children: [
-          // 배경 이미지
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/main.png',
-              fit: BoxFit.cover,
+          CustomPaint(
+            painter: DialPainter(remainingTime / totalDuration),
+            child: Container(
+              width: 200,
+              height: 200,
             ),
           ),
-          // 타이머 표시
-          Center(
-            child: CircularProgressIndicatorWithText(
-              value: _timer / 10,
-              text: '$_timer',
-            ),
-          ),
-          // 하단의 원형 버튼
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.camera, size: 50.0),
-                    onPressed: () {
-                      setState(() {
-                        _timer = 10;
-                        _startCountdown();
-                      });
-                    },
-                  ),
-                  const SizedBox(width: 20.0),
-                  IconButton(
-                    icon: const Icon(Icons.refresh, size: 50.0),
-                    onPressed: () {
-                      setState(() {
-                        _timer = 10;
-                        _startCountdown();
-                      });
-                    },
-                  ),
-                ],
-              ),
+          Text(
+            '$remainingTime',
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
         ],
@@ -99,40 +63,34 @@ class _CameraTimerPageState extends State<CameraTimerPage> {
   }
 }
 
-class CircularProgressIndicatorWithText extends StatelessWidget {
-  final double value;
-  final String text;
+class DialPainter extends CustomPainter {
+  final double fraction;
 
-  const CircularProgressIndicatorWithText({
-    Key? key,
-    required this.value,
-    required this.text,
-  }) : super(key: key);
+  DialPainter(this.fraction);
 
   @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        SizedBox(
-          width: 100,
-          height: 100,
-          child: CircularProgressIndicator(
-            value: value,
-            strokeWidth: 8.0,
-            backgroundColor: Colors.grey[300],
-            color: Colors.blue,
-          ),
-        ),
-        Text(
-          text,
-          style: const TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.blue.withOpacity(0.5)
+      ..style = PaintingStyle.fill;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.width / 2;
+
+    // 전체 배경 원
+    canvas.drawCircle(center, radius, paint);
+
+    // 오른쪽에서부터 칠해지도록 하는 원호
+    final rect = Rect.fromCircle(center: center, radius: radius);
+    final startAngle = -3.14 / 2; // 위쪽에서 시작
+    final sweepAngle = -2 * 3.14 * fraction; // 오른쪽에서부터 반시계 방향으로 칠해지도록 음수로 설정
+    paint.color = Colors.white;
+
+    canvas.drawArc(rect, startAngle, sweepAngle, true, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

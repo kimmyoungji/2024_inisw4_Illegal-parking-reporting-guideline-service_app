@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
@@ -76,11 +75,6 @@ class _CameraPageState extends State<CameraPage> {
       enableAudio: false,
     );
     cameraValue = cameraController.initialize();
-  }
-
-  void switchCamera() {
-    selectedCameraIdx = selectedCameraIdx == 0 ? 1 : 0;
-    startCamera(selectedCameraIdx);
   }
 
   @override
