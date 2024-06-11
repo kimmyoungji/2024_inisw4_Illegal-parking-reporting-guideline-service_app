@@ -56,8 +56,8 @@ Future<void> main() async {
   // 카메라 전달하기
   runApp(
       ChangeNotifierProvider(
-          create: (_) => Prov(),
-          child : MyApp(cameras: cameras)
+        create: (_) => Prov(),
+        child : MyApp(cameras: cameras)
       )
   );
 }

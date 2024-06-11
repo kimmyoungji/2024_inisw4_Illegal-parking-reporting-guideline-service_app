@@ -29,6 +29,9 @@ class Prov extends ChangeNotifier {
     }
   }
 
+  List<bool> _check_result_list= [false, false, false, true];
+  List<bool> get check_result_list => _check_result_list;
+
   bool _check_backgroud= false;
   bool get check_backgroud => _check_backgroud;
 
@@ -84,6 +87,4 @@ class Prov extends ChangeNotifier {
 // // 내용: _report_content
 // String _report_content = '${_report_type}신고합니다. 차량 번호 ${_car_num}입니다.';
 // String get report_content = _report_content;
-
-
 // 찍힌 이미지: _picture
