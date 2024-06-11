@@ -35,22 +35,46 @@ class AnalysisResult extends StatelessWidget {
 
   Future<dynamic> _showdial(BuildContext context) {
     return showDialog(
-        barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
+        barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
         context: context,
         builder: (context) {
           return Dial();
         });
   }
 
+  void _showImageDialog(BuildContext context, String imagePath) {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
+      builder: (context) {
+        return Dialog(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: FileImage(File(imagePath)),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _prov = Provider.of<Prov>(context);
     List<bool> check_list = [
-      _prov.check_backgroud, //주변 배경
-      _prov.check_object,  //탐지
-      _prov.check_car_num, //차량번호
-      _prov.check_1minute, //1분 후
-      _prov.check_same_angle //같은 앵글
+      _prov.check_backgroud, // 주변 배경
+      _prov.check_object,  // 탐지
+      _prov.check_car_num, // 차량번호
+      _prov.check_1minute, // 1분 후
+      _prov.check_same_angle // 같은 앵글
     ];
     int sum = check_list.fold(0, (prev, element) => element ? prev + 1 : prev);
     double check_percent = sum / 5;
@@ -95,11 +119,14 @@ class AnalysisResult extends StatelessWidget {
                     if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {
-                      return Image.file(
-                        snapshot.data!,
-                        width: 300,
-                        height: 300,
-                        fit: BoxFit.contain,
+                      return GestureDetector(
+                        onTap: () => _showImageDialog(context, snapshot.data!.path),
+                        child: Image.file(
+                          snapshot.data!,
+                          width: 300,
+                          height: 300,
+                          fit: BoxFit.contain,
+                        ),
                       );
                     }
                   } else {
