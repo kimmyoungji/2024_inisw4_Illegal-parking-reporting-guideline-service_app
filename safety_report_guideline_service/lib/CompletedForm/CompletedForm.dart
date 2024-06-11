@@ -1,9 +1,15 @@
+<<<<<<< Updated upstream
 
 import 'dart:io';
+=======
+import 'dart:io';
+import '../IntroOutroPage/OutroPage.dart';
+>>>>>>> Stashed changes
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:safety_report_guideline_service/IntroOutroPage/OutroPage.dart';
 import '../ManageProvider.dart';
 
 class PhoneNumberFormatter extends TextInputFormatter {
@@ -61,12 +67,17 @@ class _CompletePageState extends State<CompletePage> {
     super.dispose();
   }
 
+<<<<<<< Updated upstream
   void _showImageDialog(BuildContext context, String imagePath) {
+=======
+  void _showImageDialog(BuildContext context, File imageFile) {
+>>>>>>> Stashed changes
     showDialog(
       context: context,
       barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
       builder: (context) {
         return Dialog(
+<<<<<<< Updated upstream
           child: GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -79,6 +90,26 @@ class _CompletePageState extends State<CompletePage> {
                 ),
               ),
             ),
+=======
+          child:  Stack(
+            children: [
+              Image.file(imageFile),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ],
+>>>>>>> Stashed changes
           ),
         );
       },
@@ -105,7 +136,11 @@ class _CompletePageState extends State<CompletePage> {
                   children: [
                     Expanded(
                       child: GestureDetector(
+<<<<<<< Updated upstream
                         onTap: () => _showImageDialog(context, _prov.imagesList[0].path),
+=======
+                        onTap: () => _showImageDialog(context, _prov.imagesList[0]),
+>>>>>>> Stashed changes
                         child: Stack(
                           children: [
                             Image.file(
@@ -136,7 +171,11 @@ class _CompletePageState extends State<CompletePage> {
                     SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
+<<<<<<< Updated upstream
                         onTap: () => _showImageDialog(context, _prov.imagesList[1].path),
+=======
+                        onTap: () => _showImageDialog(context, _prov.imagesList[1]),
+>>>>>>> Stashed changes
                         child: Stack(
                           children: [
                             Image.file(
@@ -239,6 +278,11 @@ class _CompletePageState extends State<CompletePage> {
                             SnackBar(
                               content: Text('신고하기 버튼이 눌렸습니다.'),
                             ),
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OutroPage()),
                           );
                         }:null,
                         child: Text('신고하기'),

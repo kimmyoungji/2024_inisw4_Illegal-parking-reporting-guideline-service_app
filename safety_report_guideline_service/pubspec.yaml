@@ -34,6 +34,7 @@ dependencies:
   gap: ^3.0.1
   external_path: ^1.0.3
   media_scanner: ^2.1.0
+<<<<<<< Updated upstream
   provider: ^6.1.2
   circular_countdown_timer: ^0.2.3
   percent_indicator: ^4.2.2
@@ -47,13 +48,20 @@ dependencies:
   hive_flutter: ^1.1.0
   path_provider: ^2.1.3
 
+=======
+>>>>>>> Stashed changes
   path_provider: ^2.0.2
   image_picker: ^0.8.4+4
+  image: ^3.0.1
   intl: ^0.17.0
+  provider: ^6.0.4
+  fluttertoast: ^8.0.9
+  exif: ^3.0.1
+
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
-  fluttertoast: ^8.0.8
 
 dev_dependencies:
   flutter_test:
@@ -78,8 +86,12 @@ flutter:
     - assets/images/widget logo.png
     - assets/images/report.png
     - assets/images/logo.png
+<<<<<<< Updated upstream
     - assets/images/Group 53.png
     - assets/guideline/guideline.json
+=======
+    - assets/images/check.png
+>>>>>>> Stashed changes
   fonts:
     - family: NotoSans
       fonts:

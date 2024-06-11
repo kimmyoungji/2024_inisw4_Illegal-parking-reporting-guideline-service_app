@@ -172,7 +172,7 @@ class _CameraPageState extends State<CameraPage> {
               color: Colors.white,
               height: 150,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Spacer(flex: 3),
                   if (cameraProvider.imagesList.isNotEmpty)
@@ -248,17 +248,4 @@ class _CameraPageState extends State<CameraPage> {
       ),
     );
   }
-}
-
-void cameraToast(){
-  Future.delayed(const Duration(seconds: 3), () {
-    Fluttertoast.showToast(
-      msg: '주변을 주시하세요.',
-      gravity: ToastGravity.TOP,
-      fontSize: 20,
-      backgroundColor: Colors.grey,
-      textColor: Colors.black,
-      toastLength: Toast.LENGTH_LONG,
-    );
-  });
 }

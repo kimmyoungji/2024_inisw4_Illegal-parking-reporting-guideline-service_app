@@ -9,6 +9,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.1"
+<<<<<<< Updated upstream
   _fe_analyzer_shared:
     dependency: transitive
     description:
@@ -25,6 +26,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.4.1"
+=======
+>>>>>>> Stashed changes
   args:
     dependency: transitive
     description:
@@ -161,6 +164,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+<<<<<<< Updated upstream
   circular_countdown_timer:
     dependency: "direct main"
     description:
@@ -177,6 +181,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+=======
+>>>>>>> Stashed changes
   clock:
     dependency: transitive
     description:
@@ -241,6 +247,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+<<<<<<< Updated upstream
   dart_style:
     dependency: transitive
     description:
@@ -249,6 +256,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.6"
+=======
+>>>>>>> Stashed changes
   external_path:
     dependency: "direct main"
     description:
@@ -472,6 +481,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.0"
+<<<<<<< Updated upstream
   glob:
     dependency: transitive
     description:
@@ -552,6 +562,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.1"
+=======
+>>>>>>> Stashed changes
   json_annotation:
     dependency: transitive
     description:
@@ -712,14 +724,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
-  percent_indicator:
-    dependency: "direct main"
-    description:
-      name: percent_indicator
-      sha256: c37099ad833a883c9d71782321cb65c3a848c21b6939b6185f0ff6640d05814c
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.3"
   petitparser:
     dependency: transitive
     description:

@@ -4,6 +4,10 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
+<<<<<<< Updated upstream
+=======
+import './IntroOutroPage/IntroPage.dart';
+>>>>>>> Stashed changes
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
@@ -56,8 +60,8 @@ Future<void> main() async {
   // 카메라 전달하기
   runApp(
       ChangeNotifierProvider(
-        create: (_) => Prov(),
-        child : MyApp(cameras: cameras)
+          create: (_) => Prov(),
+          child : MyApp(cameras: cameras)
       )
   );
 }

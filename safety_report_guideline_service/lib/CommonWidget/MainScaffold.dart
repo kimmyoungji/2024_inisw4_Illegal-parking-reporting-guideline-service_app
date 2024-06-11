@@ -17,7 +17,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   String? reportType;
   late Future<void> _initializeControllerFuture;
 
-  bool _isReportTypeSelected = false;
+  //bool _isReportTypeSelected = false;
   bool _isExitSelected = false;
 
   void _quitApp(BuildContext context) {
@@ -28,15 +28,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     }
   }
 
-  Future<dynamic> _showdial(BuildContext context) {
-    return showDialog(
-        barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
-        context: context,
-        builder: (context) {
-          return Dial();
-        }
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,25 +59,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                 ],
               ),
             ),
-            ListTile(
-              leading: Image.asset(
-                'assets/images/report.png',
-                width: 24.0,
-                height: 24.0,
-              ),
-              title: const Text(
-                '신고 유형 선택하기',
-                style: TextStyle(
-                  color: Color(0xFF295FE5),
-                ),
-              ),
-              selected: _isReportTypeSelected,
-              selectedTileColor: Colors.grey[300],
-              onTap: () {
-                print('신고유형 선택하기 선택됨'); // 신고 유형 선택하기 버튼 클릭 시 실행할 코드로 변경 필요
-                _showdial(context);
-              },
-            ),
+
             ListTile(
               leading: const Icon(
                 Icons.exit_to_app,
