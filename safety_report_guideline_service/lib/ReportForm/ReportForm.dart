@@ -205,7 +205,6 @@ class _ReportFormState extends State<ReportForm> {
       ),
     );
   }
-
   Widget _buildLabel(String text) {
     return Text(
       text,

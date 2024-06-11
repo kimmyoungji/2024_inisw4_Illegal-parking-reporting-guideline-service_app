@@ -41,7 +41,6 @@ class _DialState extends State<Dial>{
               children: [
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
-
                       backgroundColor: _prov.report_type.toString()== buttonLabels[index]
                           ? Colors.blue
                           : Colors.black,
