@@ -33,9 +33,7 @@ class _CameraPageState extends State<CameraPage> {
   Future<File> saveImage(XFile ximage) async {
     final downloadPath = await ExternalPath.getExternalStoragePublicDirectory(
         ExternalPath.DIRECTORY_DOWNLOADS);
-    final fileName = '${DateTime
-        .now()
-        .millisecondsSinceEpoch}.png';
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}.png';
     final file = File('$downloadPath/$fileName');
 
     final bytes = await ximage.readAsBytes();
@@ -61,7 +59,7 @@ class _CameraPageState extends State<CameraPage> {
     return file;
   }
 
-  void cameraToast(){
+  void cameraToast() {
     Future.delayed(const Duration(seconds: 3), () {
       Fluttertoast.showToast(
         msg: '주변을 주시하세요.',
@@ -95,16 +93,23 @@ class _CameraPageState extends State<CameraPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => MainScaffold(child:
-            AnalysisResult(
-              // 마지막 파일
-              imageFile: file,
-              cameras: widget.cameras,)
-              , title: '분석 결과',)),
+            builder: (context) => MainScaffold(
+              child: AnalysisResult(
+                // 마지막 파일
+                imageFile: file,
+                cameras: widget.cameras,
+              ),
+              title: '분석 결과',
+            )),
       );
     } catch (e) {
       print("Error taking picture: $e");
     }
+  }
+
+  void switchCamera() {
+    selectedCameraIdx = (selectedCameraIdx + 1) % widget.cameras.length;
+    startCamera(selectedCameraIdx);
   }
 
   void startCamera(int camera) {
@@ -131,9 +136,9 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery
-        .of(context)
-        .size;
+    final size = MediaQuery.of(context).size;
+    final cameraProvider = Provider.of<Prov>(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -166,8 +171,57 @@ class _CameraPageState extends State<CameraPage> {
               color: Colors.white,
               height: 150,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  const Spacer(flex: 3),
+                  if (cameraProvider.imagesList.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        showGeneralDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          barrierLabel: MaterialLocalizations.of(context)
+                              .modalBarrierDismissLabel,
+                          pageBuilder: (context, _, __) {
+                            return Center(
+                              child: Stack(
+                                children: [
+                                  Image.file(cameraProvider.imagesList.first),
+                                  Positioned(
+                                    top: 10,
+                                    right: 10,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: 55,
+                        height: 55,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(cameraProvider.imagesList.first),
+                            fit: BoxFit.cover,
+                          ),
+                          color: Colors.grey,
+                        ),
+                      ),
+                    )
+                  else
+                    const SizedBox(width: 60, height: 60), // 빈 공간 생성
+                  const Spacer(flex: 3),
                   Container(
                     width: 80,
                     height: 80,
@@ -182,6 +236,9 @@ class _CameraPageState extends State<CameraPage> {
                       ),
                     ),
                   ),
+                  const Spacer(flex: 3),
+                  const SizedBox(width: 55, height: 55),
+                  const Spacer(flex: 3),
                 ],
               ),
             ),

@@ -1,7 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/CommonWidget/MainScaffold.dart';
+import '../ManageProvider.dart';
 
 class PhoneNumberFormatter extends TextInputFormatter {
   @override
@@ -32,6 +34,8 @@ class ReportForm extends StatefulWidget {
 }
 
 class _ReportFormState extends State<ReportForm> {
+  late Prov cameraProvider;
+
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
@@ -54,8 +58,41 @@ class _ReportFormState extends State<ReportForm> {
     super.dispose();
   }
 
+  void _showImageDialog(BuildContext context, File imageFile) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      pageBuilder: (context, _, __) {
+        return Center(
+          child: Stack(
+            children: [
+              Image.file(imageFile),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.black,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final cameraProvider = Provider.of<Prov>(context);
+
     return MainScaffold(
       title: '신고문 작성',
       child: Padding(
@@ -76,16 +113,28 @@ class _ReportFormState extends State<ReportForm> {
             _buildLabel('사진'),
             Row(
               children: [
-                Image.asset(
-                  'assets/images/main.png',
-                  width: 100,
-                  height: 100,
+                GestureDetector(
+                  onTap: () {
+                    _showImageDialog(context, cameraProvider.imagesList[0]);
+                  },
+                  child: Image.file(
+                    cameraProvider.imagesList[0],
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(width: 8.0),
-                Image.asset(
-                  'assets/images/main.png',
-                  width: 100,
-                  height: 100,
+                GestureDetector(
+                  onTap: () {
+                    _showImageDialog(context, cameraProvider.imagesList[0]);
+                  },
+                  child: Image.file(
+                    cameraProvider.imagesList[1],
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ],
             ),
@@ -101,11 +150,12 @@ class _ReportFormState extends State<ReportForm> {
             ),
             const SizedBox(height: 16.0),
             _buildLabel('내용'),
-            const TextField(
-              maxLines: 3,
+            TextField(
+              maxLines: 5,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
               ),
+              keyboardType: TextInputType.multiline,
             ),
             const SizedBox(height: 16.0),
             _buildLabel('휴대전화'),

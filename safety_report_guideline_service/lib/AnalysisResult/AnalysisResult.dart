@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/CameraPage/CameraPage.dart';
 import 'package:safety_report_guideline_service/CameraPage/Timer.dart';
 import 'package:safety_report_guideline_service/CompletedForm/CompletedForm.dart';
-import 'package:image/image.dart' as img;
 import '../CommonWidget/MainScaffold.dart';
 import '../ManageProvider.dart';
 import '../ReportTypeDialog/ReportTypeDialog.dart';
@@ -18,20 +17,6 @@ class AnalysisResult extends StatelessWidget {
   AnalysisResult({super.key, required this.imageFile, required this.cameras});
 
   late Prov _prov;
-
-  Future<File> _fixImageOrientation(File imageFile) async {
-    final bytes = await imageFile.readAsBytes();
-    img.Image? image = img.decodeImage(bytes);
-
-    // 이미지의 방향을 올바르게 수정
-    if (image != null) {
-      img.Image orientedImage = img.bakeOrientation(image);
-      // 수정된 이미지를 파일로 저장
-      final rotatedImageFile = File(imageFile.path)..writeAsBytesSync(img.encodeJpg(orientedImage));
-      return rotatedImageFile;
-    }
-    return imageFile;
-  }
 
   Future<dynamic> _showdial(BuildContext context) {
     return showDialog(
@@ -112,27 +97,14 @@ class AnalysisResult extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
             Center(
-              child: FutureBuilder<File>(
-                future: _fixImageOrientation(imageFile),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      return GestureDetector(
-                        onTap: () => _showImageDialog(context, snapshot.data!.path),
-                        child: Image.file(
-                          snapshot.data!,
-                          width: 300,
-                          height: 300,
-                          fit: BoxFit.contain,
-                        ),
-                      );
-                    }
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
+              child: GestureDetector(
+                onTap: () => _showImageDialog(context, imageFile.path),
+                child: Image.file(
+                  imageFile,
+                  width: 300,
+                  height: 300,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             SizedBox(height: 16.0),
