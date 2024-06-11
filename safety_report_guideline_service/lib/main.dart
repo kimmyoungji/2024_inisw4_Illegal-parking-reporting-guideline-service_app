@@ -6,10 +6,20 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+
+import 'package:provider/provider.dart';
+import '../ManageProvider.dart';
+import './CommonWidget/MainScaffold.dart';
+import './AnalysisResult/AnalysisResult.dart';
+import './CommonWidget/MainScaffold.dart';
+import './CameraPage/Timer.dart';
+import './CameraPage/CameraPage.dart';
+
 import 'package:safety_report_guideline_service/util/check_list.dart';
 import 'package:safety_report_guideline_service/util/common_check_list.dart';
 import 'package:safety_report_guideline_service/util/hive_util.dart';
 import './util/check_list.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +54,12 @@ Future<void> main() async {
 
 
   // 카메라 전달하기
-  runApp(MyApp(cameras: cameras));
+  runApp(
+      ChangeNotifierProvider(
+          create: (_) => Prov(),
+          child : MyApp(cameras: cameras)
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -61,8 +76,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-
-      // home: IntroPage(cameras: cameras),
+      home: IntroPage(cameras: cameras),
+      //DialTimerScreen(),
+      //IntroPage(cameras: cameras),
       // home: CameraPage(cameras: cameras),
       // home: CameraTimerPage(),
       // home: AnalysisResult(),
