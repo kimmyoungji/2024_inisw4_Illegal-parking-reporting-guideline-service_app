@@ -153,40 +153,6 @@ class AnalysisResult extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 16.0),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_prov.imagesList.length == 2) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MainScaffold(
-                                child: CompletePage(),
-                                title: '신고문 작성',
-                              )),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MainScaffold(child: CameraPage(cameras: cameras), title: "촬영")),
-                        );
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              backgroundColor: Colors.transparent,
-                              child: DialTimerScreen(),
-                            );
-                          },
-                        );
-                      }
-                    },
-                    child: Text('계속하기'),
-                  ),
-<<<<<<< Updated upstream
-                  SizedBox(width: 16.0),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -221,9 +187,6 @@ class AnalysisResult extends StatelessWidget {
                       child: Text('계속하기'),
                     ),
                   ),
-=======
->>>>>>> Stashed changes
-                ),
               ],
             ),
           ],

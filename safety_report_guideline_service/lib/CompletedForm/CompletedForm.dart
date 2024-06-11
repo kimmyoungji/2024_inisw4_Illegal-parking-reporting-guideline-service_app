@@ -1,10 +1,7 @@
-<<<<<<< Updated upstream
+
 
 import 'dart:io';
-=======
-import 'dart:io';
 import '../IntroOutroPage/OutroPage.dart';
->>>>>>> Stashed changes
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,30 +64,12 @@ class _CompletePageState extends State<CompletePage> {
     super.dispose();
   }
 
-<<<<<<< Updated upstream
-  void _showImageDialog(BuildContext context, String imagePath) {
-=======
   void _showImageDialog(BuildContext context, File imageFile) {
->>>>>>> Stashed changes
     showDialog(
       context: context,
       barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
       builder: (context) {
         return Dialog(
-<<<<<<< Updated upstream
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: FileImage(File(imagePath)),
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-=======
           child:  Stack(
             children: [
               Image.file(imageFile),
@@ -109,7 +88,6 @@ class _CompletePageState extends State<CompletePage> {
                 ),
               ),
             ],
->>>>>>> Stashed changes
           ),
         );
       },
@@ -136,11 +114,8 @@ class _CompletePageState extends State<CompletePage> {
                   children: [
                     Expanded(
                       child: GestureDetector(
-<<<<<<< Updated upstream
-                        onTap: () => _showImageDialog(context, _prov.imagesList[0].path),
-=======
                         onTap: () => _showImageDialog(context, _prov.imagesList[0]),
->>>>>>> Stashed changes
+
                         child: Stack(
                           children: [
                             Image.file(
@@ -171,11 +146,7 @@ class _CompletePageState extends State<CompletePage> {
                     SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
-<<<<<<< Updated upstream
-                        onTap: () => _showImageDialog(context, _prov.imagesList[1].path),
-=======
-                        onTap: () => _showImageDialog(context, _prov.imagesList[1]),
->>>>>>> Stashed changes
+                    onTap: () => _showImageDialog(context, _prov.imagesList[1]),
                         child: Stack(
                           children: [
                             Image.file(

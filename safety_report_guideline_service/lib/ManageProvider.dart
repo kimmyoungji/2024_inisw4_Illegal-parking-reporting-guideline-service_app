@@ -87,8 +87,4 @@ class Prov extends ChangeNotifier {
 // // 내용: _report_content
 // String _report_content = '${_report_type}신고합니다. 차량 번호 ${_car_num}입니다.';
 // String get report_content = _report_content;
-<<<<<<< Updated upstream
-// 찍힌 이미지: _picture
-=======
-// 찍힌 이미지: _picture
->>>>>>> Stashed changes
+

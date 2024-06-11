@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 import 'package:flutter/material.dart';
 import '../CameraPage/CameraPage.dart';
 import 'package:camera/camera.dart';
@@ -54,6 +54,4 @@ class IntroPage extends StatelessWidget {
     );
   }
 }
-=======
-// TODO Implement this library.
->>>>>>> Stashed changes
+
