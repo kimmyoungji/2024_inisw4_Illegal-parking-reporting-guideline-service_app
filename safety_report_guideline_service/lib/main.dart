@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:safety_report_guideline_service/util/check_list.dart';
+import 'package:safety_report_guideline_service/util/common_check_list.dart';
 import 'package:safety_report_guideline_service/util/hive_util.dart';
 import './util/check_list.dart';
 
@@ -33,6 +34,14 @@ Future<void> main() async {
   for( var r in result ){
     log(r.toString());
   }
+  CommonCheckList commonCheckList = CommonCheckList();
+  await commonCheckList.setBox(box);
+  await commonCheckList.initialize();
+  List<dynamic> result2 = commonCheckList.checkObject([TargetObject.car, TargetObject.motorcycle, TargetObject.number_plate]);
+  for( var r in result2 ){
+    log(r.toString());
+  }
+
 
   // 카메라 전달하기
   runApp(MyApp(cameras: cameras));

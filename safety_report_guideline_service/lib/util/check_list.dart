@@ -29,7 +29,7 @@ class CheckList {
           return str2TargetObj(key);
         }).toList();
 
-      return CheckItem(
+      return ObjectCheckItem(
         targetObjects: targets,
         checkItemStr: entry.value,
         value: false
@@ -38,7 +38,7 @@ class CheckList {
   }
 
   List<dynamic> checkObject(List<TargetObject> labels){
-    for( CheckItem checkItem in objectCheckList ){
+    for( ObjectCheckItem checkItem in objectCheckList ){
       for( TargetObject targetObject in checkItem.targetObjects ){
         if( labels.contains(targetObject) ){
           checkItem.value = true;
@@ -50,22 +50,29 @@ class CheckList {
   }
 }
 
-List<dynamic> check1min2(){}
-List<dynamic> checkAngle(){}
-List<dynamic> checkBackground(){}
-List<dynamic> checkTime(){}
-List<dynamic> checkLocation(){}
-
-class CheckItem{
+class ObjectCheckItem{
   final List<dynamic> targetObjects;
   final String checkItemStr;
   late bool value;
 
-  CheckItem({required this.targetObjects, required this.checkItemStr, required this.value});
+  ObjectCheckItem({required this.targetObjects, required this.checkItemStr, required this.value});
 
   @override
   String toString() {
     return 'CheckItem(targetObjects: $targetObjects, checkItemStr: $checkItemStr, value: $value)';
+  }
+}
+
+class GeneralCheckItem{
+  late String key;
+  late String checkItemStr;
+  late bool value;
+
+  GeneralCheckItem({required this.key, required this.checkItemStr, required this.value});
+
+  @override
+  String toString() {
+    return 'CheckItem(targetObjects: $key, checkItemStr: $checkItemStr, value: $value)';
   }
 }
 
