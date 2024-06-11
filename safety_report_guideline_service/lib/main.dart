@@ -6,9 +6,9 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:safety_report_guideline_service/util/guideline.dart';
+import 'package:safety_report_guideline_service/util/check_list.dart';
 import 'package:safety_report_guideline_service/util/hive_util.dart';
-import './util/guideline.dart';
+import './util/check_list.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,12 +23,16 @@ Future<void> main() async {
   await HiveUtils.initHive();
   // var tempBox = await HiveUtils.openBox('guideline');
   // await tempBox.deleteAll(tempBox.keys.toList());
-  await HiveUtils.initJsonData('assets/guideline/guideline.json');
+  await HiveUtils.initJsonData('guideline','assets/guideline/guideline.json');
   final box = await HiveUtils.openBox('guideline');
+
   CheckList checkList =  CheckList();
   await checkList.setBox(box);
-  await checkList.initialize(ReportType.fire_hydrant);
-
+  await checkList.initialize(ReportType.common);
+  List<dynamic> result = checkList.checkObject([TargetObject.number_plate, TargetObject.motorcycle]);
+  for( var r in result ){
+    log(r.toString());
+  }
 
   // 카메라 전달하기
   runApp(MyApp(cameras: cameras));

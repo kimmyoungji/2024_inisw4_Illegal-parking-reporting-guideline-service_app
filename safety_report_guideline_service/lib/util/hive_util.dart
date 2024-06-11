@@ -11,9 +11,9 @@ class HiveUtils {
     Hive.init(appDocumentDir.path);
   }
 
-  static Future<void> initJsonData(String jsonPath) async {
+  static Future<void> initJsonData(String boxName,String jsonPath) async {
     // Open the Hive box
-    final box = await Hive.openBox('guideline');
+    final box = await Hive.openBox(boxName);
 
     // Check if this is the first run
     bool isFirstRun = box.get('isFirstRun', defaultValue: true);
