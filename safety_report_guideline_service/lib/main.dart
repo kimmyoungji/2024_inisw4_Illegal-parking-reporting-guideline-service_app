@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:safety_report_guideline_service/util/guideline.dart';
 import 'package:safety_report_guideline_service/util/hive_util.dart';
+import './util/guideline.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,10 +21,14 @@ Future<void> main() async {
 
   // hive 초기화
   await HiveUtils.initHive();
+  // var tempBox = await HiveUtils.openBox('guideline');
+  // await tempBox.deleteAll(tempBox.keys.toList());
   await HiveUtils.initJsonData('assets/guideline/guideline.json');
   final box = await HiveUtils.openBox('guideline');
-  Guidelines guidelines =  Guidelines();
-  await guidelines.initialize(ReportType.fire_hydrant, box);
+  CheckList checkList =  CheckList();
+  await checkList.setBox(box);
+  await checkList.initialize(ReportType.fire_hydrant);
+
 
   // 카메라 전달하기
   runApp(MyApp(cameras: cameras));

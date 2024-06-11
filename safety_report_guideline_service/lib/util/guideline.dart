@@ -1,25 +1,36 @@
 import 'dart:developer';
 import 'package:hive/hive.dart';
 
-class Guidelines {
-  static final Guidelines _instance = Guidelines._internal();
-  late CheckItems checkItems;
+class CheckList {
+  static final CheckList _instance = CheckList._internal();
+  late ReportType _reportType;
+  late List<dynamic> objectCheckList;
+  late List<dynamic> generalCheckList;
+  late Box<dynamic> box;
 
   // Private constructor
-  Guidelines._internal();
+  CheckList._internal();
 
   // Factory constructor to return the same instance
-  factory Guidelines() {
+  factory CheckList() {
     return _instance;
   }
 
-  Future<void> initialize(ReportType reportType, Box<dynamic> box) async {
+  // Method to set the box instance
+  Future<void> setBox(Box<dynamic> newBox) async {
+    box = await newBox;
+  }
+
+  Future<void> initialize(ReportType reportType) async {
+    _reportType = reportType;
     var jsonData = await box.get(reportType.toString().split('.')[1]);
-    log('${jsonData}');
-    this.checkItems = CheckItems(objectDetection: jsonData['check_items']['object_detection'], generalChecks: jsonData['check_items']['general_checks']);
+    log(jsonData['check_items']['object_checks'].toString());
   }
 }
 
+class CheckItem{
+  final List<IPObject>
+}
 
 enum ReportType {
   common,
@@ -31,39 +42,25 @@ enum ReportType {
   sidewalk,
 }
 
-enum Objects {
+// IP = Illeagle Parking
+enum IPObject {
   fire_hydrant,
   car,
   truck,
   stop,
   motorcycle,
-  object_402,
-  object_403,
-  object_426,
-  object_412,
-  object_432,
-  object_389,
-  object_391,
+  object_402,  // 402: 속도제한 어린이 보호 구역
+  object_403,  // 403: 어린이 보호 구역
+  object_426,  // 426: 자전거 전용 도로
+  object_412,  // 412: 횡단보도
+  object_432,  // 432: 정차금지지대
+  object_389,  // 389: 주차금지(노면)
+  object_391,  // 391: 정차주차금지516-2 := 황색복선
   traffic_lane_yellow_solid,
   school_zone,
-  no_parking
+  no_parking,
+
+  number_plate,
+  side_walk,
+  road,
 }
-
-// CheckItems class
-class CheckItems {
-  final List<dynamic> objectDetection;
-  final List<dynamic> generalChecks;
-
-  CheckItems({required this.objectDetection, required this.generalChecks});
-
-  factory CheckItems.fromJson(Map<String, dynamic> json) {
-    return CheckItems(
-      objectDetection: List<String>.from(json['object_detection']),
-      generalChecks: List<String>.from(json['general_checks']),
-    );
-  }
-}
-
-
-
-
