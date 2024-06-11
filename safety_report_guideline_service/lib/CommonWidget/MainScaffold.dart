@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../ReportTypeDialog/ReportTypeDialog.dart';
+
 class MainScaffold extends StatefulWidget {
   final Widget
   child;

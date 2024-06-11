@@ -11,8 +11,6 @@ import '../CompletedForm/CompletedForm.dart';
 import '../ManageProvider.dart';
 import '../ReportTypeDialog/ReportTypeDialog.dart';
 
-
-
 class AnalysisResult extends StatelessWidget {
   final File imageFile;
   final List<CameraDescription> cameras;
@@ -157,10 +155,10 @@ class AnalysisResult extends StatelessWidget {
                       child: Text('계속하기'),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
     );
   }
