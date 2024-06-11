@@ -21,7 +21,7 @@ class CheckList {
     box = await newBox;
   }
 
-  Future<void> initialize(ReportType reportType) async {
+  Future<CheckList> initialize(ReportType reportType) async {
     _reportType = reportType;
     var jsonData = await box.get(reportType.toString().split('.')[1]);
     objectCheckList = jsonData['check_items']['object_checks'].entries.map((entry) {
@@ -35,6 +35,16 @@ class CheckList {
         value: false
       );
     }).toList();
+
+    generalCheckList = jsonData['check_items']['general_checks'].entries.map((entry) {
+      return GeneralCheckItem(
+          key: entry.key,
+          checkItemStr: entry.value,
+          value: false
+      );
+    }).toList();
+
+    return _instance;
   }
 
   List<dynamic> checkObject(List<TargetObject> labels){
@@ -48,6 +58,9 @@ class CheckList {
     }
     return objectCheckList as List<dynamic>;
   }
+
+// List<dynamic> checkTime(){}
+// List<dynamic> checkLocation(){}
 }
 
 class ObjectCheckItem{

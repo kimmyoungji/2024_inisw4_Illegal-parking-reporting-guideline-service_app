@@ -63,6 +63,4 @@ class CommonCheckList {
   // List<dynamic> check1min2(){}
   // List<dynamic> checkAngle(){}
   // List<dynamic> checkBackground(){}
-  // List<dynamic> checkTime(){}
-  // List<dynamic> checkLocation(){}
 }
