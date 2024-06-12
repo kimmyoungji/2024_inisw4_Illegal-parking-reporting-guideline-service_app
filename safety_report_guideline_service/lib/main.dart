@@ -60,14 +60,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: IntroPage(cameras: cameras),
-      //DialTimerScreen(),
+      // home: IntroPage(cameras: cameras),
+      // DialTimerScreen(),
       //IntroPage(cameras: cameras),
-      // home: CameraPage(cameras: cameras),
+      home: CameraPage(cameras: cameras),
       // home: CameraTimerPage(),
       // home: AnalysisResult(),
       // home: ReportForm(),
       // home: CompletedForm(),
+
     );
 
   }
