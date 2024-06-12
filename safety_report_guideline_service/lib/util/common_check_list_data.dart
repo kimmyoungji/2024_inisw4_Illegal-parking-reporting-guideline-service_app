@@ -1,19 +1,19 @@
 import 'dart:developer';
 import 'package:hive/hive.dart';
-import './check_list.dart';
+import './check_list_data.dart';
 
-class CommonCheckList {
-  static final CommonCheckList _instance = CommonCheckList._internal();
+class CommonCheckListData {
+  static final CommonCheckListData _instance = CommonCheckListData._internal();
   final ReportType _reportType = ReportType.common;
-  late List<dynamic> objectCheckList;
-  late List<dynamic> generalCheckList;
+  late List<dynamic> objectCheckListData;
+  late List<dynamic> generalCheckListData;
   late Box<dynamic> box;
 
   // Private constructor
-  CommonCheckList._internal();
+  CommonCheckListData._internal();
 
   // Factory constructor to return the same instance
-  factory CommonCheckList() {
+  factory CommonCheckListData() {
     return _instance;
   }
 
@@ -22,10 +22,10 @@ class CommonCheckList {
     box = await newBox;
   }
 
-  Future<CommonCheckList> initialize() async {
+  Future<CommonCheckListData> initialize() async {
     var jsonData = await box.get(_reportType.toString().split('.')[1]);
 
-    objectCheckList = jsonData['check_items']['object_checks'].entries.map((entry) {
+    objectCheckListData = jsonData['check_items']['object_checks'].entries.map((entry) {
       List<dynamic> targets = entry.key.split(',').map((key) {
         return str2TargetObj(key);
       }).toList();
@@ -37,7 +37,7 @@ class CommonCheckList {
       );
     }).toList();
 
-    generalCheckList = jsonData['check_items']['general_checks'].entries.map((entry) {
+    generalCheckListData = jsonData['check_items']['general_checks'].entries.map((entry) {
       return GeneralCheckItem(
           key: entry.key,
           checkItemStr: entry.value,
@@ -49,7 +49,7 @@ class CommonCheckList {
   }
 
   List<dynamic> checkObject(List<TargetObject> labels){
-    for( ObjectCheckItem checkItem in objectCheckList ){
+    for( ObjectCheckItem checkItem in objectCheckListData ){
       for( TargetObject targetObject in checkItem.targetObjects ){
         if( labels.contains(targetObject) ){
           checkItem.value = true;
@@ -57,7 +57,7 @@ class CommonCheckList {
         }
       }
     }
-    return objectCheckList as List<dynamic>;
+    return objectCheckListData as List<dynamic>;
   }
 
   // List<dynamic> check1min2(){}

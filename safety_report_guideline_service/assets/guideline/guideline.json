@@ -9,8 +9,8 @@
         ],
         "check_items": {
             "object_checks": {
-                "number_plate" : "차량의 번호판이 잘 나타났음.",
-                "car,truck,motorcycle" : "차량이 사진에 잘 나타남."
+                "number_plate" : "차량의 번호판이 사진에 잘 나왔음.",
+                "car,truck,motorcycle" : "차량이 사진에 잘 나왔음."
             },
             "general_checks": {
                 "1min2": "1분 간격으로 2번 촬영했음.",
@@ -30,7 +30,7 @@
               "fire_hydrant": "소화전(또는 경계석, 적색 도로바닥)이 사진에 잘 나왔음.",
               "no_parking,object_389": "교통안전표지(주정차금지표지판, 노면표시)가 잘 나왔음."
           },
-            "general_checks": []
+            "general_checks": {}
         }
     },
     "intersection_corner": {
@@ -43,7 +43,7 @@
                 "object_391,traffic_lane_yellow_solid" : "교차로 모퉁이가 사진에 잘 나왔음.",
                 "no_parking,object_389" : "교통안전표지(주정차금지표지판, 노면표시)가 잘 나왔음."
             },
-            "general_checks": []
+            "general_checks": {}
         }
     },
     "bus_stop": {
@@ -55,7 +55,7 @@
                     "stop": "버스 정류소 표지판이 잘 나왔음.",
                     "object_389": "노면표시선이 사진에 잘 나왔음."
                 },
-                "general_checks": []
+                "general_checks": {}
             }
         },
     "crosswalk": {
@@ -66,7 +66,7 @@
             "object_checks": {
                 "object_412": "횡단보도가 사진에 잘 나타났음."
             },
-            "general_checks": []
+            "general_checks": {}
         }
     },
     "school_zone": {
@@ -98,7 +98,7 @@
                 "side_walk": "보도가 사진에 나타났음.",
                 "road": "도로가 사진에 나타났음."
             },
-            "general_checks":[]
+            "general_checks":{}
         }
     }
 }

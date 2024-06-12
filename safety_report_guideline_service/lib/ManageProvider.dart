@@ -48,7 +48,7 @@ class Prov extends ChangeNotifier {
   bool get check_same_angle => _check_same_angle;
 
   // 신고 유형: _report_type
-  String _report_type = '소화전'; // 나중에 바꿔
+  String _report_type = 'fire_hydrant'; // 나중에 바꿔
   String get report_type => _report_type; // 나중에 바꿀 거
 
   change_report_type(String rt) {

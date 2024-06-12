@@ -1,18 +1,18 @@
 import 'dart:developer';
 import 'package:hive/hive.dart';
 
-class CheckList {
-  static final CheckList _instance = CheckList._internal();
+class CheckListData {
+  static final CheckListData _instance = CheckListData._internal();
   late ReportType _reportType;
-  late List<dynamic> objectCheckList;
-  late List<dynamic> generalCheckList;
+  late List<dynamic> objectCheckListData;
+  late List<dynamic> generalCheckListData;
   late Box<dynamic> box;
 
   // Private constructor
-  CheckList._internal();
+  CheckListData._internal();
 
   // Factory constructor to return the same instance
-  factory CheckList() {
+  factory CheckListData() {
     return _instance;
   }
 
@@ -21,10 +21,10 @@ class CheckList {
     box = await newBox;
   }
 
-  Future<CheckList> initialize(ReportType reportType) async {
+  Future<CheckListData> initialize(ReportType reportType) async {
     _reportType = reportType;
     var jsonData = await box.get(reportType.toString().split('.')[1]);
-    objectCheckList = jsonData['check_items']['object_checks'].entries.map((entry) {
+    objectCheckListData = jsonData['check_items']['object_checks'].entries.map((entry) {
       List<dynamic> targets = entry.key.split(',').map((key) {
           return str2TargetObj(key);
         }).toList();
@@ -36,7 +36,7 @@ class CheckList {
       );
     }).toList();
 
-    generalCheckList = jsonData['check_items']['general_checks'].entries.map((entry) {
+    generalCheckListData = jsonData['check_items']['general_checks'].entries.map((entry) {
       return GeneralCheckItem(
           key: entry.key,
           checkItemStr: entry.value,
@@ -48,7 +48,7 @@ class CheckList {
   }
 
   List<dynamic> checkObject(List<TargetObject> labels){
-    for( ObjectCheckItem checkItem in objectCheckList ){
+    for( ObjectCheckItem checkItem in objectCheckListData ){
       for( TargetObject targetObject in checkItem.targetObjects ){
         if( labels.contains(targetObject) ){
           checkItem.value = true;
@@ -56,7 +56,7 @@ class CheckList {
         }
       }
     }
-    return objectCheckList as List<dynamic>;
+    return objectCheckListData as List<dynamic>;
   }
 
 // List<dynamic> checkTime(){}
@@ -98,6 +98,28 @@ enum ReportType {
   school_zone,
   sidewalk,
 }
+
+ReportType str2ReportType(String key) {
+  switch (key) {
+  case "common":
+  return ReportType.common;
+  case "fire_hydrant":
+  return ReportType.fire_hydrant;
+  case "intersection_corner":
+  return ReportType.intersection_corner;
+  case "bus_stop":
+  return ReportType.bus_stop;
+  case "crosswalk":
+  return ReportType.crosswalk;
+  case "school_zone":
+  return ReportType.school_zone;
+  case "sidewalk":
+    return ReportType.sidewalk;
+  default:
+    throw Exception("Unknown report type: $key");
+  }
+}
+
 
 // IP = Illeagle Parking
 enum TargetObject {
@@ -163,3 +185,6 @@ TargetObject str2TargetObj(String key) {
       throw Exception("Unknown target object: $key");
   }
 }
+
+
+
