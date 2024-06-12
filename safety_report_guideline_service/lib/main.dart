@@ -61,8 +61,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: IntroPage(cameras: cameras),
-      //DialTimerScreen(),
-      //IntroPage(cameras: cameras),
       // home: CameraPage(cameras: cameras),
       // home: CameraTimerPage(),
       // home: AnalysisResult(),

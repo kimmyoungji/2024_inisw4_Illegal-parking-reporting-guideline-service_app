@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:image/image.dart' as img;
@@ -58,8 +57,7 @@ class _CameraPageState extends State<CameraPage> {
     final int rotationDegrees = getCameraRotation(cameraController.description.sensorOrientation);
     image = img.copyRotate(image, rotationDegrees);
 
-    // 한국 시간으로 변환하여 현재 시간 가져오기
-    final kstTime = DateTime.now().toUtc().add(Duration(hours: 9));
+    final kstTime = DateTime.now();
     String timestamp = DateFormat('yyyy/MM/dd HH:mm:ss').format(kstTime);
 
     int fontSize = 48;
@@ -112,8 +110,6 @@ class _CameraPageState extends State<CameraPage> {
     }
 
     try {
-      DateTime captureTime = DateTime.now();
-
       XFile image = await cameraController.takePicture();
       final file = await saveImage(image);
       cameraProvider.add_img(file);
