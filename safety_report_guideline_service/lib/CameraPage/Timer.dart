@@ -42,7 +42,7 @@ class _DialTimerScreenState extends State<DialTimerScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 70), // 글자를 더 위로 올리기 위해 조절
+          Spacer(flex:10),
           Visibility(
             visible: remainingTime > 0,
             child: Text(
@@ -54,7 +54,7 @@ class _DialTimerScreenState extends State<DialTimerScreen> {
               ),
             ),
           ),
-          SizedBox(height: 40), // 한글과 타이머 사이에 빈 박스 추가
+          Spacer(flex:3),
           Visibility(
             visible: remainingTime > 0,
             child: Stack(
@@ -78,7 +78,7 @@ class _DialTimerScreenState extends State<DialTimerScreen> {
               ],
             ),
           ),
-          Spacer(),
+          Spacer(flex:13),
         ],
       ),
     );

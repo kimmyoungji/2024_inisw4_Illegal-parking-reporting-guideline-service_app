@@ -36,15 +36,16 @@ class _AnalysisResultState extends State<AnalysisResult> {
         });
   }
 
-  void _showImageDialog(BuildContext context, String imagePath) {
-    showDialog(
+  void _showImageDialog(BuildContext context, File imageFile) {
+    showGeneralDialog(
       context: context,
-      barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
-      builder: (context) {
-        return Dialog(
-          child:  Stack(
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      pageBuilder: (context, _, __) {
+        return Center(
+          child: Stack(
             children: [
-              Image.file(widget.imageFile),
+              Image.file(imageFile),
               Positioned(
                 top: 10,
                 right: 10,
@@ -144,7 +145,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
             SizedBox(height: 16.0),
             Center(
               child: GestureDetector(
-                onTap: () => _showImageDialog(context, widget.imageFile.path),
+                onTap: () => _showImageDialog(context, widget.imageFile),
                 child: Image.file(
                   widget.imageFile,
                   width: 300,

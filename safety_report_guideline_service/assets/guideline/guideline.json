@@ -27,7 +27,7 @@
         ],
         "check_items": {
           "object_checks": {
-              "fire_hydrant": "소화전(또는 경계석, 적색 도로바닥)이 사진에 잘 나왔음.",
+              "fire_hydrant": "소화전이 사진에 잘 나왔음.",
               "no_parking,object_389": "교통안전표지(주정차금지표지판, 노면표시)가 잘 나왔음."
           },
             "general_checks": {}
@@ -78,7 +78,7 @@
         ],
         "check_items": {
             "object_checks": {
-                "object_402,object_403,school_zone": "어린이 보호구역 표시(어린이보호표지판, 어린이보호구역표지판, 어린이보호구역 노면, 어린이보호구역속도제한노면)이 잘 나왔음.",
+                "object_402,object_403,school_zone": "어린이 보호구역 표시가 잘 나왔음.",
                 "no_parking,object_389,traffic_lane_yellow_solid": "교통안전표지(주정차금지표지판, 황색실선)가 잘 나왔음."
             },
             "general_checks": {

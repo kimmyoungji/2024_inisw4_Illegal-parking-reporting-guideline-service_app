@@ -1,6 +1,4 @@
-
 import 'dart:io';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -61,24 +59,31 @@ class _CompletePageState extends State<CompletePage> {
     super.dispose();
   }
 
-  void _showImageDialog(BuildContext context, String imagePath) {
-    showDialog(
+  void _showImageDialog(BuildContext context, File imageFile) {
+    showGeneralDialog(
       context: context,
-      barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
-      builder: (context) {
-        return Dialog(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: FileImage(File(imagePath)),
-                  fit: BoxFit.contain,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      pageBuilder: (context, _, __) {
+        return Center(
+          child: Stack(
+            children: [
+              Image.file(imageFile),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 30,
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         );
       },
@@ -105,7 +110,7 @@ class _CompletePageState extends State<CompletePage> {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, _prov.imagesList[0].path),
+                        onTap: () => _showImageDialog(context, _prov.imagesList[0]),
                         child: Stack(
                           children: [
                             Image.file(
@@ -136,7 +141,7 @@ class _CompletePageState extends State<CompletePage> {
                     SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, _prov.imagesList[1].path),
+                        onTap: () => _showImageDialog(context, _prov.imagesList[1]),
                         child: Stack(
                           children: [
                             Image.file(
