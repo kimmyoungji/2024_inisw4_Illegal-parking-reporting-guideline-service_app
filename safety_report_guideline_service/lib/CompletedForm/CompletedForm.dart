@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:safety_report_guideline_service/util/enums.dart';
 import '../ManageProvider.dart';
 
 class PhoneNumberFormatter extends TextInputFormatter {
@@ -97,7 +98,7 @@ class _CompletePageState extends State<CompletePage> {
               children: [
                 _buildLabelWithIcon('신고 유형', 'assets/images/logo.png'),
                 SizedBox(height: 8),
-                Text(_prov.report_type.toString(), style: TextStyle(fontSize: 16, color: Colors.blue,)),
+                Text( reportTypeToKorean(_prov.report_type), style: TextStyle(fontSize: 16, color: Colors.blue,)),
                 SizedBox(height: 16),
                 _buildLabelWithIcon('사진', 'assets/images/logo.png'),
                 SizedBox(height: 16),
@@ -182,7 +183,7 @@ class _CompletePageState extends State<CompletePage> {
                 ),
                 SizedBox(height: 8),
                 TextFormField(
-                  controller: TextEditingController(text: '${_prov.report_type.toString()} 불법주정차 신고합니다. 같은 위치에 자주 불법 주정차를 하는 차량입니다. 차량 번호 ${_prov.car_num.toString()}입니다.'),
+                  controller: TextEditingController(text: '${reportTypeToKorean(_prov.report_type)} 불법주정차 신고합니다. 차량 번호 ${_prov.car_num.toString()}입니다.'),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                   ),

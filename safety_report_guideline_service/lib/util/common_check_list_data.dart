@@ -1,6 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:hive/hive.dart';
+import 'package:safety_report_guideline_service/util/image_comparing.dart';
 import './check_list_data.dart';
+import './enums.dart';
+import '../util/image_comparing.dart';
 
 class CommonCheckListData {
   static final CommonCheckListData _instance = CommonCheckListData._internal();
@@ -60,7 +64,31 @@ class CommonCheckListData {
     return objectCheckListData as List<dynamic>;
   }
 
-  // List<dynamic> check1min2(){}
-  // List<dynamic> checkAngle(){}
-  // List<dynamic> checkBackground(){}
+  GeneralCheckItem check1min2photo(int PictureCount){
+    if(PictureCount > 3 ){
+      generalCheckListData[0].value = true;
+      return generalCheckListData[0];
+    }else{
+      return generalCheckListData[0];
+    }
+  }
+
+  Future<GeneralCheckItem> checkAngleSimilar(File imageFile1, File imageFile2) async {
+    double similarity = await compareImages(imageFile1.path, imageFile2.path);
+    if(similarity > 0.9 ){
+      generalCheckListData[1].value = true;
+      return generalCheckListData[1];
+    }else{
+      return generalCheckListData[1];
+    }
+  }
+
+  GeneralCheckItem checkBackgroundRatio(double value) {
+    if(value > 0.4 && value < 0.6 ){
+      generalCheckListData[2].value = true;
+      return generalCheckListData[2];
+    }else{
+      return generalCheckListData[2];
+    }
+  }
 }

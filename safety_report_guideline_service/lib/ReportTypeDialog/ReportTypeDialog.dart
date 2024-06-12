@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:safety_report_guideline_service/util/enums.dart';
 import '../ManageProvider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class Dial extends StatefulWidget {
+class ReportTypeDial extends StatefulWidget {
   @override
-  _DialState createState() => _DialState();
+  _ReportTypeDialState createState() => _ReportTypeDialState();
 }
 
 
-class _DialState extends State<Dial>{
+class _ReportTypeDialState extends State<ReportTypeDial>{
   late Prov _prov;
   @override
   Widget build(BuildContext context){
@@ -17,11 +18,12 @@ class _DialState extends State<Dial>{
     List<String> buttonLabels = [
       '소화전',
       '교차로 모퉁이',
-      '버스 정류소',
+      '버스정류소',
       '횡단보도',
       '어린이 보호구역',
       '인도'
     ];
+
     return AlertDialog(
       backgroundColor: Colors.white,
       alignment: Alignment.center,
@@ -41,7 +43,7 @@ class _DialState extends State<Dial>{
               children: [
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      backgroundColor: _prov.report_type.toString()== buttonLabels[index]
+                      backgroundColor: _prov.report_type.toString() == buttonLabels[index]
                           ? Colors.blue
                           : Colors.black,
                       minimumSize: Size(300, 50)
@@ -50,7 +52,7 @@ class _DialState extends State<Dial>{
                     _prov.change_report_type(buttonLabels[index]);
                     Navigator.of(context).pop();
                     Fluttertoast.showToast(
-                      msg: '${_prov.report_type.toString()} 변경 완료',
+                      msg: '${reportTypeToKorean(_prov.report_type)} 변경 완료',
                       gravity: ToastGravity.BOTTOM,
                       fontSize: 20,
                       backgroundColor: Colors.grey,

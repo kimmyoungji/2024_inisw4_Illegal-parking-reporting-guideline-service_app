@@ -1,13 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
-// late TestProv _TestProv;
-// 위젯 안에
-// _TestProv = Provider.of<TestProv>(context);
-// _TestProv.change_report_type(buttonLabels[index]);
-// result = _TestProv.report_type.toString();
-
+import 'package:safety_report_guideline_service/util/enums.dart';
 
 class Prov extends ChangeNotifier {
   // 진행 상태: 0(촬영 0번), 1(촬영 1번), 2(촬영 2번)  3(신고 완)
@@ -19,7 +12,6 @@ class Prov extends ChangeNotifier {
   add_img(final file){
     _imagesList.add(file);
     if (_report_state == 0){
-
     }
   }
 
@@ -48,11 +40,11 @@ class Prov extends ChangeNotifier {
   bool get check_same_angle => _check_same_angle;
 
   // 신고 유형: _report_type
-  String _report_type = 'fire_hydrant'; // 나중에 바꿔
-  String get report_type => _report_type; // 나중에 바꿀 거
+  ReportType _report_type = ReportType.sidewalk; // 나중에 바꿔
+  ReportType get report_type => _report_type; // 나중에 바꿀 거
 
   change_report_type(String rt) {
-    _report_type = rt;
+    _report_type = koreanToReportType(rt);
     notifyListeners();
     print('${_report_type}으로 변경됨');
   }
@@ -78,8 +70,6 @@ class Prov extends ChangeNotifier {
     notifyListeners();
     print('${_phone_num}으로 변경됨');
   }
-
-
 }
 
 // Image img1 = Image(image: image);

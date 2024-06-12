@@ -33,7 +33,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
         context: context,
         builder: (context) {
-          return Dial();
+          return ReportTypeDial();
         }
     );
   }
