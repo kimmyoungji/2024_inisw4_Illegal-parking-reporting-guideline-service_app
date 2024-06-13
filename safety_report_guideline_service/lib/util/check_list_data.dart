@@ -1,4 +1,8 @@
+/*chat gpt used*/
+
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import './enums.dart';
 
 class CheckListData {
   static final CheckListData _instance = CheckListData._internal();
@@ -46,7 +50,7 @@ class CheckListData {
     return _instance;
   }
 
-  List<dynamic> checkObject(List<TargetObject> labels){
+  Future<List<dynamic>> checkObject(List<TargetObject> labels) async {
     for( ObjectCheckItem checkItem in objectCheckListData ){
       for( TargetObject targetObject in checkItem.targetObjects ){
         if( labels.contains(targetObject) ){
@@ -58,8 +62,29 @@ class CheckListData {
     return objectCheckListData;
   }
 
-// List<dynamic> checkTime(){}
-// List<dynamic> checkLocation(){}
+  GeneralCheckItem checkTime(TimeOfDay startTime, TimeOfDay endTime, TimeOfDay photoTime) {
+    // Convert the time components to minutes for easier comparison
+    int startTimeInMinutes = startTime.hour * 60 + startTime.minute;
+    int endTimeInMinutes = endTime.hour * 60 + endTime.minute;
+    int photoTimeInMinutes = photoTime.hour * 60 + photoTime.minute;
+
+    // Check if the photo time is within the boundary
+    if (photoTimeInMinutes >= startTimeInMinutes && photoTimeInMinutes <= endTimeInMinutes) {
+      generalCheckListData[0].value = true;
+      return generalCheckListData[0];
+    } else {
+      return generalCheckListData[0];
+    }
+  }
+
+  GeneralCheckItem checkLocation(bool flag){
+    if(flag){
+      generalCheckListData[1].value = true;
+      return generalCheckListData[1];
+    }else{
+      return generalCheckListData[1];
+    }
+  }
 }
 
 class ObjectCheckItem{
@@ -87,103 +112,5 @@ class GeneralCheckItem{
     return 'CheckItem(targetObjects: $key, checkItemStr: $checkItemStr, value: $value)';
   }
 }
-
-enum ReportType {
-  common,
-  fire_hydrant,
-  intersection_corner,
-  bus_stop,
-  crosswalk,
-  school_zone,
-  sidewalk,
-}
-
-ReportType str2ReportType(String key) {
-  switch (key) {
-  case "common":
-  return ReportType.common;
-  case "fire_hydrant":
-  return ReportType.fire_hydrant;
-  case "intersection_corner":
-  return ReportType.intersection_corner;
-  case "bus_stop":
-  return ReportType.bus_stop;
-  case "crosswalk":
-  return ReportType.crosswalk;
-  case "school_zone":
-  return ReportType.school_zone;
-  case "sidewalk":
-    return ReportType.sidewalk;
-  default:
-    throw Exception("Unknown report type: $key");
-  }
-}
-
-
-// IP = Illeagle Parking
-enum TargetObject {
-  fire_hydrant,
-  car,
-  truck,
-  stop,
-  motorcycle,
-  object_402,  // 402: 속도제한 어린이 보호 구역
-  object_403,  // 403: 어린이 보호 구역
-  object_426,  // 426: 자전거 전용 도로
-  object_412,  // 412: 횡단보도
-  object_432,  // 432: 정차금지지대
-  object_389,  // 389: 주차금지(노면)
-  object_391,  // 391: 정차주차금지516-2 := 황색복선
-  traffic_lane_yellow_solid,
-  school_zone,
-  no_parking,
-  number_plate,
-  side_walk,
-  road,
-}
-
-TargetObject str2TargetObj(String key) {
-  switch (key) {
-    case "fire_hydrant":
-      return TargetObject.fire_hydrant;
-    case "car":
-      return TargetObject.car;
-    case "truck":
-      return TargetObject.truck;
-    case "stop":
-      return TargetObject.stop;
-    case "motorcycle":
-      return TargetObject.motorcycle;
-    case "object_402":
-      return TargetObject.object_402;
-    case "object_403":
-      return TargetObject.object_403;
-    case "object_426":
-      return TargetObject.object_426;
-    case "object_412":
-      return TargetObject.object_412;
-    case "object_432":
-      return TargetObject.object_432;
-    case "object_389":
-      return TargetObject.object_389;
-    case "object_391":
-      return TargetObject.object_391;
-    case "traffic_lane_yellow_solid":
-      return TargetObject.traffic_lane_yellow_solid;
-    case "school_zone":
-      return TargetObject.school_zone;
-    case "no_parking":
-      return TargetObject.no_parking;
-    case "number_plate":
-      return TargetObject.number_plate;
-    case "side_walk":
-      return TargetObject.side_walk;
-    case "road":
-      return TargetObject.road;
-    default:
-      throw Exception("Unknown target object: $key");
-  }
-}
-
 
 

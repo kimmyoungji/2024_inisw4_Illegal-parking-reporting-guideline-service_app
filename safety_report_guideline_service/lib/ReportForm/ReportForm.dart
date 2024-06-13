@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/CommonWidget/MainScaffold.dart';
+import 'package:safety_report_guideline_service/ImageDialog/ImageDialog.dart';
 import '../ManageProvider.dart';
 
 class PhoneNumberFormatter extends TextInputFormatter {
@@ -66,27 +67,7 @@ class _ReportFormState extends State<ReportForm> {
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       pageBuilder: (context, _, __) {
-        return Center(
-          child: Stack(
-            children: [
-              Image.file(imageFile),
-              Positioned(
-                top: 10,
-                right: 10,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Icon(
-                    Icons.close,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
+        return ImageDialog(imageFile: imageFile);
       },
     );
   }

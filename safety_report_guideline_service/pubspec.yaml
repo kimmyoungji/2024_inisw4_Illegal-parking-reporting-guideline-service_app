@@ -37,7 +37,7 @@ dependencies:
   provider: ^6.1.2
   circular_countdown_timer: ^0.2.3
   percent_indicator: ^4.2.2
-  image: ^3.0.1
+  image: ^3.0.2
   image_picker: ^0.8.4+4
   intl: ^0.17.0
   fluttertoast: ^8.0.9
@@ -74,6 +74,9 @@ flutter:
     - assets/images/logo.png
     - assets/images/Group 53.png
     - assets/guideline/guideline.json
+    - assets/images/test01.jpg
+    - assets/images/test02.jpg
+    - assets/images/test03.jpeg
   fonts:
     - family: NotoSans
       fonts:

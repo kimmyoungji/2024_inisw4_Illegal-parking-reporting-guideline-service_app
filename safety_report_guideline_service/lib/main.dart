@@ -8,6 +8,7 @@ import 'package:safety_report_guideline_service/util/check_list_data.dart';
 import 'package:safety_report_guideline_service/util/common_check_list_data.dart';
 import 'package:safety_report_guideline_service/util/hive_util.dart';
 import './IntroPage/IntroPage.dart';
+import './util/enums.dart';
 
 
 Future<void> main() async {
@@ -29,8 +30,7 @@ Future<void> main() async {
   // 특정유형 체크항목 가져오기
   CheckListData checkListData =  CheckListData();
   await checkListData.setBox(box);
-  await checkListData.initialize(ReportType.school_zone);
-
+  await checkListData.initialize(ReportType.sidewalk);
   // 공통 체크항목 가져오기
   CommonCheckListData commonCheckListData = CommonCheckListData();
   await commonCheckListData.setBox(box);

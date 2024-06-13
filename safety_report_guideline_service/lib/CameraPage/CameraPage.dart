@@ -1,3 +1,7 @@
+
+import 'dart:io';
+import 'dart:async';
+import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -108,7 +112,7 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
-  void takePicture() async {
+  void takePicture(BuildContext context) async {
     final cameraProvider = Provider.of<Prov>(context, listen: false);
 
     if (cameraController.value.isTakingPicture ||
@@ -117,6 +121,10 @@ class _CameraPageState extends State<CameraPage> {
     }
 
     try {
+      
+      DateTime captureTime = DateTime.now();
+      cameraProvider.photo_time = captureTime;
+
       XFile image = await cameraController.takePicture();
       final file = await saveImage(image);
       cameraProvider.add_img(file);
@@ -162,7 +170,6 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final cameraProvider = Provider.of<Prov>(context);
 
     return Scaffold(
       body: Stack(
@@ -199,53 +206,58 @@ class _CameraPageState extends State<CameraPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Spacer(flex: 3),
-                  if (cameraProvider.imagesList.isNotEmpty)
-                    GestureDetector(
-                      onTap: () {
-                        showGeneralDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          barrierLabel: MaterialLocalizations.of(context)
-                              .modalBarrierDismissLabel,
-                          pageBuilder: (context, _, __) {
-                            return Center(
-                              child: Stack(
-                                children: [
-                                  Image.file(cameraProvider.imagesList.first),
-                                  Positioned(
-                                    top: 10,
-                                    right: 10,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Icon(
-                                        Icons.close,
-                                        color: Colors.white,
-                                        size: 30,
+                  Consumer<Prov>(
+                    builder: (context, cameraProvider, child) {
+                      if (cameraProvider.imagesList.isNotEmpty) {
+                        return GestureDetector(
+                          onTap: () {
+                            showGeneralDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              barrierLabel: MaterialLocalizations.of(context)
+                                  .modalBarrierDismissLabel,
+                              pageBuilder: (context, _, __) {
+                                return Center(
+                                  child: Stack(
+                                    children: [
+                                      Image.file(cameraProvider.imagesList.first),
+                                      Positioned(
+                                        top: 10,
+                                        right: 10,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                      child: Container(
-                        width: 55,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: FileImage(cameraProvider.imagesList.first),
-                            fit: BoxFit.cover,
+                          child: Container(
+                            width: 55,
+                            height: 55,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: FileImage(cameraProvider.imagesList.first),
+                                fit: BoxFit.cover,
+                              ),
+                              color: Colors.grey,
+                            ),
                           ),
-                          color: Colors.grey,
-                        ),
-                      ),
-                    )
-                  else
-                    const SizedBox(width: 60, height: 60), // 빈 공간 생성
+                        );
+                      } else {
+                        return const SizedBox(width: 60, height: 60); // 빈 공간 생성
+                      }
+                    },
+                  ),
                   const Spacer(flex: 3),
                   SizedBox(
                     width: 80,
@@ -253,7 +265,7 @@ class _CameraPageState extends State<CameraPage> {
                     child: FloatingActionButton(
                       backgroundColor: const Color(0xFF295FE5),
                       shape: const CircleBorder(),
-                      onPressed: takePicture,
+                      onPressed: () => takePicture(context),
                       child: const Icon(
                         Icons.camera_alt,
                         size: 30,
@@ -272,4 +284,17 @@ class _CameraPageState extends State<CameraPage> {
       ),
     );
   }
+}
+
+void cameraToast(){
+  Future.delayed(const Duration(seconds: 3), () {
+    Fluttertoast.showToast(
+      msg: '주변을 주시하세요.',
+      gravity: ToastGravity.TOP,
+      fontSize: 20,
+      backgroundColor: Colors.grey,
+      textColor: Colors.black,
+      toastLength: Toast.LENGTH_LONG,
+    );
+  });
 }

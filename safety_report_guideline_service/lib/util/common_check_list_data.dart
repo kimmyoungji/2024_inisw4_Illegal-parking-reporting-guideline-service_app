@@ -1,5 +1,11 @@
+/*chat gpt used*/
+
+import 'dart:developer';
+import 'dart:io';
 import 'package:hive/hive.dart';
+import 'package:safety_report_guideline_service/util/image_comparing.dart';
 import './check_list_data.dart';
+import './enums.dart';
 
 class CommonCheckListData {
   static final CommonCheckListData _instance = CommonCheckListData._internal();
@@ -59,7 +65,36 @@ class CommonCheckListData {
     return objectCheckListData;
   }
 
-  // List<dynamic> check1min2(){}
-  // List<dynamic> checkAngle(){}
-  // List<dynamic> checkBackground(){}
+  Future<GeneralCheckItem> check1min2photo(int pictureCount) async{
+    log('이미지갯수 $pictureCount');
+    if(pictureCount >= 2 ){
+      generalCheckListData[0].value = true;
+      return await generalCheckListData[0];
+    }else{
+      return await generalCheckListData[0];
+    }
+  }
+
+  Future<GeneralCheckItem> checkAngleSimilar(List<File> imagesList) async {
+    if(imagesList.length < 2){
+      return await generalCheckListData[1];
+    }
+    log('${imagesList[0].path}, ${imagesList[1].path} 나와라 나와라 나와라');
+    double similarity = await compareImages(imagesList[0].path, imagesList[1].path);
+    if(similarity > 0.9 ){
+      generalCheckListData[1].value = true;
+      return await generalCheckListData[1];
+    }else{
+      return await generalCheckListData[1];
+    }
+  }
+
+  Future<GeneralCheckItem> checkBackgroundRatio(double value) async {
+    if(value > 0.3 && value < 0.5 ){
+      generalCheckListData[2].value = true;
+      return await generalCheckListData[2];
+    }else{
+      return await generalCheckListData[2];
+    }
+  }
 }

@@ -9,7 +9,7 @@ class DialTimerScreen extends StatefulWidget {
 }
 
 class _DialTimerScreenState extends State<DialTimerScreen> {
-  static const int totalDuration = 60; // 전체 시간 (초)
+  static const int totalDuration = 1; // 전체 시간 (초)
   int remainingTime = totalDuration;
   Timer? timer;
 
