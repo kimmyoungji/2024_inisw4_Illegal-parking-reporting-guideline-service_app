@@ -1,17 +1,19 @@
+
 import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import '../CommonWidget/MainScaffold.dart';
 import 'package:external_path/external_path.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/AnalysisResult/AnalysisResult.dart';
+import '../CommonWidget/MainScaffold.dart';
 import '../ManageProvider.dart';
 
 class CameraPage extends StatefulWidget {
@@ -27,7 +29,29 @@ class _CameraPageState extends State<CameraPage> {
   late Future<void> cameraValue;
   String? reportType;
   int selectedCameraIdx = 0;
-  late Future<void> _initializeControllerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    cameraController = CameraController(
+      widget.cameras[selectedCameraIdx],
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
+    cameraValue = cameraController.initialize();
+
+    // 페이지 진입 시 Toast 메시지 표시
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cameraProvider = Provider.of<Prov>(context, listen: false);
+      cameraToast(cameraProvider.imagesList.isEmpty);
+    });
+  }
+
+  @override
+  void dispose() {
+    cameraController.dispose();
+    super.dispose();
+  }
 
   Future<File> saveImage(XFile ximage) async {
     final downloadPath = await ExternalPath.getExternalStoragePublicDirectory(
@@ -37,6 +61,10 @@ class _CameraPageState extends State<CameraPage> {
 
     final bytes = await ximage.readAsBytes();
     img.Image image = img.decodeImage(Uint8List.fromList(bytes))!;
+
+    // 카메라의 방향에 따라 이미지 회전
+    final int rotationDegrees = getCameraRotation(cameraController.description.sensorOrientation);
+    image = img.copyRotate(image, rotationDegrees);
 
     // 한국 시간으로 변환하여 현재 시간 가져오기
     final kstTime = DateTime.now().toUtc().add(const Duration(hours: 9));
@@ -51,15 +79,28 @@ class _CameraPageState extends State<CameraPage> {
     img.fillRect(image, 0, 0, textWidth, textHeight, img.getColor(255, 255, 255));
     img.drawString(image, img.arial_48, padding, padding, timestamp, color: img.getColor(0, 0, 0));
 
-    final tempDir = await getTemporaryDirectory();
     // 타임스탬프가 추가된 이미지를 새로운 파일로 저장
     await file.writeAsBytes(Uint8List.fromList(img.encodePng(image)));
 
     return file;
   }
 
-  void cameraToast() {
-    Future.delayed(const Duration(seconds: 3), () {
+  int getCameraRotation(int sensorOrientation) {
+    switch (sensorOrientation) {
+      case 90:
+        return 90;
+      case 270:
+        return -90;
+      case 180:
+        return 180;
+      default:
+        return 0;
+    }
+  }
+
+  void cameraToast(bool isListEmpty) {
+    final duration = isListEmpty ? Duration(seconds: 3) : Duration(seconds: 67);
+    Future.delayed(duration, () {
       Fluttertoast.showToast(
         msg: '주변을 주시하세요.',
         gravity: ToastGravity.TOP,
@@ -80,6 +121,7 @@ class _CameraPageState extends State<CameraPage> {
     }
 
     try {
+      
       DateTime captureTime = DateTime.now();
       cameraProvider.photo_time = captureTime;
 
@@ -95,42 +137,34 @@ class _CameraPageState extends State<CameraPage> {
             builder: (context) => MainScaffold(
               title: '분석 결과',
               child: AnalysisResult(
-                // 마지막 파일
                 imageFile: file,
                 cameras: widget.cameras,
               ),
             )),
       );
+
+      // 이미지 리스트의 상태에 따라 Toast 메시지 표시 시간 설정
+      if (cameraProvider.imagesList.isEmpty) {
+        cameraToast(true);
+      } else {
+        cameraToast(false);
+      }
+
     } catch (e) {
       print("Error taking picture: $e");
     }
   }
 
   void switchCamera() {
-    selectedCameraIdx = (selectedCameraIdx + 1) % widget.cameras.length;
-    startCamera(selectedCameraIdx);
-  }
-
-  void startCamera(int camera) {
-    cameraController = CameraController(
-      widget.cameras[camera],
-      ResolutionPreset.high,
-      enableAudio: false,
-    );
-    cameraValue = cameraController.initialize();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    startCamera(selectedCameraIdx); // 0은 후면 카메라
-    cameraToast();
-  }
-
-  @override
-  void dispose() {
-    cameraController.dispose();
-    super.dispose();
+    setState(() {
+      selectedCameraIdx = (selectedCameraIdx + 1) % widget.cameras.length;
+      cameraController = CameraController(
+        widget.cameras[selectedCameraIdx],
+        ResolutionPreset.high,
+        enableAudio: false,
+      );
+      cameraValue = cameraController.initialize();
+    });
   }
 
   @override

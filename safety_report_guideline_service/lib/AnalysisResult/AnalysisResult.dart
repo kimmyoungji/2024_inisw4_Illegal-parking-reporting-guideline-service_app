@@ -45,8 +45,8 @@ class _AnalysisResultState extends State<AnalysisResult> {
         });
   }
 
-  void _showImageDialog(BuildContext context, String imagePath) {
-    showDialog(
+  void _showImageDialog(BuildContext context, File imageFile) {
+    showGeneralDialog(
       context: context,
       barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
       builder: (context) {

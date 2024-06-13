@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+
 import 'package:safety_report_guideline_service/util/enums.dart';
 
 class Prov extends ChangeNotifier {
   /* 진행 상태: 0(촬영 0번), 1(촬영 1번), 2(촬영 2번)  3(신고 완) */
   final int _report_state = 0;
-
 
   /* 신고 유형: _report_type */
   ReportType _report_type = ReportType.sidewalk;
@@ -31,7 +31,6 @@ class Prov extends ChangeNotifier {
     }
   }
 
-
   /* 배경-자동차 비율 */
   final double _check_backgroud= 0.4;
   double get check_backgroud => _check_backgroud;
@@ -53,6 +52,18 @@ class Prov extends ChangeNotifier {
     notifyListeners();
     print('$car_num으로 변경됨');
   }
+
+  // 휴대전화: _phone_num
+  String _phone_num = '010-9411-7238';
+
+  String get phone_num => _phone_num;
+
+  change_phone_num(String pn) {
+    _phone_num = pn;
+    notifyListeners();
+    print('$_phone_num으로 변경됨');
+  }
+
 }
 
 // Image img1 = Image(image: image);
