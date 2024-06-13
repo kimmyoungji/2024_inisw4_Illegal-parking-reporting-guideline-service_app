@@ -1,9 +1,11 @@
-
-import 'dart:io';
+import '../IntroOutroPage/OutroPage.dart';
 import 'package:flutter/gestures.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:safety_report_guideline_service/util/enums.dart';
+
 import '../ManageProvider.dart';
 
 class PhoneNumberFormatter extends TextInputFormatter {
@@ -30,6 +32,8 @@ class PhoneNumberFormatter extends TextInputFormatter {
 }
 
 class CompletePage extends StatefulWidget {
+  const CompletePage({super.key});
+
   @override
   State<CompletePage> createState() => _CompletePageState();
 }
@@ -61,24 +65,30 @@ class _CompletePageState extends State<CompletePage> {
     super.dispose();
   }
 
-  void _showImageDialog(BuildContext context, String imagePath) {
+  void _showImageDialog(BuildContext context, File imageFile) {
     showDialog(
       context: context,
       barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
       builder: (context) {
         return Dialog(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: FileImage(File(imagePath)),
-                  fit: BoxFit.contain,
+          child:  Stack(
+            children: [
+              Image.file(imageFile),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 30,
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         );
       },
@@ -96,16 +106,16 @@ class _CompletePageState extends State<CompletePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildLabelWithIcon('신고 유형', 'assets/images/logo.png'),
-                SizedBox(height: 8),
-                Text(_prov.report_type.toString(), style: TextStyle(fontSize: 16, color: Colors.blue,)),
-                SizedBox(height: 16),
+                const SizedBox(height: 8),
+                Text( reportTypeToKorean(_prov.report_type), style: const TextStyle(fontSize: 16, color: Colors.blue,)),
+                const SizedBox(height: 16),
                 _buildLabelWithIcon('사진', 'assets/images/logo.png'),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, _prov.imagesList[0].path),
+                        onTap: () => _showImageDialog(context, _prov.imagesList[0]),
                         child: Stack(
                           children: [
                             Image.file(
@@ -117,8 +127,8 @@ class _CompletePageState extends State<CompletePage> {
                               left: 8,
                               child: Container(
                                 color: Colors.black54,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(4.0),
                                   child: Text(
                                     '1차 촬영물',
                                     style: TextStyle(
@@ -133,10 +143,10 @@ class _CompletePageState extends State<CompletePage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, _prov.imagesList[1].path),
+                    onTap: () => _showImageDialog(context, _prov.imagesList[1]),
                         child: Stack(
                           children: [
                             Image.file(
@@ -148,8 +158,8 @@ class _CompletePageState extends State<CompletePage> {
                               left: 8,
                               child: Container(
                                 color: Colors.black54,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(4.0),
                                   child: Text(
                                     '2차 촬영물',
                                     style: TextStyle(
@@ -166,35 +176,35 @@ class _CompletePageState extends State<CompletePage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildLabelWithIcon('발생 지역', 'assets/images/logo.png'),
                   ],
                 ),
-                SizedBox(height: 8),
-                Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16, color: Colors.blue,)),
-                SizedBox(height: 16),
+                const SizedBox(height: 8),
+                const Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16, color: Colors.blue,)),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildLabelWithIcon('내용', 'assets/images/logo.png'),
                   ],
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 TextFormField(
-                  controller: TextEditingController(text: '${_prov.report_type.toString()} 불법주정차 신고합니다. 같은 위치에 자주 불법 주정차를 하는 차량입니다. 차량 번호 ${_prov.car_num.toString()}입니다.'),
-                  decoration: InputDecoration(
+                  controller: TextEditingController(text: '${reportTypeToKorean(_prov.report_type)} 불법주정차 신고합니다. 차량 번호 ${_prov.car_num.toString()}입니다.'),
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildLabelWithIcon('휴대전화', 'assets/images/logo.png'),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 TextFormField(
                   controller: _phoneController,
                   focusNode: _focusNode,
                   keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
                   inputFormatters: [
@@ -203,7 +213,7 @@ class _CompletePageState extends State<CompletePage> {
                     PhoneNumberFormatter(),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     SizedBox(
@@ -225,27 +235,32 @@ class _CompletePageState extends State<CompletePage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
-                    Text('신고 내용 공유 동의', style: TextStyle(fontSize: 16)),
+                    const SizedBox(width: 8),
+                    const Text('신고 내용 공유 동의', style: TextStyle(fontSize: 16)),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     Expanded(
                       child: ElevatedButton(
                         onPressed: checked_box?(){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('신고하기 버튼이 눌렸습니다.'),
-                            ),
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content: Text('신고하기 버튼이 눌렸습니다.'),
+                          //   ),
+                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OutroPage()),
                           );
                         }:null,
-                        child: Text('신고하기'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF295FE5), // 버튼 배경색
+                          backgroundColor: const Color(0xFF295FE5), // 버튼 배경색
                           foregroundColor: Colors.white,
                         ),
+                        child: const Text('신고하기'),
                       ),
                     ),
                   ],
@@ -261,10 +276,10 @@ class _CompletePageState extends State<CompletePage> {
     return Row(
       children: [
         Image.asset(iconPath, width: 20.0, height: 20.0),
-        SizedBox(width: 8.0),
+        const SizedBox(width: 8.0),
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16.0,
           ),

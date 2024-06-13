@@ -2,12 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class DialTimerScreen extends StatefulWidget {
+  const DialTimerScreen({super.key});
+
   @override
   _DialTimerScreenState createState() => _DialTimerScreenState();
 }
 
 class _DialTimerScreenState extends State<DialTimerScreen> {
-  static const int totalDuration = 60; // 전체 시간 (초)
+  static const int totalDuration = 1; // 전체 시간 (초)
   int remainingTime = totalDuration;
   Timer? timer;
 
@@ -24,7 +26,7 @@ class _DialTimerScreenState extends State<DialTimerScreen> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (remainingTime > 0) {
           remainingTime--;
@@ -42,10 +44,10 @@ class _DialTimerScreenState extends State<DialTimerScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 70), // 글자를 더 위로 올리기 위해 조절
+          const Spacer(flex:10),
           Visibility(
             visible: remainingTime > 0,
-            child: Text(
+            child: const Text(
               '60초 후에 재촬영 해주세요.',
               style: TextStyle(
                 fontSize: 25,
@@ -54,7 +56,7 @@ class _DialTimerScreenState extends State<DialTimerScreen> {
               ),
             ),
           ),
-          SizedBox(height: 40), // 한글과 타이머 사이에 빈 박스 추가
+          const Spacer(flex:3),
           Visibility(
             visible: remainingTime > 0,
             child: Stack(
@@ -62,14 +64,14 @@ class _DialTimerScreenState extends State<DialTimerScreen> {
               children: [
                 CustomPaint(
                   painter: DialPainter(remainingTime / totalDuration),
-                  child: Container(
+                  child: const SizedBox(
                     width: 200,
                     height: 200,
                   ),
                 ),
                 Text(
                   '$remainingTime',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 40, // 텍스트 크기 유지
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -78,7 +80,7 @@ class _DialTimerScreenState extends State<DialTimerScreen> {
               ],
             ),
           ),
-          Spacer(),
+          const Spacer(flex:13),
         ],
       ),
     );
@@ -104,7 +106,7 @@ class DialPainter extends CustomPainter {
 
     // 오른쪽에서부터 칠해지도록 하는 원호
     final rect = Rect.fromCircle(center: center, radius: radius);
-    final startAngle = -3.14 / 2; // 위쪽에서 시작
+    const startAngle = -3.14 / 2; // 위쪽에서 시작
     final sweepAngle = -2 * 3.14 * fraction; // 오른쪽에서부터 반시계 방향으로 칠해지도록 음수로 설정
     paint.color = Colors.blue;
 
