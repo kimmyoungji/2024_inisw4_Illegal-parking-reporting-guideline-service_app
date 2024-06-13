@@ -17,10 +17,9 @@ import '../util/enums.dart';
 
 /* 분석 페이지 클래스 */
 class AnalysisResult extends StatefulWidget {
-  final File imageFile;
   final List<CameraDescription> cameras;
 
-  const AnalysisResult({super.key, required this.imageFile, required this.cameras});
+  const AnalysisResult({super.key, required this.cameras});
 
   @override
   State<AnalysisResult> createState() => _AnalysisResultState();
@@ -50,7 +49,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
       context: context,
       barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
       builder: (context) {
-        return ImageDialog(imageFile: widget.imageFile);
+        return ImageDialog(imageFile: imageFile);
       },
     );
   }
@@ -92,44 +91,14 @@ class _AnalysisResultState extends State<AnalysisResult> {
         barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
         context: context,
         builder: (context) {
-          return Dial();
+          return ReportTypeDial();
         });
-  }
-
-  void _showImageDialog(BuildContext context, String imagePath) {
-    final provider = Provider.of<Prov>(context, listen: false);
-    File? imageFile = provider.imagesList.last;
-    showDialog(
-      context: context,
-      barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
-      builder: (context) {
-        return Dialog(
-          child:  Stack(
-                children: [
-                  Image.file(imageFile),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Prov>(context, listen: false);
+    File? imageFile = provider.imagesList.last;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -184,9 +153,9 @@ class _AnalysisResultState extends State<AnalysisResult> {
                     const SizedBox(height: 16.0),
                     Center(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, widget.imageFile),
+                        onTap: () => _showImageDialog(context, _prov.imagesList.last),
                         child: Image.file(
-                          widget.imageFile,
+                          imageFile,
                           width: 300,
                           height: 300,
                           fit: BoxFit.contain,

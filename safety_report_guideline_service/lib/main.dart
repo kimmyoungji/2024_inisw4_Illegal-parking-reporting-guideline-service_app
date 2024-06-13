@@ -13,7 +13,6 @@ import '../ManageProvider.dart';
 import 'package:safety_report_guideline_service/util/check_list_data.dart';
 import 'package:safety_report_guideline_service/util/common_check_list_data.dart';
 import 'package:safety_report_guideline_service/util/hive_util.dart';
-import './IntroPage/IntroPage.dart';
 import './util/enums.dart';
 
 

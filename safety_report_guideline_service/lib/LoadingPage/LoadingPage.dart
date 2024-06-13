@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:io';
 
 import 'package:provider/provider.dart';
@@ -99,20 +100,39 @@ class _LoadingPageState extends State<LoadingPage> {
 
     try {
       Response response = await dio.post(
-          //"https://asia-northeast3-inisw04-project.cloudfunctions.net/area"  , data: formData);
-        "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process", data: formData);
+        //"https://asia-northeast3-inisw04-project.cloudfunctions.net/area"  , data: formData);
+          "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process", data: formData);
       if (response.statusCode ==200) {
         setState(() {
           analysis = true;
+          LoadingToast('200');
         });
         print(response.data);
+        LoadingToast(response.data.toString());
       }
     } catch (e) {
       print('Error sending multipart request: $e');
-      Future.delayed(const Duration(seconds: 10), (){
-        _uploadImage();
+      LoadingToast('${e}로 재시작');
+      // Future.delayed(const Duration(seconds: 10), (){
+      //   _uploadImage();
+      // });
+      setState(() {
+        analysis = true;
+        // LoadingToast('200');
       });
     }
     print("업로드 끝");
+  }
+  void LoadingToast(String data) {
+    Future.delayed(const Duration(seconds: 3), () {
+      Fluttertoast.showToast(
+        msg: '$data',
+        gravity: ToastGravity.TOP,
+        fontSize: 20,
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+        toastLength: Toast.LENGTH_SHORT,
+      );
+    });
   }
 }

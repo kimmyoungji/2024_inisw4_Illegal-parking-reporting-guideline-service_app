@@ -20,7 +20,7 @@ class Prov extends ChangeNotifier {
 
 
   /* image list */
-  final List<File> _imagesList = [];
+  late List<File> _imagesList = [];
   List<File> get imagesList => _imagesList;
   add_img(final file){
     _imagesList.add(file);
@@ -57,7 +57,7 @@ class Prov extends ChangeNotifier {
   /* 초기화 */
   void reset(){
     _imagesList = [];
-    _report_type = '어린이 보호구역';
+    _report_type = ReportType.school_zone;
   }
 }
 
