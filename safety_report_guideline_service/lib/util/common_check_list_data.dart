@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:hive/hive.dart';
 import './check_list_data.dart';
 
@@ -19,7 +18,7 @@ class CommonCheckListData {
 
   // Method to set the box instance
   Future<void> setBox(Box<dynamic> newBox) async {
-    box = await newBox;
+    box = newBox;
   }
 
   Future<CommonCheckListData> initialize() async {
@@ -57,7 +56,7 @@ class CommonCheckListData {
         }
       }
     }
-    return objectCheckListData as List<dynamic>;
+    return objectCheckListData;
   }
 
   // List<dynamic> check1min2(){}

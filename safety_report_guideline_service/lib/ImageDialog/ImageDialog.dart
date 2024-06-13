@@ -32,7 +32,7 @@ class _ImageDialogState extends State<ImageDialog> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     '촬영일시: ${DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now())}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -46,7 +46,7 @@ class _ImageDialogState extends State<ImageDialog> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: CircleAvatar(
+                  child: const CircleAvatar(
                     backgroundColor: Colors.black54,
                     child: Icon(Icons.close, color: Colors.white),
                   ),
@@ -61,10 +61,12 @@ class _ImageDialogState extends State<ImageDialog> {
 }
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -72,19 +74,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ReportForm(),
+      home: const ReportForm(),
     );
   }
 }
 
 class ReportForm extends StatelessWidget {
+  const ReportForm({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('신고문 작성'),
+        title: const Text('신고문 작성'),
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           onPressed: () {
             // 메뉴 버튼 누를 때 처리
           },
@@ -100,7 +104,7 @@ class ReportForm extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return ImageDialog();
+                    return const ImageDialog();
                   },
                 );
               },
@@ -116,7 +120,7 @@ class ReportForm extends StatelessWidget {
                     child: Container(
                       color: Colors.black54,
                       padding: const EdgeInsets.all(4.0),
-                      child: Text(
+                      child: const Text(
                         '촬영물',
                         style: TextStyle(
                           color: Colors.white,
@@ -128,26 +132,26 @@ class ReportForm extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildLabelWithIcon('신고유형', 'assets/Group_53.png'),
-            SizedBox(height: 8),
-            Text('횡단보도 불법주정차', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
+            const SizedBox(height: 8),
+            const Text('횡단보도 불법주정차', style: TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
             _buildLabelWithIcon('발생지역', 'assets/Group_53.png'),
-            SizedBox(height: 8),
-            Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
+            const SizedBox(height: 8),
+            const Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
             _buildLabelWithIcon('휴대전화', 'assets/Group_53.png'),
-            SizedBox(height: 8),
-            Text('010-9411-7238', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
+            const SizedBox(height: 8),
+            const Text('010-9411-7238', style: TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
             _buildLabelWithIcon('내용', 'assets/Group_53.png'),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               '횡단보도 불법주정차 신고합니다. 같은 위치에 자주 불법 주정차를 하는 차량입니다.',
               style: TextStyle(fontSize: 16),
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               children: [
                 Expanded(
@@ -155,24 +159,24 @@ class ReportForm extends StatelessWidget {
                     onPressed: () {
                       // 재촬영하기 버튼 누를 때 처리
                     },
-                    child: Text('재촬영하기'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF295FE5), // 버튼 배경색
+                      backgroundColor: const Color(0xFF295FE5), // 버튼 배경색
                       foregroundColor: Colors.white, // 버튼 텍스트 색상
                     ),
+                    child: const Text('재촬영하기'),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
                       // 신고하기 버튼 누를 때 처리
                     },
-                    child: Text('신고하기'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF295FE5), // 버튼 배경색
+                      backgroundColor: const Color(0xFF295FE5), // 버튼 배경색
                       foregroundColor: Colors.white, // 버튼 텍스트 색상
                     ),
+                    child: const Text('신고하기'),
                   ),
                 ),
               ],
@@ -187,10 +191,10 @@ class ReportForm extends StatelessWidget {
     return Row(
       children: [
         Image.asset(iconPath, width: 20.0, height: 20.0),
-        SizedBox(width: 8.0),
+        const SizedBox(width: 8.0),
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16.0,
           ),

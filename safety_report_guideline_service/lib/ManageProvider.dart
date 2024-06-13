@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 // late TestProv _TestProv;
 // 위젯 안에
 // _TestProv = Provider.of<TestProv>(context);
@@ -11,9 +10,9 @@ import 'package:camera/camera.dart';
 
 class Prov extends ChangeNotifier {
   // 진행 상태: 0(촬영 0번), 1(촬영 1번), 2(촬영 2번)  3(신고 완)
-  int _report_state = 0;
+  final int _report_state = 0;
 
-  List<File> _imagesList = [];
+  final List<File> _imagesList = [];
   List<File> get imagesList => _imagesList;
 
   add_img(final file){
@@ -29,22 +28,22 @@ class Prov extends ChangeNotifier {
     }
   }
 
-  List<bool> _check_result_list= [false, false, false, true];
+  final List<bool> _check_result_list= [false, false, false, true];
   List<bool> get check_result_list => _check_result_list;
 
-  bool _check_backgroud= false;
+  final bool _check_backgroud= false;
   bool get check_backgroud => _check_backgroud;
 
-  bool _check_object= true;
+  final bool _check_object= true;
   bool get check_object => _check_object;
 
-  bool _check_car_num= false;
+  final bool _check_car_num= false;
   bool get check_car_num => _check_car_num;
 
-  bool _check_1minute = true;
+  final bool _check_1minute = true;
   bool get check_1minute => _check_1minute;
 
-  bool _check_same_angle = false;
+  final bool _check_same_angle = false;
   bool get check_same_angle => _check_same_angle;
 
   // 신고 유형: _report_type
@@ -54,7 +53,7 @@ class Prov extends ChangeNotifier {
   change_report_type(String rt) {
     _report_type = rt;
     notifyListeners();
-    print('${_report_type}으로 변경됨');
+    print('$_report_type으로 변경됨');
   }
 
   // 차량번호: _car_num
@@ -65,7 +64,7 @@ class Prov extends ChangeNotifier {
   change_car_num(String cn) {
     _car_num = cn;
     notifyListeners();
-    print('${car_num}으로 변경됨');
+    print('$car_num으로 변경됨');
   }
 
   // 휴대전화: _phone_num
@@ -76,7 +75,7 @@ class Prov extends ChangeNotifier {
   change_phone_num(String pn) {
     _phone_num = pn;
     notifyListeners();
-    print('${_phone_num}으로 변경됨');
+    print('$_phone_num으로 변경됨');
   }
 
 

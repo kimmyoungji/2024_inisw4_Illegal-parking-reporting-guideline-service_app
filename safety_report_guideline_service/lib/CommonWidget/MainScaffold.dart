@@ -17,8 +17,8 @@ class _MainScaffoldState extends State<MainScaffold> {
   String? reportType;
   late Future<void> _initializeControllerFuture;
 
-  bool _isReportTypeSelected = false;
-  bool _isExitSelected = false;
+  final bool _isReportTypeSelected = false;
+  final bool _isExitSelected = false;
 
   void _quitApp(BuildContext context) {
     if (Platform.isAndroid) {
@@ -33,7 +33,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
         context: context,
         builder: (context) {
-          return Dial();
+          return const Dial();
         }
     );
   }

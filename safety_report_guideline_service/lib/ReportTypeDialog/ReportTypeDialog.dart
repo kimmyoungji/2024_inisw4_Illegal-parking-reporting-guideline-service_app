@@ -4,6 +4,8 @@ import '../ManageProvider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Dial extends StatefulWidget {
+  const Dial({super.key});
+
   @override
   _DialState createState() => _DialState();
 }
@@ -25,7 +27,7 @@ class _DialState extends State<Dial>{
     return AlertDialog(
       backgroundColor: Colors.white,
       alignment: Alignment.center,
-      title: Text(
+      title: const Text(
         "불법 주정차 신고 유형",
         textAlign: TextAlign.center,
         style: TextStyle(
@@ -44,7 +46,7 @@ class _DialState extends State<Dial>{
                       backgroundColor: _prov.report_type.toString()== buttonLabels[index]
                           ? Colors.blue
                           : Colors.black,
-                      minimumSize: Size(300, 50)
+                      minimumSize: const Size(300, 50)
                   ),
                   onPressed: () {
                     _prov.change_report_type(buttonLabels[index]);
@@ -61,14 +63,14 @@ class _DialState extends State<Dial>{
                   },
                   child: Text(
                       buttonLabels[index],
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                           color: Colors.white
                       )
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             );
           })

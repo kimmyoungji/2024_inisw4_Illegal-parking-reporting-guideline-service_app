@@ -14,7 +14,7 @@ import '../ManageProvider.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription> cameras;
-  CameraPage({super.key, required this.cameras});
+  const CameraPage({super.key, required this.cameras});
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -35,7 +35,12 @@ class _CameraPageState extends State<CameraPage> {
       enableAudio: false,
     );
     cameraValue = cameraController.initialize();
-    cameraToast();
+
+    // 페이지 진입 시 Toast 메시지 표시
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cameraProvider = Provider.of<Prov>(context, listen: false);
+      cameraToast(cameraProvider.imagesList.isEmpty);
+    });
   }
 
   @override
@@ -57,12 +62,13 @@ class _CameraPageState extends State<CameraPage> {
     final int rotationDegrees = getCameraRotation(cameraController.description.sensorOrientation);
     image = img.copyRotate(image, rotationDegrees);
 
-    final kstTime = DateTime.now();
+    // 한국 시간으로 변환하여 현재 시간 가져오기
+    final kstTime = DateTime.now().toUtc().add(const Duration(hours: 9));
     String timestamp = DateFormat('yyyy/MM/dd HH:mm:ss').format(kstTime);
 
     int fontSize = 48;
     int padding = 10;
-    int textWidth = (fontSize * timestamp.length / 2).toInt();
+    int textWidth = fontSize * timestamp.length ~/ 2;
     int textHeight = fontSize + padding * 2;
 
     // 타임스탬프 텍스트 및 배경 그리기
@@ -88,8 +94,9 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
-  void cameraToast() {
-    Future.delayed(const Duration(seconds: 3), () {
+  void cameraToast(bool isListEmpty) {
+    final duration = isListEmpty ? Duration(seconds: 3) : Duration(seconds: 67);
+    Future.delayed(duration, () {
       Fluttertoast.showToast(
         msg: '주변을 주시하세요.',
         gravity: ToastGravity.TOP,
@@ -120,13 +127,21 @@ class _CameraPageState extends State<CameraPage> {
         context,
         MaterialPageRoute(
             builder: (context) => MainScaffold(
+              title: '분석 결과',
               child: AnalysisResult(
                 imageFile: file,
                 cameras: widget.cameras,
               ),
-              title: '분석 결과',
             )),
       );
+
+      // 이미지 리스트의 상태에 따라 Toast 메시지 표시 시간 설정
+      if (cameraProvider.imagesList.isEmpty) {
+        cameraToast(true);
+      } else {
+        cameraToast(false);
+      }
+
     } catch (e) {
       print("Error taking picture: $e");
     }
@@ -204,7 +219,7 @@ class _CameraPageState extends State<CameraPage> {
                                       onTap: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.close,
                                         color: Colors.white,
                                         size: 30,
@@ -232,7 +247,7 @@ class _CameraPageState extends State<CameraPage> {
                   else
                     const SizedBox(width: 60, height: 60), // 빈 공간 생성
                   const Spacer(flex: 3),
-                  Container(
+                  SizedBox(
                     width: 80,
                     height: 80,
                     child: FloatingActionButton(
