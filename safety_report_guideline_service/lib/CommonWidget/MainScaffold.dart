@@ -17,7 +17,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   String? reportType;
   late Future<void> _initializeControllerFuture;
 
-  //bool _isReportTypeSelected = false;
+ //bool _isReportTypeSelected = false;
   bool _isExitSelected = false;
 
   void _quitApp(BuildContext context) {
@@ -28,6 +28,16 @@ class _MainScaffoldState extends State<MainScaffold> {
     }
   }
 
+
+//   Future<dynamic> _showdial(BuildContext context) {
+//     return showDialog(
+//         barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
+//         context: context,
+//         builder: (context) {
+//           return const ReportTypeDial();
+//         }
+//     );
+//   }
 
 
   @override

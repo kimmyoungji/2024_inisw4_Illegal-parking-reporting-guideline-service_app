@@ -14,7 +14,7 @@ class IntroPage extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                MainScaffold(child: CameraPage(cameras: cameras), title: '촬영',)
+                MainScaffold(title: '촬영',child: CameraPage(cameras: cameras),)
         ),
       );
     });

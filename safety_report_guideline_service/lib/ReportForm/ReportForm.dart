@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/CommonWidget/MainScaffold.dart';
+import 'package:safety_report_guideline_service/ImageDialog/ImageDialog.dart';
 import '../ManageProvider.dart';
 
 class PhoneNumberFormatter extends TextInputFormatter {
@@ -29,6 +30,8 @@ class PhoneNumberFormatter extends TextInputFormatter {
 }
 
 class ReportForm extends StatefulWidget {
+  const ReportForm({super.key});
+
   @override
   _ReportFormState createState() => _ReportFormState();
 }
@@ -64,27 +67,7 @@ class _ReportFormState extends State<ReportForm> {
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       pageBuilder: (context, _, __) {
-        return Center(
-          child: Stack(
-            children: [
-              Image.file(imageFile),
-              Positioned(
-                top: 10,
-                right: 10,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
+        return ImageDialog(imageFile: imageFile);
       },
     );
   }
@@ -150,7 +133,7 @@ class _ReportFormState extends State<ReportForm> {
             ),
             const SizedBox(height: 16.0),
             _buildLabel('내용'),
-            TextField(
+            const TextField(
               maxLines: 5,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -162,7 +145,7 @@ class _ReportFormState extends State<ReportForm> {
             TextField(
               controller: _controller,
               focusNode: _focusNode,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,

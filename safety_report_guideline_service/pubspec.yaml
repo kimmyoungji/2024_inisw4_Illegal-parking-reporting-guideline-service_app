@@ -37,7 +37,7 @@ dependencies:
   provider: ^6.1.2
   circular_countdown_timer: ^0.2.3
   percent_indicator: ^4.2.2
-  image: ^3.0.1
+  image: ^3.0.2
   image_picker: ^0.8.4+4
   intl: ^0.17.0
   fluttertoast: ^8.0.9
@@ -80,6 +80,7 @@ flutter:
     - assets/images/outro1.png
     - assets/images/outro2.png
     - assets/images/loading.png
+
   fonts:
     - family: NotoSans
       fonts:
