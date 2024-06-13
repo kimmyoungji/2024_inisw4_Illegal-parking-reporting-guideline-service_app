@@ -66,8 +66,8 @@ class _CameraPageState extends State<CameraPage> {
     img.Image image = img.decodeImage(Uint8List.fromList(bytes))!;
 
     // 카메라의 방향에 따라 이미지 회전
-    final int rotationDegrees = getCameraRotation(cameraController.description.sensorOrientation);
-    image = img.copyRotate(image, rotationDegrees);
+    // final int rotationDegrees = getCameraRotation(cameraController.description.sensorOrientation);
+    // image = img.copyRotate(image, rotationDegrees);
 
     // 한국 시간으로 변환하여 현재 시간 가져오기
     final kstTime = DateTime.now().toUtc().add(const Duration(hours: 9));

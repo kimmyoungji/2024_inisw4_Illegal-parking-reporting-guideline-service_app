@@ -28,8 +28,6 @@ class AnalysisResult extends StatefulWidget {
 
 /* 분석 페이지 상태 클래스 */
 class _AnalysisResultState extends State<AnalysisResult> {
-  // 전역 변수 집합
-  late Prov _prov;
   // object detection 결과 라벨
   late List<TargetObject> _labels;
   // checklistData
@@ -86,7 +84,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
     return [ TargetObject.car, TargetObject.side_walk, TargetObject.stop, TargetObject.number_plate ];
   }
 
-  Future<dynamic> _showdial(BuildContext context) {
+  Future<dynamic> _showReportTypeDial(BuildContext context) {
     return showDialog(
         barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
         context: context,
@@ -97,8 +95,6 @@ class _AnalysisResultState extends State<AnalysisResult> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<Prov>(context, listen: false);
-    File? imageFile = provider.imagesList.last;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -153,9 +149,9 @@ class _AnalysisResultState extends State<AnalysisResult> {
                     const SizedBox(height: 16.0),
                     Center(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, _prov.imagesList.last),
+                        onTap: () => _showImageDialog(context, prov.imagesList.last),
                         child: Image.file(
-                          imageFile,
+                          prov.imagesList.last,
                           width: 300,
                           height: 300,
                           fit: BoxFit.contain,

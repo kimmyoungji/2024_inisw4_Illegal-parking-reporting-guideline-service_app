@@ -101,7 +101,9 @@ class _LoadingPageState extends State<LoadingPage> {
     try {
       Response response = await dio.post(
         //"https://asia-northeast3-inisw04-project.cloudfunctions.net/area"  , data: formData);
-          "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process", data: formData);
+        //   "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process", data: formData);
+          "https://asia-northeast3-inisw04-project.cloudfunctions.net/segmodel", data: formData);
+
       if (response.statusCode ==200) {
         setState(() {
           analysis = true;
