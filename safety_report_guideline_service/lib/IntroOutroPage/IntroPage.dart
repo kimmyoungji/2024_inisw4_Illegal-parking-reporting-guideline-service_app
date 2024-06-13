@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../CameraPage/CameraPage.dart';
 import 'package:camera/camera.dart';
@@ -14,7 +13,7 @@ class IntroPage extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                MainScaffold(title: '촬영',child: CameraPage(cameras: cameras),)
+                MainScaffold(child: CameraPage(cameras: cameras), title: '촬영',)
         ),
       );
     });
@@ -54,4 +53,3 @@ class IntroPage extends StatelessWidget {
     );
   }
 }
-

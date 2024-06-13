@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/CameraPage/CameraPage.dart';
 import 'package:safety_report_guideline_service/CameraPage/Timer.dart';
 import 'package:safety_report_guideline_service/CompletedForm/CompletedForm.dart';
+
 import 'package:safety_report_guideline_service/ImageDialog/ImageDialog.dart';
 import 'package:safety_report_guideline_service/util/common_check_list_data.dart';
 import '../CommonWidget/MainScaffold.dart';
@@ -13,7 +14,6 @@ import '../ManageProvider.dart';
 import '../ReportTypeDialog/ReportTypeDialog.dart';
 import '../util/check_list_data.dart';
 import '../util/enums.dart';
-
 
 /* 분석 페이지 클래스 */
 class AnalysisResult extends StatefulWidget {
@@ -85,6 +85,47 @@ class _AnalysisResultState extends State<AnalysisResult> {
   Future<List<TargetObject>> getModelAnalyzedResult() async {
     // 임시 하드코딩, 모델과 연결될 부분
     return [ TargetObject.car, TargetObject.side_walk, TargetObject.stop, TargetObject.number_plate ];
+  }
+
+  Future<dynamic> _showdial(BuildContext context) {
+    return showDialog(
+        barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
+        context: context,
+        builder: (context) {
+          return Dial();
+        });
+  }
+
+  void _showImageDialog(BuildContext context, String imagePath) {
+    final provider = Provider.of<Prov>(context, listen: false);
+    File? imageFile = provider.imagesList.last;
+    showDialog(
+      context: context,
+      barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
+      builder: (context) {
+        return Dialog(
+          child:  Stack(
+                children: [
+                  Image.file(imageFile),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+        );
+      },
+    );
   }
 
   @override
@@ -267,4 +308,67 @@ class _AnalysisResultState extends State<AnalysisResult> {
       ],
     );
   }
+
+//   void showCustomDialog(BuildContext context) {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           backgroundColor: Colors.lightBlue[50], // 다이얼로그 배경색 변경
+//           title: Text(
+//             '어린이 보호구역 신고',
+//             textAlign: TextAlign.center, // 제목 중앙 정렬
+//             style: TextStyle(
+//               fontWeight: FontWeight.bold, // 제목 글씨 굵게
+//             ),
+//           ),
+//           content: Text(
+//             '어린이 보호구역 불법 주정차는\n정문 주차 차량만 신고 대상입니다.\n정문에서 촬영된 사진인가요?',
+//             textAlign: TextAlign.center, // 내용 중앙 정렬
+//             style: TextStyle(
+//               fontWeight: FontWeight.bold, // 내용 글씨 굵게
+//             ),
+//           ),
+//           actionsAlignment: MainAxisAlignment.spaceAround, // 버튼을 고르게 배치
+//           actions: <Widget>[
+//             OutlinedButton(
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//                 print('Yes clicked');
+//               },
+//               style: OutlinedButton.styleFrom(
+//                 side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
+//                 backgroundColor: Colors.black, // 버튼의 배경 색상
+//                 foregroundColor: Colors.white, // 글씨 색상
+//               ),
+//               child: Text(
+//                 '예',
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.bold, // 버튼 글씨 굵게
+//                 ),
+//               ),
+//             ),
+//             OutlinedButton(
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//                 print('No clicked');
+//               },
+//               style: OutlinedButton.styleFrom(
+//                 side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
+//                 backgroundColor: Colors.black, // 버튼의 배경 색상
+//                 foregroundColor: Colors.white, // 글씨 색상
+//               ),
+//               child: Text(
+//                 '아니요',
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.bold, // 버튼 글씨 굵게
+//                 ),
+//               ),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+  
 }

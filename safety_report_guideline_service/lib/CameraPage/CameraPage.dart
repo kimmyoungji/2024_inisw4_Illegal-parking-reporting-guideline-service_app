@@ -1,4 +1,5 @@
 
+import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
@@ -13,6 +14,8 @@ import 'package:external_path/external_path.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/AnalysisResult/AnalysisResult.dart';
+import 'package:safety_report_guideline_service/IntroOutroPage/OutroPage.dart';
+import 'package:safety_report_guideline_service/LoadingPage/LoadingPage.dart';
 import '../CommonWidget/MainScaffold.dart';
 import '../ManageProvider.dart';
 
@@ -98,8 +101,9 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
+
   void cameraToast(bool isListEmpty) {
-    final duration = isListEmpty ? Duration(seconds: 3) : Duration(seconds: 67);
+    final duration = isListEmpty ? Duration(seconds: 3) : Duration(seconds: 61);
     Future.delayed(duration, () {
       Fluttertoast.showToast(
         msg: '주변을 주시하세요.',
@@ -134,13 +138,8 @@ class _CameraPageState extends State<CameraPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => MainScaffold(
-              title: '분석 결과',
-              child: AnalysisResult(
-                imageFile: file,
-                cameras: widget.cameras,
-              ),
-            )),
+          builder: (context) => LoadingPage(cameras: widget.cameras),
+        ),
       );
 
       // 이미지 리스트의 상태에 따라 Toast 메시지 표시 시간 설정
@@ -155,17 +154,18 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
-  void switchCamera() {
-    setState(() {
-      selectedCameraIdx = (selectedCameraIdx + 1) % widget.cameras.length;
-      cameraController = CameraController(
-        widget.cameras[selectedCameraIdx],
-        ResolutionPreset.high,
-        enableAudio: false,
-      );
-      cameraValue = cameraController.initialize();
-    });
-  }
+
+//   void switchCamera() {
+//     setState(() {
+//       selectedCameraIdx = (selectedCameraIdx + 1) % widget.cameras.length;
+//       cameraController = CameraController(
+//         widget.cameras[selectedCameraIdx],
+//         ResolutionPreset.high,
+//         enableAudio: false,
+//       );
+//       cameraValue = cameraController.initialize();
+//     });
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -286,15 +286,3 @@ class _CameraPageState extends State<CameraPage> {
   }
 }
 
-void cameraToast(){
-  Future.delayed(const Duration(seconds: 3), () {
-    Fluttertoast.showToast(
-      msg: '주변을 주시하세요.',
-      gravity: ToastGravity.TOP,
-      fontSize: 20,
-      backgroundColor: Colors.grey,
-      textColor: Colors.black,
-      toastLength: Toast.LENGTH_LONG,
-    );
-  });
-}

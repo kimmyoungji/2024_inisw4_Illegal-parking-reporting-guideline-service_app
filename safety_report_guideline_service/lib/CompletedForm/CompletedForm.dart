@@ -1,8 +1,11 @@
+import '../IntroOutroPage/OutroPage.dart';
+import 'package:flutter/gestures.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/util/enums.dart';
+
 import '../ManageProvider.dart';
 
 class PhoneNumberFormatter extends TextInputFormatter {
@@ -63,13 +66,12 @@ class _CompletePageState extends State<CompletePage> {
   }
 
   void _showImageDialog(BuildContext context, File imageFile) {
-    showGeneralDialog(
+    showDialog(
       context: context,
-      barrierDismissible: true,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      pageBuilder: (context, _, __) {
-        return Center(
-          child: Stack(
+      barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
+      builder: (context) {
+        return Dialog(
+          child:  Stack(
             children: [
               Image.file(imageFile),
               Positioned(
@@ -144,7 +146,7 @@ class _CompletePageState extends State<CompletePage> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, _prov.imagesList[1]),
+                    onTap: () => _showImageDialog(context, _prov.imagesList[1]),
                         child: Stack(
                           children: [
                             Image.file(
@@ -243,10 +245,15 @@ class _CompletePageState extends State<CompletePage> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: checked_box?(){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('신고하기 버튼이 눌렸습니다.'),
-                            ),
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content: Text('신고하기 버튼이 눌렸습니다.'),
+                          //   ),
+                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OutroPage()),
                           );
                         }:null,
                         style: ElevatedButton.styleFrom(
