@@ -36,7 +36,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
   // checklistData
   late CheckListData checkListData;
 
-  void _showReportTypedial(BuildContext context) {
+  void _showReportTypeDialog(BuildContext context) {
       showDialog(
         barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
         context: context,
@@ -46,7 +46,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
   }
 
   void _showImageDialog(BuildContext context, File imageFile) {
-    showGeneralDialog(
+    showDialog(
       context: context,
       barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
       builder: (context) {
@@ -133,7 +133,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
                           visible: prov.imagesList.length != 2,
                           child: ElevatedButton(
                             onPressed: () {
-                              _showReportTypedial(context);
+                              _showReportTypeDialog(context);
                             },
                             child: const Text('변경'),
                           ),
@@ -143,7 +143,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
                     const SizedBox(height: 16.0),
                     Center(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, widget.imageFile.path),
+                        onTap: () => _showImageDialog(context, widget.imageFile),
                         child: Image.file(
                           widget.imageFile,
                           width: 300,
