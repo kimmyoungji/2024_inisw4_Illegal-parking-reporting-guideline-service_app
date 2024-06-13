@@ -245,11 +245,11 @@ class _CompletePageState extends State<CompletePage> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: checked_box?(){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('신고하기 버튼이 눌렸습니다.'),
-                            ),
-                          );
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content: Text('신고하기 버튼이 눌렸습니다.'),
+                          //   ),
+                          // );
                           Navigator.push(
                             context,
                             MaterialPageRoute(

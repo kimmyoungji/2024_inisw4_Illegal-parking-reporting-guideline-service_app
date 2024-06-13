@@ -10,23 +10,28 @@ import 'package:camera/camera.dart';
 
 
 class Prov extends ChangeNotifier {
-  // 진행 상태: 0(촬영 0번), 1(촬영 1번), 2(촬영 2번)  3(신고 완)
-  int _report_state = 0;
 
   List<File> _imagesList = [];
   List<File> get imagesList => _imagesList;
 
   add_img(final file){
     _imagesList.add(file);
-    if (_report_state == 0){
-
-    }
   }
 
   pop_img(){
     if (_imagesList.isNotEmpty) {
       _imagesList.removeLast();
     }
+  }
+
+  // 신고 유형: _report_type
+  String _report_type = '어린이 보호구역'; // 나중에 바꿔
+  String get report_type => _report_type; // 나중에 바꿀 거
+
+  change_report_type(String rt) {
+    _report_type = rt;
+    notifyListeners();
+    print('${_report_type}으로 변경됨');
   }
 
   List<bool> _check_result_list= [false, false, false, true];
@@ -47,16 +52,6 @@ class Prov extends ChangeNotifier {
   bool _check_same_angle = false;
   bool get check_same_angle => _check_same_angle;
 
-  // 신고 유형: _report_type
-  String _report_type = '소화전'; // 나중에 바꿔
-  String get report_type => _report_type; // 나중에 바꿀 거
-
-  change_report_type(String rt) {
-    _report_type = rt;
-    notifyListeners();
-    print('${_report_type}으로 변경됨');
-  }
-
   // 차량번호: _car_num
   String _car_num = '51가3593';
 
@@ -68,18 +63,11 @@ class Prov extends ChangeNotifier {
     print('${car_num}으로 변경됨');
   }
 
-  // 휴대전화: _phone_num
-  String _phone_num = '010-9411-7238';
 
-  String get phone_num => _phone_num;
-
-  change_phone_num(String pn) {
-    _phone_num = pn;
-    notifyListeners();
-    print('${_phone_num}으로 변경됨');
+  void reset(){
+    _imagesList = [];
+    _report_type = '어린이 보호구역';
   }
-
-
 }
 
 // Image img1 = Image(image: image);

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import './IntroOutroPage/IntroPage.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../ManageProvider.dart';
 import './CommonWidget/MainScaffold.dart';
@@ -24,6 +25,46 @@ import './util/check_list.dart';
 
 
 Future<void> main() async {
+  Future<void> _uploadImage(String str_uri) async {
+    print("upload 수행 시작");
+    File _image = await File('/storage/emulated/0/Download/1718266239380.png');
+
+
+    final uri = Uri.parse(str_uri);
+    var request = http.MultipartRequest('POST', uri);
+    // Read the image as bytes
+    List<int> imageBytes = await _image.readAsBytes();
+
+    // Add the file to the request
+    request.files.add(
+      http.MultipartFile.fromBytes(
+        'image', // name of the field that the server expects
+        imageBytes,
+        filename: "image.png", // you can provide a filename if needed
+      ),
+    );
+
+    // Send the request and get the response
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      print('Image uploaded successfully');
+    } else {
+      print('Image upload failed with status: ${response.statusCode}');
+    }
+    print("upload 끝");
+  }
+
+  List<String> API_LIST = [
+    "https://api-inference.huggingface.co/models/facebook/mask2former-swin-large-cityscapes-panoptic",
+    "https://api-inference.huggingface.co/models/MG31/license_aug_380_200_",
+    "https://api-inference.huggingface.co/models/stoneseok/finetuning_1",
+
+  ];
+  for (String apiUrl in API_LIST) {
+    _uploadImage(apiUrl);
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
 
   // 사용 가능한 카메라 반환

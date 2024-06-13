@@ -11,10 +11,9 @@ import '../ManageProvider.dart';
 import '../ReportTypeDialog/ReportTypeDialog.dart';
 
 class AnalysisResult extends StatelessWidget {
-  final File imageFile;
   final List<CameraDescription> cameras;
 
-  AnalysisResult({super.key, required this.imageFile, required this.cameras});
+  AnalysisResult({super.key, required this.cameras});
 
   late Prov _prov;
 
@@ -28,6 +27,8 @@ class AnalysisResult extends StatelessWidget {
   }
 
   void _showImageDialog(BuildContext context, String imagePath) {
+    final provider = Provider.of<Prov>(context, listen: false);
+    File? imageFile = provider.imagesList.last;
     showDialog(
       context: context,
       barrierDismissible: true, // 바깥을 클릭해도 닫히도록 설정
@@ -60,10 +61,14 @@ class AnalysisResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _prov = Provider.of<Prov>(context);
+    File imageFile = _prov.imagesList.last;
     List<bool> check_result_list = _prov.check_result_list;
     int sum = check_result_list.fold(0, (prev, element) => element ? prev + 1 : prev);
     double check_percent = sum / 5;
 
+    if (_prov.report_type =='어린이 보호구역'){
+      showCustomDialog;
+    }
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -205,6 +210,68 @@ class AnalysisResult extends StatelessWidget {
         SizedBox(width: 8.0),
         Text(text),
       ],
+    );
+  }
+
+  void showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.lightBlue[50], // 다이얼로그 배경색 변경
+          title: Text(
+            '어린이 보호구역 신고',
+            textAlign: TextAlign.center, // 제목 중앙 정렬
+            style: TextStyle(
+              fontWeight: FontWeight.bold, // 제목 글씨 굵게
+            ),
+          ),
+          content: Text(
+            '어린이 보호구역 불법 주정차는\n정문 주차 차량만 신고 대상입니다.\n정문에서 촬영된 사진인가요?',
+            textAlign: TextAlign.center, // 내용 중앙 정렬
+            style: TextStyle(
+              fontWeight: FontWeight.bold, // 내용 글씨 굵게
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceAround, // 버튼을 고르게 배치
+          actions: <Widget>[
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                print('Yes clicked');
+              },
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
+                backgroundColor: Colors.black, // 버튼의 배경 색상
+                foregroundColor: Colors.white, // 글씨 색상
+              ),
+              child: Text(
+                '예',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, // 버튼 글씨 굵게
+                ),
+              ),
+            ),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                print('No clicked');
+              },
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
+                backgroundColor: Colors.black, // 버튼의 배경 색상
+                foregroundColor: Colors.white, // 글씨 색상
+              ),
+              child: Text(
+                '아니요',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, // 버튼 글씨 굵게
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
