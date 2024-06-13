@@ -1,4 +1,5 @@
-import 'dart:developer';
+/*chat gpt used*/
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import './enums.dart';
@@ -20,7 +21,7 @@ class CheckListData {
 
   // Method to set the box instance
   Future<void> setBox(Box<dynamic> newBox) async {
-    box = await newBox;
+    box = newBox;
   }
 
   Future<CheckListData> initialize(ReportType reportType) async {
@@ -58,7 +59,7 @@ class CheckListData {
         }
       }
     }
-    return await objectCheckListData as List<dynamic>;
+    return objectCheckListData;
   }
 
   GeneralCheckItem checkTime(TimeOfDay startTime, TimeOfDay endTime, TimeOfDay photoTime) {

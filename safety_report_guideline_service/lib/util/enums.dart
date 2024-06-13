@@ -1,3 +1,5 @@
+/*chat gpt used*/
+
 enum ReportType {
   common,
   fire_hydrant,
@@ -25,7 +27,7 @@ String reportTypeToKorean(ReportType type) {
     case ReportType.sidewalk:
       return '인도';
     default:
-      return '${type}은 유효한 신고유형이 아닙니다.'; // 만약 새로운 enum 값이 추가되면 공백 문자열을 반환합니다.
+      return '$type은 유효한 신고유형이 아닙니다.'; // 만약 새로운 enum 값이 추가되면 공백 문자열을 반환합니다.
   }
 }
 

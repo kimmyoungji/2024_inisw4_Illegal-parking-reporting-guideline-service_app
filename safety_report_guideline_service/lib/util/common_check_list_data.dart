@@ -1,10 +1,11 @@
+/*chat gpt used*/
+
 import 'dart:developer';
 import 'dart:io';
 import 'package:hive/hive.dart';
 import 'package:safety_report_guideline_service/util/image_comparing.dart';
 import './check_list_data.dart';
 import './enums.dart';
-import '../util/image_comparing.dart';
 
 class CommonCheckListData {
   static final CommonCheckListData _instance = CommonCheckListData._internal();
@@ -23,7 +24,7 @@ class CommonCheckListData {
 
   // Method to set the box instance
   Future<void> setBox(Box<dynamic> newBox) async {
-    box = await newBox;
+    box = newBox;
   }
 
   Future<CommonCheckListData> initialize() async {
@@ -61,34 +62,39 @@ class CommonCheckListData {
         }
       }
     }
-    return objectCheckListData as List<dynamic>;
+    return objectCheckListData;
   }
 
-  GeneralCheckItem check1min2photo(int PictureCount){
-    if(PictureCount > 3 ){
+  Future<GeneralCheckItem> check1min2photo(int pictureCount) async{
+    log('이미지갯수 $pictureCount');
+    if(pictureCount >= 2 ){
       generalCheckListData[0].value = true;
-      return generalCheckListData[0];
+      return await generalCheckListData[0];
     }else{
-      return generalCheckListData[0];
+      return await generalCheckListData[0];
     }
   }
 
-  Future<GeneralCheckItem> checkAngleSimilar(File imageFile1, File imageFile2) async {
-    double similarity = await compareImages(imageFile1.path, imageFile2.path);
+  Future<GeneralCheckItem> checkAngleSimilar(List<File> imagesList) async {
+    if(imagesList.length < 2){
+      return await generalCheckListData[1];
+    }
+    log('${imagesList[0].path}, ${imagesList[1].path} 나와라 나와라 나와라');
+    double similarity = await compareImages(imagesList[0].path, imagesList[1].path);
     if(similarity > 0.9 ){
       generalCheckListData[1].value = true;
-      return generalCheckListData[1];
+      return await generalCheckListData[1];
     }else{
-      return generalCheckListData[1];
+      return await generalCheckListData[1];
     }
   }
 
-  GeneralCheckItem checkBackgroundRatio(double value) {
-    if(value > 0.4 && value < 0.6 ){
+  Future<GeneralCheckItem> checkBackgroundRatio(double value) async {
+    if(value > 0.3 && value < 0.5 ){
       generalCheckListData[2].value = true;
-      return generalCheckListData[2];
+      return await generalCheckListData[2];
     }else{
-      return generalCheckListData[2];
+      return await generalCheckListData[2];
     }
   }
 }

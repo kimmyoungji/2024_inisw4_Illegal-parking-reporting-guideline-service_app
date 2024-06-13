@@ -1,5 +1,3 @@
-import 'dart:developer';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
@@ -11,7 +9,6 @@ import 'package:safety_report_guideline_service/util/common_check_list_data.dart
 import 'package:safety_report_guideline_service/util/hive_util.dart';
 import './IntroPage/IntroPage.dart';
 import './util/enums.dart';
-import 'package:path/path.dart';
 
 
 Future<void> main() async {

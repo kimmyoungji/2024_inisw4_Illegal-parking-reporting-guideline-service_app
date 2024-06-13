@@ -30,6 +30,8 @@ class PhoneNumberFormatter extends TextInputFormatter {
 }
 
 class ReportForm extends StatefulWidget {
+  const ReportForm({super.key});
+
   @override
   _ReportFormState createState() => _ReportFormState();
 }
@@ -131,7 +133,7 @@ class _ReportFormState extends State<ReportForm> {
             ),
             const SizedBox(height: 16.0),
             _buildLabel('내용'),
-            TextField(
+            const TextField(
               maxLines: 5,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -143,7 +145,7 @@ class _ReportFormState extends State<ReportForm> {
             TextField(
               controller: _controller,
               focusNode: _focusNode,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,

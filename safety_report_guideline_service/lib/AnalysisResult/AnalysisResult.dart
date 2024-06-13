@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ class AnalysisResult extends StatefulWidget {
   final File imageFile;
   final List<CameraDescription> cameras;
 
-  AnalysisResult({super.key, required this.imageFile, required this.cameras});
+  const AnalysisResult({super.key, required this.imageFile, required this.cameras});
 
   @override
   State<AnalysisResult> createState() => _AnalysisResultState();
@@ -42,7 +41,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
         barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
         context: context,
         builder: (context) {
-          return ReportTypeDial();
+          return const ReportTypeDial();
         });
   }
 
@@ -57,18 +56,24 @@ class _AnalysisResultState extends State<AnalysisResult> {
   }
 
   // 체크 리스트 데이터 받아 오기
-  Future<List<dynamic>> getChecklistData(ReportType report_type, List<TargetObject> labels ) async{
+  Future<List<dynamic>> getChecklistData(Prov prov, List<TargetObject> labels) async{
     // checklist: 특정 유형 체크 항목 데이터 받아 오기
-    CheckListData checkListData = await CheckListData();
-    await checkListData.initialize(report_type);
+    CheckListData checkListData = CheckListData();
+    await checkListData.initialize(prov.report_type);
     await checkListData.checkObject(labels);
+    if(prov.report_type == ReportType.school_zone){
+      checkListData.checkTime(const TimeOfDay(hour: 9, minute: 00), const TimeOfDay(hour: 20, minute: 00), TimeOfDay(hour: prov.photo_time.hour, minute: prov.photo_time.minute));
+    }
     List<dynamic> objectCheckListData = checkListData.objectCheckListData;
     List<dynamic> generalCheckListData = checkListData.generalCheckListData;
 
     // common checklist: 공통 체크항목 데이터
-    CommonCheckListData commonCheckListData = await CommonCheckListData();
+    CommonCheckListData commonCheckListData = CommonCheckListData();
     await commonCheckListData.initialize();
-    await commonCheckListData.checkObject(labels);
+    commonCheckListData.checkObject(labels);
+    await commonCheckListData.check1min2photo(prov.imagesList.length);
+    await commonCheckListData.checkAngleSimilar(prov.imagesList);
+    await commonCheckListData.checkBackgroundRatio(prov.check_backgroud);
     List<dynamic> commonObjectCheckListData = commonCheckListData.objectCheckListData;
     List<dynamic> commonGeneralCheckListData = commonCheckListData.generalCheckListData;
 
@@ -79,63 +84,63 @@ class _AnalysisResultState extends State<AnalysisResult> {
   // 모델과 연결될 부분
   Future<List<TargetObject>> getModelAnalyzedResult() async {
     // 임시 하드코딩, 모델과 연결될 부분
-    return await [ TargetObject.car, TargetObject.side_walk, TargetObject.stop, TargetObject.number_plate ];
+    return [ TargetObject.car, TargetObject.side_walk, TargetObject.stop, TargetObject.number_plate ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Consumer<Prov>(
-          builder: (context, _prov, child) {
+          builder: (context, prov, child) {
             return FutureBuilder<List<dynamic>>(
-              future: _loadChecklistData(_prov),
+              future: _loadChecklistData(prov),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text('No data available'));
+                  return const Center(child: Text('No data available'));
                 }
 
                 List<dynamic> checkListData = snapshot.data!;
                 int sum = checkListData.fold(0, (value, element) => value + (element.value ? 1 : 0));
-                double check_percent = double.parse((sum / checkListData.length).toStringAsFixed(1));
+                double checkPercent = double.parse((sum / checkListData.length).toStringAsFixed(1));
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.report, color: Colors.orange),
-                        SizedBox(width: 8.0),
-                        Text(
+                        const Icon(Icons.report, color: Colors.orange),
+                        const SizedBox(width: 8.0),
+                        const Text(
                           '신고 유형:',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(width: 8.0),
+                        const SizedBox(width: 8.0),
                         Text(
-                          reportTypeToKorean(_prov.report_type),
-                          style: TextStyle(
+                          reportTypeToKorean(prov.report_type),
+                          style: const TextStyle(
                             color: Color(0xFF862633),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Visibility(
-                          visible: _prov.imagesList.length != 2,
+                          visible: prov.imagesList.length != 2,
                           child: ElevatedButton(
                             onPressed: () {
                               _showReportTypedial(context);
                             },
-                            child: Text('변경'),
+                            child: const Text('변경'),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     Center(
                       child: GestureDetector(
                         onTap: () => _showImageDialog(context, widget.imageFile.path),
@@ -147,17 +152,17 @@ class _AnalysisResultState extends State<AnalysisResult> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16.0),
-                    Text('가이드 라인 준수율'),
-                    SizedBox(height: 8.0),
+                    const SizedBox(height: 16.0),
+                    const Text('가이드 라인 준수율'),
+                    const SizedBox(height: 8.0),
                     LinearProgressIndicator(
-                      value: check_percent,
+                      value: checkPercent,
                       backgroundColor: Colors.grey[300],
                       color: Colors.blue,
                     ),
-                    SizedBox(height: 8.0),
-                    Text('${(check_percent * 100).toStringAsFixed(1)}%'),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 8.0),
+                    Text('${(checkPercent * 100).toStringAsFixed(1)}%'),
+                    const SizedBox(height: 16.0),
                     Column(
                       children: List.generate(checkListData.length, (index) {
                         return Column(
@@ -168,36 +173,36 @@ class _AnalysisResultState extends State<AnalysisResult> {
                         );
                       }),
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     Row(
                       children: [
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              _prov.pop_img();
-                              print(_prov.imagesList);
+                              prov.pop_img();
+                              print(prov.imagesList);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainScaffold(
-                                        child: CameraPage(cameras: widget.cameras),
-                                        title: "촬영")),
+                                        title: "촬영",
+                                        child: CameraPage(cameras: widget.cameras))),
                               );
                             },
-                            child: Text('재촬영하기'),
+                            child: const Text('재촬영하기'),
                           ),
                         ),
-                        SizedBox(width: 16.0),
+                        const SizedBox(width: 16.0),
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              if (_prov.imagesList.length == 2) {
+                              if (prov.imagesList.length == 2) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => MainScaffold(
-                                        child: CompletePage(),
+                                      builder: (context) => const MainScaffold(
                                         title: '신고문 작성',
+                                        child: CompletePage(),
                                       )),
                                 );
                               } else {
@@ -205,14 +210,14 @@ class _AnalysisResultState extends State<AnalysisResult> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => MainScaffold(
-                                          child: CameraPage(cameras: widget.cameras),
-                                          title: "촬영")),
+                                          title: "촬영",
+                                          child: CameraPage(cameras: widget.cameras))),
                                 );
                                 showDialog(
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return Dialog(
+                                    return const Dialog(
                                       backgroundColor: Colors.transparent,
                                       child: DialTimerScreen(),
                                     );
@@ -220,7 +225,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
                                 );
                               }
                             },
-                            child: Text('계속하기'),
+                            child: const Text('계속하기'),
                           ),
                         ),
                       ],
@@ -235,10 +240,10 @@ class _AnalysisResultState extends State<AnalysisResult> {
     );
   }
 
-  Future<List<dynamic>> _loadChecklistData(Prov _prov) async {
+  Future<List<dynamic>> _loadChecklistData(Prov prov) async {
     // Load Data
     _labels = await getModelAnalyzedResult();
-    List<dynamic> checkListData = await getChecklistData(_prov.report_type, _labels);
+    List<dynamic> checkListData = await getChecklistData(prov, _labels);
     return checkListData;
   }
 
@@ -250,13 +255,13 @@ class _AnalysisResultState extends State<AnalysisResult> {
           isChecked ? Icons.check_circle : Icons.radio_button_unchecked,
           color: isChecked ? Colors.blue : Colors.grey,
         ),
-        SizedBox(width: 8.0),
+        const SizedBox(width: 8.0),
         Expanded(
           child: Text(
             text,
             softWrap: true,
             overflow: TextOverflow.visible,
-            style: TextStyle(fontSize: 16.0),
+            style: const TextStyle(fontSize: 16.0),
           ),
         ),
       ],

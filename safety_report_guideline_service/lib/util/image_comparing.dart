@@ -1,12 +1,17 @@
+/*chat gpt used*/
+
 import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:image/image.dart' as img;
 
 Future<double> compareImages(String path1, String path2) async {
+
+  log('$path1, $path2 이거 왜 안돼냐고요');
   // Load images asynchronously from asset bundle
-  final imageBytes1 = await loadImageBytes(path1);
-  final imageBytes2 = await loadImageBytes(path2);
+  final imageBytes1 = await loadImageFileAsUint8List(path1);
+  final imageBytes2 = await loadImageFileAsUint8List(path2);
 
   // Decode images
   img.Image image1 = img.decodeImage(imageBytes1.buffer.asUint8List())!;
@@ -33,9 +38,12 @@ Future<double> compareImages(String path1, String path2) async {
   return similarity;
 }
 
-Future<ByteData> loadImageBytes(String assetPath) async {
-  ByteData byteData = await rootBundle.load(assetPath);
-  return byteData;
+Future<Uint8List> loadImageFileAsUint8List(String imagePath) async {
+  // Read file as bytes
+  File imageFile = File(imagePath);
+  Uint8List bytes = await imageFile.readAsBytes();
+
+  return bytes;
 }
 
 int calculatePixelDifference(img.Image image1, img.Image image2) {

@@ -1,5 +1,6 @@
+/*chat gpt used*/
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class TimeCheckItem {
   bool value;
@@ -20,14 +21,3 @@ TimeCheckItem checkTime(String timezone, TimeOfDay startTime, TimeOfDay endTime,
     return TimeCheckItem(false);
   }
 }
-
-// void main() {
-//   // Example usage
-//   String timezone = 'UTC+05:00';
-//   TimeOfDay startTime = TimeOfDay(hour: 9, minute: 0);
-//   TimeOfDay endTime = TimeOfDay(hour: 17, minute: 0);
-//   TimeOfDay photoTime = TimeOfDay(hour: 12, minute: 30); // Example photo time
-//
-//   TimeCheckItem result = checkTime(timezone, startTime, endTime, photoTime);
-//   print('Is photo time within boundary? ${result.value}');
-// }
