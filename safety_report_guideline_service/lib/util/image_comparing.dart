@@ -7,8 +7,6 @@ import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 
 Future<double> compareImages(String path1, String path2) async {
-
-  log('$path1, $path2 이거 왜 안돼냐고요');
   // Load images asynchronously from asset bundle
   final imageBytes1 = await loadImageFileAsUint8List(path1);
   final imageBytes2 = await loadImageFileAsUint8List(path2);
