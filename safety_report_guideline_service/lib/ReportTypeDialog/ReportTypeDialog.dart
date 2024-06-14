@@ -46,7 +46,7 @@ class _ReportTypeDialState extends State<ReportTypeDial>{
               children: [
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      backgroundColor: _prov.report_type.toString() == buttonLabels[index]
+                      backgroundColor: reportTypeToKorean(_prov.report_type) == buttonLabels[index]
                           ? Colors.blue
                           : Colors.black,
                       minimumSize: const Size(300, 50)

@@ -132,6 +132,7 @@ class _CameraPageState extends State<CameraPage> {
       XFile image = await cameraController.takePicture();
       final file = await saveImage(image);
       cameraProvider.add_img(file);
+      print(cameraProvider.imagesList);
 
       MediaScanner.loadMedia(path: file.path);
 
