@@ -156,7 +156,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
                     const SizedBox(height: 16.0),
                     Center(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, prov.imagesList.last),
+                        onTap: () => _showImageDialog(context, prov.SegList.length == prov.imagesList.length ? prov.SegList.last :prov.imagesList.last),
                         child: Image.file(
                           prov.imagesList.last,
                           width: 300,

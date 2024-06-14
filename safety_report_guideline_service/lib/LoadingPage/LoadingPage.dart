@@ -30,14 +30,14 @@ class _LoadingPageState extends State<LoadingPage> {
   void initState() {
     super.initState();
 
-    List<String> API_LIST = [
-      "https://api-inference.huggingface.co/models/facebook/mask2former-swin-large-cityscapes-panoptic",
-      "https://api-inference.huggingface.co/models/MG31/license_aug_380_200_",
-      "https://api-inference.huggingface.co/models/stoneseok/finetuning_1",
-    ];
-    for (String apiUrl in API_LIST) {
-      _uploadImage(apiUrl);
-    }
+    // List<String> API_LIST = [
+    //   "https://api-inference.huggingface.co/models/facebook/mask2former-swin-large-cityscapes-panoptic",
+    //   "https://api-inference.huggingface.co/models/MG31/license_aug_380_200_",
+    //   "https://api-inference.huggingface.co/models/stoneseok/finetuning_1",
+    // ];
+    // for (String apiUrl in API_LIST) {
+    //   _uploadImage(apiUrl);
+    // }
     _segmentation();
   }
 
@@ -132,6 +132,8 @@ class _LoadingPageState extends State<LoadingPage> {
         if (responseData['image'] != null){
           Uint8List binaryData = base64Decode(responseData['image']);
           saveImage(binaryData);
+        }else{
+          print("segmentation 시작");
         }
         //List<dynamic> full_od_result = responseData['full_od_result']; //[{box: {xmax: 522, xmin: 279, ymax: 544, ymin: 358}, label: LABEL_1, score: 0.6640685796737671}]
         //print('full_od_result: $full_od_result');
@@ -148,6 +150,7 @@ class _LoadingPageState extends State<LoadingPage> {
 
         List<dynamic> od_result = responseData['od_result']; // 라벨 값 [LABEL_1]
         print('od_result: $od_result');
+        LoadingToast(od_result.toString());
 
         //String area = responseData['area'].toString();
         //String max_car_ratio = responseData['area']['max_car_ratio'].toString().split("%")[0];
@@ -210,9 +213,10 @@ class _LoadingPageState extends State<LoadingPage> {
 
   Future<void> saveImage(Uint8List imageData) async {
     final _prov = Provider.of<Prov>(context, listen: false);
-    String _image = _prov.imagesList.last.path;
-
-    final file = File(_image);
+    String _image = _prov.imagesList.last.path;;
+    final file = File("${_image.split('.').first}seg.png");
+    _prov.add_seg_img(file);
+    print("seglist: ${_prov.SegList}");
     await file.writeAsBytes(imageData);
   }
 

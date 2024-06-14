@@ -31,6 +31,18 @@ class Prov extends ChangeNotifier {
     }
   }
 
+  /* image list */
+  late List<File> _SegList = [];
+  List<File> get SegList => _SegList;
+  add_seg_img(final file){
+    _SegList.add(file);
+  }
+  pop_seg_img(){
+    if (_SegList.isNotEmpty) {
+      _SegList.removeLast();
+    }
+  }
+
 
   /* 배경-자동차 비율 */
   double _check_backgroud= 0.4;
