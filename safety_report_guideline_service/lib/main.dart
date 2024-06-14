@@ -19,13 +19,12 @@ import './util/enums.dart';
 Future<void> main() async {
   Future<void> _uploadImage(String str_uri) async {
     print("upload 수행 시작");
-    File _image = await File('/storage/emulated/0/Download/1718266239380.png');
 
 
     final uri = Uri.parse(str_uri);
     var request = http.MultipartRequest('POST', uri);
     // Read the image as bytes
-    List<int> imageBytes = await _image.readAsBytes();
+    List<int> imageBytes = [0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46];
 
     // Add the file to the request
     request.files.add(
