@@ -10,7 +10,7 @@ class Prov extends ChangeNotifier {
 
 
   /* 신고 유형: _report_type */
-  ReportType _report_type = ReportType.sidewalk;
+  ReportType _report_type = ReportType.school_zone;
   ReportType get report_type => _report_type;
   change_report_type(String rt) {
     _report_type = koreanToReportType(rt);
@@ -33,9 +33,13 @@ class Prov extends ChangeNotifier {
 
 
   /* 배경-자동차 비율 */
-  final double _check_backgroud= 0.4;
+  double _check_backgroud= 0.4;
   double get check_backgroud => _check_backgroud;
-  
+
+  get_car_ratio(double car_ratio){
+    _check_backgroud = car_ratio;
+    notifyListeners();
+  }
 
   /* 촬영시간 */
   DateTime _photo_time = DateTime.now();

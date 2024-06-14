@@ -89,8 +89,8 @@ class CommonCheckListData {
     }
   }
 
-  Future<GeneralCheckItem> checkBackgroundRatio(double value) async {
-    if(value > 0.3 && value < 0.5 ){
+  Future<GeneralCheckItem> checkBackgroundRatio(double car_ratio) async {
+    if(car_ratio > 0.3 && car_ratio < 0.5 ){
       generalCheckListData[2].value = true;
       return await generalCheckListData[2];
     }else{
