@@ -19,6 +19,7 @@ import 'package:safety_report_guideline_service/LoadingPage/LoadingPage.dart';
 import '../CommonWidget/MainScaffold.dart';
 import '../ManageProvider.dart';
 
+/* 카메라 페이지 */
 class CameraPage extends StatefulWidget {
   final List<CameraDescription> cameras;
   const CameraPage({super.key, required this.cameras});
@@ -27,6 +28,7 @@ class CameraPage extends StatefulWidget {
   State<CameraPage> createState() => _CameraPageState();
 }
 
+/* 카메라 페이지 State */
 class _CameraPageState extends State<CameraPage> {
   late CameraController cameraController;
   late Future<void> cameraValue;

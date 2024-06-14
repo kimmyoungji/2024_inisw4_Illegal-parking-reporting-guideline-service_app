@@ -79,9 +79,9 @@ class CommonCheckListData {
     if(imagesList.length < 2){
       return await generalCheckListData[1];
     }
-    log('${imagesList[0].path}, ${imagesList[1].path} 나와라 나와라 나와라');
     double similarity = await compareImages(imagesList[0].path, imagesList[1].path);
-    if(similarity > 0.9 ){
+    log('두 사진의 유사도${similarity}');
+    if(similarity > 0.7 ){
       generalCheckListData[1].value = true;
       return await generalCheckListData[1];
     }else{
@@ -90,7 +90,8 @@ class CommonCheckListData {
   }
 
   Future<GeneralCheckItem> checkBackgroundRatio(double car_ratio) async {
-    if(car_ratio > 0.3 && car_ratio < 0.5 ){
+    log('배경 대비 차량의 비율: ${car_ratio}');
+    if(car_ratio > 0.2 && car_ratio < 0.5 ){
       generalCheckListData[2].value = true;
       return await generalCheckListData[2];
     }else{
