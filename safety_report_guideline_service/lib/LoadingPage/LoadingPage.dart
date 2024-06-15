@@ -140,7 +140,6 @@ class _LoadingPageState extends State<LoadingPage> {
         _prov.od_result = od_result;
         print('od_result: $od_result');
         LoadingToast(od_result.toString());
-        _prov.change_od_result(od_result);
 
         // String area = responseData['area'].toString();
         // String max_car_ratio = responseData['area']['max_car_ratio'].toString().split("%")[0];
