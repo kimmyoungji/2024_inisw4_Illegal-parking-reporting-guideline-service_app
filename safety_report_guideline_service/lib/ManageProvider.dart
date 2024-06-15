@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:safety_report_guideline_service/util/decide_reporttype.dart';
 
 import 'package:safety_report_guideline_service/util/enums.dart';
 
@@ -17,6 +19,23 @@ class Prov extends ChangeNotifier {
     notifyListeners();
     print('$_report_type으로 변경됨');
   }
+  void guess_report_type(List<dynamic> od_result ) {
+    _report_type = decideReportType(od_result);
+    log('$_report_type으로 변경됨');
+    print('$_report_type으로 변경됨');
+  }
+
+  /* od_result */
+  late List<TargetObject> _od_result = [];
+  List<TargetObject> get od_result => _od_result;
+  set od_result(List<dynamic> new_od_result) {
+    List<TargetObject> targetObjdects = [];
+    for(var i = 0; i < new_od_result.length ; i++){
+      targetObjdects.add(str2TargetObj(new_od_result[i]));
+    }
+    _od_result = targetObjdects;
+    log('$_od_result으로 변경됨');
+  }
 
 
   /* image list */
@@ -31,7 +50,7 @@ class Prov extends ChangeNotifier {
     }
   }
 
-  /* image list */
+  /* seg image list */
   late List<File> _SegList = [];
   List<File> get SegList => _SegList;
   add_seg_img(final file){
@@ -47,8 +66,7 @@ class Prov extends ChangeNotifier {
   /* 배경-자동차 비율 */
   double _check_backgroud= 0.4;
   double get check_backgroud => _check_backgroud;
-
-  get_car_ratio(double car_ratio){
+  set car_ratio(double car_ratio){
     _check_backgroud = car_ratio;
     notifyListeners();
   }

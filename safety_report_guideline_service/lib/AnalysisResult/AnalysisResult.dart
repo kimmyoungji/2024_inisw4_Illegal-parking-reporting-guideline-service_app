@@ -53,7 +53,9 @@ class _AnalysisResultState extends State<AnalysisResult> {
   }
 
   // 체크 리스트 데이터 받아 오기
-  Future<List<dynamic>> getChecklistData(Prov prov, List<TargetObject> labels) async{
+  Future<List<dynamic>> getChecklistData(Prov prov) async{
+    // od_result 전역에서 참조하기
+    List<TargetObject> labels = prov.od_result;
     // checklist: 특정 유형 체크 항목 데이터 받아 오기
     CheckListData checkListData = CheckListData();
     await checkListData.initialize(prov.report_type);
@@ -76,12 +78,6 @@ class _AnalysisResultState extends State<AnalysisResult> {
 
     List<dynamic> result = [...objectCheckListData, ...commonObjectCheckListData, ...generalCheckListData, ...commonGeneralCheckListData];
     return result;
-  }
-
-  // 모델과 연결될 부분
-  Future<List<TargetObject>> getModelAnalyzedResult() async {
-    // 임시 하드코딩, 모델과 연결될 부분
-    return [ TargetObject.car, TargetObject.side_walk, TargetObject.stop, TargetObject.number_plate ];
   }
 
   Future<dynamic> _showReportTypeDial(BuildContext context) {
@@ -255,8 +251,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
 
   Future<List<dynamic>> _loadChecklistData(Prov prov) async {
     // Load Data
-    _labels = await getModelAnalyzedResult();
-    List<dynamic> checkListData = await getChecklistData(prov, _labels);
+    List<dynamic> checkListData = await getChecklistData(prov);
     return checkListData;
   }
 

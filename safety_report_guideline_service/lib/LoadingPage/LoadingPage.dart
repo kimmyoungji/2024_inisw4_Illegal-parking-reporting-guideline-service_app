@@ -144,20 +144,23 @@ class _LoadingPageState extends State<LoadingPage> {
         Map<String, dynamic> area = responseData['area']; // json 형태
         if(area.isNotEmpty){
           String max_car_ratio = area['max_car_ratio'].toString().split("%")[0];
-          _prov.get_car_ratio(double.parse(max_car_ratio));
+          _prov.car_ratio = double.parse(max_car_ratio);
         }
         print(_prov.check_backgroud);
 
         List<dynamic> od_result = responseData['od_result']; // 라벨 값 [LABEL_1]
+        od_result = ['fire_hydrant','truck','car'];
+        _prov.guess_report_type(od_result);
+        _prov.od_result = od_result;
         print('od_result: $od_result');
         LoadingToast(od_result.toString());
 
-        //String area = responseData['area'].toString();
-        //String max_car_ratio = responseData['area']['max_car_ratio'].toString().split("%")[0];
+        // String area = responseData['area'].toString();
+        // String max_car_ratio = responseData['area']['max_car_ratio'].toString().split("%")[0];
         // String road_ratio = responseData['area']['road_ratio'].toString().split("%")[0];
         // String sidewalk_ratio = responseData['area']['sidewalk_ratio'].toString().split("%")[0];
-        //_prov.get_car_ratio(double.parse(max_car_ratio));
-        //print(_prov.check_backgroud);
+        // _prov.get_car_ratio(double.parse(max_car_ratio));
+        // print(_prov.check_backgroud);
 
         String license_number = responseData['license_number'].toString();
         print('license_number: $license_number');
