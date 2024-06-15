@@ -8,6 +8,13 @@ class Prov extends ChangeNotifier {
   /* 진행 상태: 0(촬영 0번), 1(촬영 1번), 2(촬영 2번)  3(신고 완) */
   final int _report_state = 0;
 
+  List<dynamic> _od_result = [];
+  List<dynamic> get od_result => _od_result;
+
+  change_od_result(List<dynamic> od){
+    _od_result = od;
+  }
+
 
   /* 신고 유형: _report_type */
   ReportType _report_type = ReportType.school_zone;

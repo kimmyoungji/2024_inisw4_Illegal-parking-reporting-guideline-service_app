@@ -96,9 +96,11 @@ class _AnalysisResultState extends State<AnalysisResult> {
   @override
   Widget build(BuildContext context) {
     final _prov = Provider.of<Prov>(context);
-    // if (reportTypeToKorean(_prov.report_type)=='어린이 보호구역' ){
-    //   showCustomDialog(context);
-    // }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (reportTypeToKorean(_prov.report_type) == '어린이 보호구역') {
+        showCustomDialog(context);
+      }
+    });
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -143,10 +145,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
                           visible: prov.imagesList.length != 2,
                           child: ElevatedButton(
                             onPressed: () {
-                              String before = reportTypeToKorean(prov.report_type);
                               _showReportTypeDialog(context);
-                              String after = reportTypeToKorean(prov.report_type);
-
                             },
                             child: const Text('변경'),
                           ),
@@ -193,7 +192,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
                           child: ElevatedButton(
                             onPressed: () {
                               prov.pop_img();
-                              print(prov.imagesList);
+                              prov.pop_seg_img();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
