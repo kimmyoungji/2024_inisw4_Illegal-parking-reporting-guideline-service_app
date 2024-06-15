@@ -49,7 +49,7 @@ Future<void> main() async {
   List<String> API_LIST = [
     "https://api-inference.huggingface.co/models/facebook/mask2former-swin-large-cityscapes-panoptic",
     "https://api-inference.huggingface.co/models/MG31/license_aug_380_200_",
-    "https://api-inference.huggingface.co/models/stoneseok/finetuning_1",
+    "https://huggingface.co/MG31/V8_342",
 
   ];
   for (String apiUrl in API_LIST) {

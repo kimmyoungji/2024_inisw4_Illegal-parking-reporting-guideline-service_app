@@ -29,15 +29,6 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-
-    // List<String> API_LIST = [
-    //   "https://api-inference.huggingface.co/models/facebook/mask2former-swin-large-cityscapes-panoptic",
-    //   "https://api-inference.huggingface.co/models/MG31/license_aug_380_200_",
-    //   "https://api-inference.huggingface.co/models/stoneseok/finetuning_1",
-    // ];
-    // for (String apiUrl in API_LIST) {
-    //   _uploadImage(apiUrl);
-    // }
     _segmentation();
   }
 
@@ -115,12 +106,7 @@ class _LoadingPageState extends State<LoadingPage> {
 
     try {
       Response response = await dio.post(
-        //"https://asia-northeast3-inisw04-project.cloudfunctions.net/area"  , data: formData),
         "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process", data: formData);
-          //"https://asia-northeast3-inisw04-project.cloudfunctions.net/segmodel",
-        //   data: formData,
-        // options: Options(responseType: ResponseType.bytes),
-      // );
 
       if (response.statusCode == 200) {
         setState(() {
@@ -154,6 +140,7 @@ class _LoadingPageState extends State<LoadingPage> {
         _prov.od_result = od_result;
         print('od_result: $od_result');
         LoadingToast(od_result.toString());
+        _prov.change_od_result(od_result);
 
         // String area = responseData['area'].toString();
         // String max_car_ratio = responseData['area']['max_car_ratio'].toString().split("%")[0];
@@ -219,7 +206,6 @@ class _LoadingPageState extends State<LoadingPage> {
     String _image = _prov.imagesList.last.path;;
     final file = File("${_image.split('.').first}seg.png");
     _prov.add_seg_img(file);
-    print("seglist: ${_prov.SegList}");
     await file.writeAsBytes(imageData);
   }
 
