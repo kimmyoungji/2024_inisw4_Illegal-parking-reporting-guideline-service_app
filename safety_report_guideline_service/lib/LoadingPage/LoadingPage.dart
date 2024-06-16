@@ -172,8 +172,6 @@ class _LoadingPageState extends State<LoadingPage> {
 
   }
 
-
-
   Future<void> saveImage(Uint8List imageData) async {
     final _prov = Provider.of<Prov>(context, listen: false);
     String _image = _prov.imagesList.last.path;
