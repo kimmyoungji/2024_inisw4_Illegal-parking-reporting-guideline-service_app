@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../AnalysisResult/AnalysisResult.dart';
 import '../CommonWidget/MainScaffold.dart';
 import '../ManageProvider.dart';
+import '../ReportTypeDialog/AllPopupPage.dart';
 
 class LoadingPage extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -97,7 +98,6 @@ class _LoadingPageState extends State<LoadingPage> {
     final _prov = Provider.of<Prov>(context, listen: false);
     Dio dio = Dio();
     File? _image = _prov.imagesList.last;
-    late double car_ratio;
 
     FormData formData = FormData.fromMap({
       'image': await MultipartFile.fromFile(_image.path, filename: _image!
@@ -109,17 +109,25 @@ class _LoadingPageState extends State<LoadingPage> {
         "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process", data: formData);
 
       if (response.statusCode == 200) {
-        setState(() {
-          analysis = true;
-        });
         print("200 response");
         Map<String, dynamic> responseData = response.data; //json 형식으로
-        print(responseData);
-        if (responseData['image'] != null){
-          Uint8List binaryData = base64Decode(responseData['image']);
-          saveImage(binaryData);
-        }else{
-          print("segmentation 시작");
+        if(responseData['msg'].toString() == 'Model facebook/mask2former-swin-large-cityscapes-panoptic is currently loading'){
+          LoadingToast('Again');
+          print("다시");
+          Future.delayed(const Duration(seconds: 10), (){ // 판옵틱 세그멘테이션 로딩중이라면 10초 후 재실행
+            _segmentation();
+          });
+        }else {
+          setState(() {
+            analysis = true;
+          });
+          if (responseData['image'] != null){
+            Uint8List binaryData = base64Decode(responseData['image']);
+            saveImage(binaryData);
+            print("저장");
+          }else{
+            print("segmentation 안됨");
+          }
         }
         //List<dynamic> full_od_result = responseData['full_od_result']; //[{box: {xmax: 522, xmin: 279, ymax: 544, ymin: 358}, label: LABEL_1, score: 0.6640685796737671}]
         //print('full_od_result: $full_od_result');
@@ -127,19 +135,20 @@ class _LoadingPageState extends State<LoadingPage> {
         print("msg: $msg"); // 에러 메세지
         LoadingToast(msg);
 
-        Map<String, dynamic> area = responseData['area']; // json 형태
-        if(area.isNotEmpty){
-          String max_car_ratio = area['max_car_ratio'].toString().split("%")[0];
-          _prov.car_ratio = double.parse(max_car_ratio);
-        }
-        print(_prov.check_backgroud);
+        // Map<String, dynamic> area = responseData['area']; // json 형태
+        // if(area.isNotEmpty){
+        //   String max_car_ratio = area['max_car_ratio'].toString().split("%")[0];
+        //   _prov.car_ratio = double.parse(max_car_ratio);
+        // }
+        // // print(_prov.check_backgroud);
 
         List<dynamic> od_result = responseData['od_result']; // 라벨 값 [LABEL_1]
-        // od_result = ['fire_hydrant','truck','car'];
-        _prov.guess_report_type(od_result);
-        _prov.od_result = od_result;
-        print('od_result: $od_result');
+        _prov.set_result(od_result);
+        print('od_result: ${_prov.origin_od_result}');
+        // print(od_result[0].runtimeType); // String
         LoadingToast(od_result.toString());
+        _prov.guess_report_type(od_result);
+
 
         // String area = responseData['area'].toString();
         // String max_car_ratio = responseData['area']['max_car_ratio'].toString().split("%")[0];
@@ -150,16 +159,14 @@ class _LoadingPageState extends State<LoadingPage> {
 
         String license_number = responseData['license_number'].toString();
         print('license_number: $license_number');
-        _prov.change_car_num('' == license_number ? '인식X' : license_number);
-        print(_prov.car_num);
-
-        }
+        _prov.change_car_num('' == license_number ? "인식X" : license_number);
+      }
         print("segmentation 끝");
     } catch (e) {
       print('Error sending multipart request: $e');
-      Future.delayed(const Duration(seconds: 10), (){
-        _segmentation();
-      });
+      // Future.delayed(const Duration(seconds: 10), (){
+      //   _segmentation();
+      // });
     }
     print("업로드 끝");
 
@@ -173,6 +180,7 @@ class _LoadingPageState extends State<LoadingPage> {
     await file.writeAsBytes(imageData);
   }
 
+
   void LoadingToast(String st) {
     Fluttertoast.showToast(
       msg: st,
@@ -183,4 +191,5 @@ class _LoadingPageState extends State<LoadingPage> {
       toastLength: Toast.LENGTH_LONG,
     );
   }
+
 }
