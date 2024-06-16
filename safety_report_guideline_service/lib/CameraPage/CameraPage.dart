@@ -1,4 +1,5 @@
 
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:async';
@@ -30,6 +31,7 @@ class CameraPage extends StatefulWidget {
 
 /* 카메라 페이지 State */
 class _CameraPageState extends State<CameraPage> {
+  final ImagePicker _picker = ImagePicker();
   late CameraController cameraController;
   late Future<void> cameraValue;
   String? reportType;
@@ -157,6 +159,23 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
+  Future<void> _pickImage() async {
+    final cameraProvider = Provider.of<Prov>(context, listen: false);
+    File? _image;
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    }
+    cameraProvider.add_img(_image);
+    print(cameraProvider.imagesList);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoadingPage(cameras: widget.cameras),
+      ),
+    );
+  }
+
 
 //   void switchCamera() {
 //     setState(() {
@@ -277,7 +296,18 @@ class _CameraPageState extends State<CameraPage> {
                     ),
                   ),
                   const Spacer(flex: 3),
-                  const SizedBox(width: 55, height: 55),
+                  SizedBox(
+                    width: 55,
+                    height: 55,
+                    child: ElevatedButton(
+                    onPressed: (){
+                      print("시작");
+                        _pickImage();
+                      print("끝");
+                    },
+                      child: Text('G'),
+                  ),
+                  ),
                   const Spacer(flex: 3),
                 ],
               ),
