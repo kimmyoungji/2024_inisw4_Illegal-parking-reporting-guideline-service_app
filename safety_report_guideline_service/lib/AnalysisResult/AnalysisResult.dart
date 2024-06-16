@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/CameraPage/CameraPage.dart';
 import 'package:safety_report_guideline_service/CameraPage/Timer.dart';
 import 'package:safety_report_guideline_service/CompletedForm/CompletedForm.dart';
-
 import 'package:safety_report_guideline_service/ImageDialog/ImageDialog.dart';
 import 'package:safety_report_guideline_service/util/common_check_list_data.dart';
 import '../CommonWidget/MainScaffold.dart';
@@ -25,7 +24,6 @@ class AnalysisResult extends StatefulWidget {
   State<AnalysisResult> createState() => _AnalysisResultState();
 }
 
-
 /* 분석 페이지 상태 클래스 */
 class _AnalysisResultState extends State<AnalysisResult> {
   // object detection 결과 라벨
@@ -34,12 +32,13 @@ class _AnalysisResultState extends State<AnalysisResult> {
   late CheckListData checkListData;
 
   void _showReportTypeDialog(BuildContext context) {
-      showDialog(
-        barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
-        context: context,
-        builder: (context) {
-          return const ReportTypeDial();
-        });
+    showDialog(
+      barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
+      context: context,
+      builder: (context) {
+        return const ReportTypeDial();
+      },
+    );
   }
 
   void _showImageDialog(BuildContext context, File imageFile) {
@@ -53,15 +52,16 @@ class _AnalysisResultState extends State<AnalysisResult> {
   }
 
   // 체크 리스트 데이터 받아 오기
-  Future<List<dynamic>> getChecklistData(Prov prov) async{
+  Future<List<dynamic>> getChecklistData(Prov prov) async {
     // od_result 전역에서 참조하기
     List<TargetObject> labels = prov.od_result;
     // checklist: 특정 유형 체크 항목 데이터 받아 오기
     CheckListData checkListData = CheckListData();
     await checkListData.initialize(prov.report_type);
     await checkListData.checkObject(labels);
-    if(prov.report_type == ReportType.school_zone){
-      checkListData.checkTime(const TimeOfDay(hour: 9, minute: 00), const TimeOfDay(hour: 20, minute: 00), TimeOfDay(hour: prov.photo_time.hour, minute: prov.photo_time.minute));
+    if (prov.report_type == ReportType.school_zone) {
+      checkListData.checkTime(const TimeOfDay(hour: 9, minute: 00), const TimeOfDay(hour: 20, minute: 00),
+          TimeOfDay(hour: prov.photo_time.hour, minute: prov.photo_time.minute));
     }
     List<dynamic> objectCheckListData = checkListData.objectCheckListData;
     List<dynamic> generalCheckListData = checkListData.generalCheckListData;
@@ -82,11 +82,12 @@ class _AnalysisResultState extends State<AnalysisResult> {
 
   Future<dynamic> _showReportTypeDial(BuildContext context) {
     return showDialog(
-        barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
-        context: context,
-        builder: (context) {
-          return ReportTypeDial();
-        });
+      barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
+      context: context,
+      builder: (context) {
+        return ReportTypeDial();
+      },
+    );
   }
 
   @override
@@ -151,7 +152,8 @@ class _AnalysisResultState extends State<AnalysisResult> {
                     const SizedBox(height: 16.0),
                     Center(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, prov.SegList.length == prov.imagesList.length ? prov.SegList.last :prov.imagesList.last),
+                        onTap: () => _showImageDialog(context,
+                            prov.SegList.length == prov.imagesList.length ? prov.SegList.last : prov.imagesList.last),
                         child: Image.file(
                           prov.imagesList.last,
                           width: 300,
@@ -208,9 +210,9 @@ class _AnalysisResultState extends State<AnalysisResult> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const MainScaffold(
+                                      builder: (context) => MainScaffold(
                                         title: '신고문 작성',
-                                        child: CompletePage(),
+                                        child: CompletePage(cameras: widget.cameras), // 여기를 수정했습니다.
                                       )),
                                 );
                               } else {
@@ -336,5 +338,4 @@ class _AnalysisResultState extends State<AnalysisResult> {
       },
     );
   }
-  
 }

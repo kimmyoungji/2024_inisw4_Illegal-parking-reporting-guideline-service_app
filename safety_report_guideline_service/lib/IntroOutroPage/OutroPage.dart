@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart'; // Timer를 사용하기 위해 필요
-import 'dart:ui' as ui;
+import 'package:provider/provider.dart';
+import 'package:camera/camera.dart';
+
+import 'package:safety_report_guideline_service/IntroOutroPage/IntroPage.dart';
+import 'package:safety_report_guideline_service/ManageProvider.dart';
+
 class OutroPage extends StatefulWidget {
+  final List<CameraDescription> cameras;
+
+  OutroPage({required this.cameras});
+
   @override
   _OutroPageState createState() => _OutroPageState();
 }
@@ -100,15 +109,17 @@ class _OutroPageState extends State<OutroPage> with TickerProviderStateMixin {
                 children: <Widget>[
                   ElevatedButton.icon(
                     onPressed: () {
-                      print("Home button pressed");
-                      //ui.Window.instance.restart();
+                      Provider.of<Prov>(context, listen: false).reset();
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => IntroPage(cameras: widget.cameras)
+                        ),
+                      );
                     },
                     icon: Icon(Icons.home),
                     label: Text('초기 화면'),
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
-                      print("Exit button pressed");
                       SystemNavigator.pop();
                     },
                     icon: Icon(Icons.exit_to_app),
@@ -130,10 +141,3 @@ class _OutroPageState extends State<OutroPage> with TickerProviderStateMixin {
     super.dispose();
   }
 }
-
-void main() => runApp(MaterialApp(
-  home: OutroPage(),
-  theme: ThemeData(
-    primarySwatch: Colors.blue,
-  ),
-));

@@ -135,7 +135,7 @@ class _LoadingPageState extends State<LoadingPage> {
         print(_prov.check_backgroud);
 
         List<dynamic> od_result = responseData['od_result']; // 라벨 값 [LABEL_1]
-        od_result = ['fire_hydrant','truck','car'];
+        // od_result = ['fire_hydrant','truck','car'];
         _prov.guess_report_type(od_result);
         _prov.od_result = od_result;
         print('od_result: $od_result');
@@ -165,45 +165,10 @@ class _LoadingPageState extends State<LoadingPage> {
 
   }
 
-
-  Future<void> _uploadImage(String str_uri) async {
-    //File _image = await File('/storage/emulated/0/Download/1718266239380.png');
-    final _prov = Provider.of<Prov>(context, listen: false);
-    //   Dio dio = Dio();
-    if (_prov.imagesList.length == 0) {
-      File? _image = _prov.imagesList.last;
-
-      final uri = Uri.parse(str_uri);
-      var request = http.MultipartRequest('POST', uri);
-      // Read the image as bytes
-      List<int> imageBytes = await _image.readAsBytes();
-
-      // Add the file to the request
-      request.files.add(
-        http.MultipartFile.fromBytes(
-          'image', // name of the field that the server expects
-          imageBytes,
-          filename: "image.png", // you can provide a filename if needed
-        ),
-      );
-
-      // Send the request and get the response
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print('Image uploaded successfully');
-      } else {
-        print('Image upload failed with status: ${response.statusCode}');
-      }
-      print("모델 깨우기 끝");
-    }
-  }
-
-
   Future<void> saveImage(Uint8List imageData) async {
     final _prov = Provider.of<Prov>(context, listen: false);
-    String _image = _prov.imagesList.last.path;;
-    final file = File("${_image.split('.').first}seg.png");
+    String _image = _prov.imagesList.last.path;
+    final file = File("${_image.substring(0, _image.length - 4)}seg.png");
     _prov.add_seg_img(file);
     await file.writeAsBytes(imageData);
   }
