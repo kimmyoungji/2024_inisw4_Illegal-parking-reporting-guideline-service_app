@@ -24,6 +24,11 @@ class Prov extends ChangeNotifier {
     print('$_report_type으로 변경됨');
   }
 
+  List<dynamic> _origin_od_result = [];
+  List<dynamic> get origin_od_result => _origin_od_result;
+  set_result(List<dynamic> od){
+    _origin_od_result = od;
+  }
   /* od_result */
   late List<TargetObject> _od_result = [];
   List<TargetObject> get od_result => _od_result;

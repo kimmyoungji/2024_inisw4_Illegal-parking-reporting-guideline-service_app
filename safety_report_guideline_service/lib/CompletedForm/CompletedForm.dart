@@ -177,14 +177,14 @@ class _CompletePageState extends State<CompletePage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    _buildLabelWithIcon('발생 지역', 'assets/images/logo.png'),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                const Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16, color: Colors.blue,)),
-                const SizedBox(height: 16),
+                // Row(
+                //   children: [
+                //     _buildLabelWithIcon('발생 지역', 'assets/images/logo.png'),
+                //   ],
+                // ),
+                // const SizedBox(height: 8),
+                // const Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16, color: Colors.blue,)),
+                // const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildLabelWithIcon('내용', 'assets/images/logo.png'),
@@ -192,7 +192,8 @@ class _CompletePageState extends State<CompletePage> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
-                  controller: TextEditingController(text: '${reportTypeToKorean(_prov.report_type)} 불법주정차 신고합니다. 차량 번호 ${_prov.car_num.toString()}입니다.'),
+                    maxLines: 4,
+                  controller: TextEditingController(text: '${reportTypeToKorean(_prov.report_type)} 불법주정차 신고합니다.\n차량 번호 ${_prov.car_num.toString()}입니다.'),
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),

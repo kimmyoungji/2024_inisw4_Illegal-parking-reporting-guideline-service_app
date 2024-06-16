@@ -11,6 +11,7 @@ import 'package:safety_report_guideline_service/ImageDialog/ImageDialog.dart';
 import 'package:safety_report_guideline_service/util/common_check_list_data.dart';
 import '../CommonWidget/MainScaffold.dart';
 import '../ManageProvider.dart';
+import '../ReportTypeDialog/AllPopupPage.dart';
 import '../ReportTypeDialog/ReportTypeDialog.dart';
 import '../util/check_list_data.dart';
 import '../util/enums.dart';
@@ -32,6 +33,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
   late List<TargetObject> _labels;
   // checklistData
   late CheckListData checkListData;
+  bool once_dialog = true;
 
   void _showReportTypeDialog(BuildContext context) {
       showDialog(
@@ -50,6 +52,21 @@ class _AnalysisResultState extends State<AnalysisResult> {
         return ImageDialog(imageFile: imageFile);
       },
     );
+  }
+
+  void dialogs(BuildContext context){
+    final _prov = Provider.of<Prov>(context);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (_prov.origin_od_result.contains("car")) { // 세그멘테이션이 인식 됐으면
+        WidgetsBinding.instance!.addPostFrameCallback((_) { // 번호판 인식 확인
+          if (_prov.car_num == "인식X") { // 번호판 인식 안됐으면
+            no_license_popup(context);
+          }
+        });
+      }else{ // 인식 안됐으면
+        no_car_popup(context);
+      }
+    });
   }
 
   // 체크 리스트 데이터 받아 오기
@@ -94,9 +111,13 @@ class _AnalysisResultState extends State<AnalysisResult> {
     final _prov = Provider.of<Prov>(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (reportTypeToKorean(_prov.report_type) == '어린이 보호구역') {
-        showCustomDialog(context);
+        school_zone_popup(context);
       }
     });
+    if (once_dialog){
+      dialogs(context);
+      once_dialog = false;
+    }
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -275,66 +296,6 @@ class _AnalysisResultState extends State<AnalysisResult> {
     );
   }
 
-  void showCustomDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.lightBlue[50], // 다이얼로그 배경색 변경
-          title: Text(
-            '어린이 보호구역 신고',
-            textAlign: TextAlign.center, // 제목 중앙 정렬
-            style: TextStyle(
-              fontWeight: FontWeight.bold, // 제목 글씨 굵게
-            ),
-          ),
-          content: Text(
-            '어린이 보호구역 불법 주정차는\n정문 주차 차량만 신고 대상입니다.\n정문에서 촬영된 사진인가요?',
-            textAlign: TextAlign.center, // 내용 중앙 정렬
-            style: TextStyle(
-              fontWeight: FontWeight.bold, // 내용 글씨 굵게
-            ),
-          ),
-          actionsAlignment: MainAxisAlignment.spaceAround, // 버튼을 고르게 배치
-          actions: <Widget>[
-            OutlinedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                print('Yes clicked');
-              },
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
-                backgroundColor: Colors.black, // 버튼의 배경 색상
-                foregroundColor: Colors.white, // 글씨 색상
-              ),
-              child: Text(
-                '예',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold, // 버튼 글씨 굵게
-                ),
-              ),
-            ),
-            OutlinedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                print('No clicked');
-              },
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
-                backgroundColor: Colors.black, // 버튼의 배경 색상
-                foregroundColor: Colors.white, // 글씨 색상
-              ),
-              child: Text(
-                '아니요',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold, // 버튼 글씨 굵게
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+
   
 }
