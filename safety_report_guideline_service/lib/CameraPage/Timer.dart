@@ -1,102 +1,120 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
-class CircularTimer extends StatefulWidget {
-  const CircularTimer({super.key});
+class DialTimerScreen extends StatefulWidget {
+  const DialTimerScreen({super.key});
 
   @override
-  _CircularTimerState createState() => _CircularTimerState();
+  _DialTimerScreenState createState() => _DialTimerScreenState();
 }
 
-class _CircularTimerState extends State<CircularTimer>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _DialTimerScreenState extends State<DialTimerScreen> {
+  static const int totalDuration = 60; // 전체 시간 (초)
+  int remainingTime = totalDuration;
+  Timer? timer;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 10),
-    );
-    _controller.forward();
+    startTimer();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    timer?.cancel();
     super.dispose();
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (remainingTime > 0) {
+          remainingTime--;
+        } else {
+          timer.cancel(); // 끝내기
+          Navigator.of(context).pop();
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Circular Timer'),
-      ),
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              painter: TimerPainter(
-                animation: _controller,
-                backgroundColor: Colors.grey,
-                color: Colors.blue,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Spacer(flex:10),
+          Visibility(
+            visible: remainingTime > 0,
+            child: const Text(
+              '60초 후에 재촬영 해주세요.',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              child: SizedBox(
-                width: 200.0,
-                height: 200.0,
-                child: Center(
-                  child: Text(
-                    '${(_controller.duration! * (1.0 - _controller.value)).inSeconds}s',
-                    style: const TextStyle(fontSize: 20.0),
+            ),
+          ),
+          const Spacer(flex:3),
+          Visibility(
+            visible: remainingTime > 0,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                CustomPaint(
+                  painter: DialPainter(remainingTime / totalDuration),
+                  child: const SizedBox(
+                    width: 200,
+                    height: 200,
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+                Text(
+                  '$remainingTime',
+                  style: const TextStyle(
+                    fontSize: 40, // 텍스트 크기 유지
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Spacer(flex:13),
+        ],
       ),
     );
   }
 }
 
-class TimerPainter extends CustomPainter {
-  TimerPainter({
-    required this.animation,
-    required this.backgroundColor,
-    required this.color,
-  }) : super(repaint: animation);
+class DialPainter extends CustomPainter {
+  final double fraction;
 
-  final Animation<double> animation;
-  final Color backgroundColor;
-  final Color color;
+  DialPainter(this.fraction);
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = backgroundColor
-      ..strokeWidth = 10.0
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke;
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0)
+      ..style = PaintingStyle.fill;
 
-    canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.width / 2;
 
-    paint.color = color;
-    double progress = (1.0 - animation.value) * 2 * 3.1415926535897932;
-    canvas.drawArc(
-      Offset.zero & size,
-      3.1415926535897932 * 1.5,
-      -progress,
-      false,
-      paint,
-    );
+    // 전체 배경 원
+    canvas.drawCircle(center, radius, paint);
+
+    // 오른쪽에서부터 칠해지도록 하는 원호
+    final rect = Rect.fromCircle(center: center, radius: radius);
+    const startAngle = -3.14 / 2; // 위쪽에서 시작
+    final sweepAngle = -2 * 3.14 * fraction; // 오른쪽에서부터 반시계 방향으로 칠해지도록 음수로 설정
+    paint.color = Colors.blue;
+
+    canvas.drawArc(rect, startAngle, sweepAngle, true, paint);
   }
 
   @override
-  bool shouldRepaint(TimerPainter old) {
-    return animation.value != old.animation.value ||
-        color != old.color ||
-        backgroundColor != old.backgroundColor;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }
