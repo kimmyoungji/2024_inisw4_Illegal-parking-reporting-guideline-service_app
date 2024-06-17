@@ -106,7 +106,7 @@ class _LoadingPageState extends State<LoadingPage> {
 
     try {
       Response response = await dio.post(
-        "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process", data: formData);
+          "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process", data: formData);
 
       if (response.statusCode == 200) {
         print("200 response");
@@ -161,7 +161,7 @@ class _LoadingPageState extends State<LoadingPage> {
         print('license_number: $license_number');
         _prov.change_car_num('' == license_number ? "인식X" : license_number);
       }
-        print("segmentation 끝");
+      print("segmentation 끝");
     } catch (e) {
       print('Error sending multipart request: $e');
       // Future.delayed(const Duration(seconds: 10), (){
@@ -169,7 +169,6 @@ class _LoadingPageState extends State<LoadingPage> {
       // });
     }
     print("업로드 끝");
-
   }
 
   Future<void> saveImage(Uint8List imageData) async {
