@@ -10,8 +10,7 @@ ReportType decideReportType(List<dynamic> labels) {
     return ReportType.school_zone;
   } else if (targetObjectList.contains(TargetObject.Road_School_Zone)) {
     return ReportType.school_zone;
-  } else
-  if (targetObjectList.contains(TargetObject.Road_Speed_Limit_in_School_Zone)) {
+  } else if (targetObjectList.contains(TargetObject.Road_Speed_Limit_in_School_Zone)) {
     return ReportType.school_zone;
   } else if (targetObjectList.contains(TargetObject.fire_hydrant)) {
     return ReportType.fire_hydrant;
@@ -21,8 +20,7 @@ ReportType decideReportType(List<dynamic> labels) {
     return ReportType.crosswalk;
   } else if (targetObjectList.contains(TargetObject.sidewalk)) {
     return ReportType.sidewalk;
-  } else
-  if (targetObjectList.contains(TargetObject.traffic_lane_yellow_solid)) {
+  } else if (targetObjectList.contains(TargetObject.traffic_lane_yellow_solid)) {
     return ReportType.intersection_corner;
   } else {
     return ReportType.intersection_corner;

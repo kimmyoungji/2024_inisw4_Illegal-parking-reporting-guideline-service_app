@@ -32,6 +32,8 @@ class _AnalysisResultState extends State<AnalysisResult> {
   late List<TargetObject> _labels;
   // checklistData
   late CheckListData checkListData;
+  bool isRightLocation = false;
+  bool isLocationChecked = false;
   bool once_dialog = true;
 
   void _showReportTypeDialog(BuildContext context) {
@@ -81,6 +83,7 @@ class _AnalysisResultState extends State<AnalysisResult> {
     if (prov.report_type == ReportType.school_zone) {
       checkListData.checkTime(const TimeOfDay(hour: 9, minute: 00), const TimeOfDay(hour: 20, minute: 00),
           TimeOfDay(hour: prov.photo_time.hour, minute: prov.photo_time.minute));
+      checkListData.checkLocation(isRightLocation);
     }
     List<dynamic> objectCheckListData = checkListData.objectCheckListData;
     List<dynamic> generalCheckListData = checkListData.generalCheckListData;
@@ -97,8 +100,6 @@ class _AnalysisResultState extends State<AnalysisResult> {
     List<dynamic> commonGeneralCheckListData = commonCheckListData.generalCheckListData;
 
     List<dynamic> result = [...objectCheckListData, ...commonObjectCheckListData, ...generalCheckListData, ...commonGeneralCheckListData];
-    log('이게 바뀌어야 한다고');
-    log(result.toString());
     return result;
   }
 
@@ -117,7 +118,10 @@ class _AnalysisResultState extends State<AnalysisResult> {
     final _prov = Provider.of<Prov>(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (reportTypeToKorean(_prov.report_type) == '어린이 보호구역') {
-        school_zone_popup(context);
+        if(!isLocationChecked){
+          school_zone_popup(context, _prov);
+          isLocationChecked = true;
+        }
       }
     });
     if (once_dialog){
@@ -300,6 +304,74 @@ class _AnalysisResultState extends State<AnalysisResult> {
           ),
         ),
       ],
+    );
+  }
+
+  void school_zone_popup(BuildContext context, Prov _prov) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.lightBlue[50], // 다이얼로그 배경색 변경
+          title: Text(
+            '어린이 보호구역 신고',
+            textAlign: TextAlign.center, // 제목 중앙 정렬
+            style: TextStyle(
+              fontWeight: FontWeight.bold, // 제목 글씨 굵게
+            ),
+          ),
+          content: Text(
+            '어린이 보호구역 불법 주정차는\n정문 주차 차량만 신고 대상입니다.\n정문에서 촬영된 사진인가요?',
+            textAlign: TextAlign.center, // 내용 중앙 정렬
+            style: TextStyle(
+              fontWeight: FontWeight.bold, // 내용 글씨 굵게
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceAround, // 버튼을 고르게 배치
+          actions: <Widget>[
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  isRightLocation = true;
+                });
+                print('Yes');
+              },
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
+                backgroundColor: Colors.black, // 버튼의 배경 색상
+                foregroundColor: Colors.white, // 글씨 색상
+              ),
+              child: Text(
+                '예',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, // 버튼 글씨 굵게
+                ),
+              ),
+            ),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  isRightLocation = false;
+                });
+                print('No');
+              },
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
+                backgroundColor: Colors.black, // 버튼의 배경 색상
+                foregroundColor: Colors.white, // 글씨 색상
+              ),
+              child: Text(
+                '아니요',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, // 버튼 글씨 굵게
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
