@@ -57,7 +57,8 @@ class _AnalysisResultState extends State<AnalysisResult> {
   void dialogs(BuildContext context){
     final _prov = Provider.of<Prov>(context);
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (_prov.origin_od_result.contains("car")) { // 세그멘테이션이 인식 됐으면
+      if (_prov.origin_od_result.contains("car") || _prov.origin_od_result.contains("truck")||
+      _prov.origin_od_result.contains("motorcycle") ||_prov.origin_od_result.contains('bus')) { // 세그멘테이션이 인식 됐으면
         WidgetsBinding.instance!.addPostFrameCallback((_) { // 번호판 인식 확인
           if (_prov.car_num == "인식X") { // 번호판 인식 안됐으면
             no_license_popup(context);

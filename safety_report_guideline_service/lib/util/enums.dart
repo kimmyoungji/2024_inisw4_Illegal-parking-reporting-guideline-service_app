@@ -117,6 +117,12 @@ TargetObject str2TargetObj(String value) {
       return TargetObject.fire_hydrant;
     case 'car':
       return TargetObject.car;
+    case 'truck':
+      return TargetObject.car;
+    case 'bus':
+      return TargetObject.car;
+    case 'motorcycle':
+      return TargetObject.car;
     case 'road':
       return TargetObject.road;
     case 'sidewalk':

@@ -112,7 +112,7 @@ class _LoadingPageState extends State<LoadingPage> {
         print("200 response");
         Map<String, dynamic> responseData = response.data; //json 형식으로
         if(responseData['msg'].toString() == 'Model facebook/mask2former-swin-large-cityscapes-panoptic is currently loading'){
-          LoadingToast('Again');
+          //LoadingToast('Again');
           print("다시");
           Future.delayed(const Duration(seconds: 10), (){ // 판옵틱 세그멘테이션 로딩중이라면 10초 후 재실행
             _segmentation();
@@ -133,7 +133,7 @@ class _LoadingPageState extends State<LoadingPage> {
         //print('full_od_result: $full_od_result');
         String msg = responseData['msg'].toString();
         print("msg: $msg"); // 에러 메세지
-        LoadingToast(msg);
+        //LoadingToast(msg);
 
         // Map<String, dynamic> area = responseData['area']; // json 형태
         // if(area.isNotEmpty){
@@ -145,7 +145,7 @@ class _LoadingPageState extends State<LoadingPage> {
         List<dynamic> od_result = responseData['od_result']; // 라벨 값 [LABEL_1]
         _prov.set_result(od_result);
         print('od_result: ${_prov.origin_od_result}');
-        LoadingToast(od_result.toString());
+        //LoadingToast(od_result.toString());
         _prov.od_result = od_result;
         _prov.guess_report_type(od_result);
 
@@ -180,15 +180,15 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
 
-  void LoadingToast(String st) {
-    Fluttertoast.showToast(
-      msg: st,
-      gravity: ToastGravity.TOP,
-      fontSize: 20,
-      backgroundColor: Colors.grey,
-      textColor: Colors.black,
-      toastLength: Toast.LENGTH_LONG,
-    );
-  }
+  // void LoadingToast(String st) {
+  //   Fluttertoast.showToast(
+  //     msg: st,
+  //     gravity: ToastGravity.TOP,
+  //     fontSize: 20,
+  //     backgroundColor: Colors.grey,
+  //     textColor: Colors.black,
+  //     toastLength: Toast.LENGTH_LONG,
+  //   );
+  // }
 
 }

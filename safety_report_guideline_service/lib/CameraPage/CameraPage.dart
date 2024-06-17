@@ -46,12 +46,6 @@ class _CameraPageState extends State<CameraPage> {
       enableAudio: false,
     );
     cameraValue = cameraController.initialize();
-
-    // 페이지 진입 시 Toast 메시지 표시
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final cameraProvider = Provider.of<Prov>(context, listen: false);
-      cameraToast(cameraProvider.imagesList.isEmpty);
-    });
   }
 
   @override
@@ -176,6 +170,28 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
+  void toast_msg() {
+    final _prov = Provider.of<Prov>(context);
+    if (_prov.imagesList.length == 1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Fluttertoast.showToast(
+          msg: '동일한 각도에서 촬영해주세요',
+          gravity: ToastGravity.TOP,
+          fontSize: 20,
+          backgroundColor: Colors.grey,
+          textColor: Colors.black,
+          toastLength: Toast.LENGTH_LONG,
+        );
+      });
+    }else{
+      // 페이지 진입 시 Toast 메시지 표시
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final cameraProvider = Provider.of<Prov>(context, listen: false);
+        cameraToast(cameraProvider.imagesList.isEmpty);
+      });
+    }
+  }
+
 
 //   void switchCamera() {
 //     setState(() {
@@ -192,7 +208,7 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    toast_msg();
     return Scaffold(
       body: Stack(
         children: [
@@ -301,9 +317,7 @@ class _CameraPageState extends State<CameraPage> {
                     height: 55,
                     child: ElevatedButton(
                     onPressed: (){
-                      print("시작");
                         _pickImage();
-                      print("끝");
                     },
                       child: Text('G'),
                   ),
