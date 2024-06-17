@@ -10,12 +10,12 @@ ReportType decideReportType(List<dynamic> labels){
     return ReportType.school_zone;
   }else if( targetObjectList.contains(TargetObject.fire_hydrant) ){
     return ReportType.fire_hydrant;
-  }else if( targetObjectList.contains(TargetObject.side_walk) ){
-    return ReportType.sidewalk;
-  }else if( targetObjectList.contains(TargetObject.object_412) ){
-    return ReportType.crosswalk;
   }else if( targetObjectList.contains(TargetObject.stop) ){
     return ReportType.bus_stop;
+  }else if( targetObjectList.contains(TargetObject.Crosswalk) ){
+    return ReportType.crosswalk;
+  }else if( targetObjectList.contains(TargetObject.sidewalk) ){
+    return ReportType.sidewalk;
   }else if( targetObjectList.contains(TargetObject.traffic_lane_yellow_solid) ){
     return ReportType.intersection_corner;
   }else {

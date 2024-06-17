@@ -98,4 +98,14 @@ class CommonCheckListData {
       return await generalCheckListData[2];
     }
   }
+
+  Future<GeneralCheckItem> checkLisenceNumber(String lincence_number) async {
+    log('탐지된 번호판: ${lincence_number}');
+    if(lincence_number == ''){
+      return await generalCheckListData[3];
+    }else{
+      generalCheckListData[3].value = true;
+      return await generalCheckListData[3];
+    }
+  }
 }

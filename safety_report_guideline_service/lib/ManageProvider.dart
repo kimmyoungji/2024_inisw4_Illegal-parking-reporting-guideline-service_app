@@ -7,8 +7,6 @@ import 'package:safety_report_guideline_service/util/enums.dart';
 
 class Prov extends ChangeNotifier {
 
-  /* 진행 상태: 0(촬영 0번), 1(촬영 1번), 2(촬영 2번)  3(신고 완) */
-  final int _report_state = 0;
 
   /* 신고 유형: _report_type */
   ReportType _report_type = ReportType.school_zone;
@@ -22,6 +20,12 @@ class Prov extends ChangeNotifier {
     _report_type = decideReportType(od_result);
     log('$_report_type으로 변경됨');
     print('$_report_type으로 변경됨');
+  }
+
+  List<dynamic> _origin_od_result = [];
+  List<dynamic> get origin_od_result => _origin_od_result;
+  set_result(List<dynamic> od){
+    _origin_od_result = od;
   }
 
   /* od_result */
@@ -88,8 +92,14 @@ class Prov extends ChangeNotifier {
  
   /* 초기화 */
   void reset(){
+    log('확인확인확인');
     _imagesList = [];
     _report_type = ReportType.school_zone;
+    _origin_od_result = [];
+    _od_result = [];
+    _SegList = [];
+    _check_backgroud= 0.4;
+    _car_num = '51가3593';
   }
 }
 

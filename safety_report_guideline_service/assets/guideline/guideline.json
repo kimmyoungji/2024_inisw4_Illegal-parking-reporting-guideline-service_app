@@ -9,13 +9,13 @@
         ],
         "check_items": {
             "object_checks": {
-                "number_plate" : "차량번호판",
-                "car,truck,motorcycle" : "위반차량"
+                "car" : "위반차량"
             },
             "general_checks": {
                 "1min2": "1분 간격으로 2번 촬영",
                 "angle": "두 사진이 동일한 각도에서 촬영",
-                "background" : "위반임을 증명할 수 있는 적절한 주변 환경"
+                "background" : "위반임을 증명할 수 있는 적절한 주변 환경",
+                "lisence_number": "차량변호판"
             }
         }
     },
@@ -28,7 +28,7 @@
         "check_items": {
             "object_checks": {
                 "fire_hydrant": "소화전",
-                "no_parking,object_389": "교통안전표지(주정차금지표지판, 노면표시)"
+                "no_parking,Road_No_Parking": "교통안전표지(주정차금지표지판, 노면표시)"
             },
             "general_checks": {}
         }
@@ -40,8 +40,8 @@
         ],
         "check_items": {
             "object_checks": {
-                "object_391,traffic_lane_yellow_solid" : "교차로 모퉁이",
-                "no_parking,object_389" : "교통안전표지(주정차금지표지판, 노면표시)"
+                "Road_No_Stopping_or_Parking,traffic_lane_yellow_solid" : "교차로 모퉁이",
+                "no_parking,Road_No_Parking" : "교통안전표지(주정차금지표지판, 노면표시)"
             },
             "general_checks": {}
         }
@@ -53,7 +53,7 @@
         "check_items": {
             "object_checks": {
                 "stop": "버스 정류소 표지판",
-                "object_389": "노면표시선"
+                "Road_No_Parking": "노면표시선"
             },
             "general_checks": {}
         }
@@ -64,7 +64,7 @@
         ],
         "check_items": {
             "object_checks": {
-                "object_412": "횡단보도"
+                "Crosswalk": "횡단보도"
             },
             "general_checks": {}
         }
@@ -78,8 +78,8 @@
         ],
         "check_items": {
             "object_checks": {
-                "object_402,object_403,school_zone": "어린이 보호구역 표시",
-                "no_parking,object_389,traffic_lane_yellow_solid": "교통안전표지(주정차금지표지판, 황색실선)"
+                "Road_Speed_Limit_in_School_Zone,Road_School_Zone,school_zone": "어린이 보호구역 표시",
+                "no_parking,Road_No_Parking,traffic_lane_yellow_solid": "교통안전표지(주정차금지표지판, 황색실선)"
             },
             "general_checks": {
                 "time": "사진에 찍힌 타임스탬프가 단속 시간에 해당",
@@ -95,7 +95,7 @@
         ],
         "check_items": {
             "object_checks": {
-                "side_walk": "보도",
+                "sidewalk": "보도",
                 "road": "도로"
             },
             "general_checks":{}

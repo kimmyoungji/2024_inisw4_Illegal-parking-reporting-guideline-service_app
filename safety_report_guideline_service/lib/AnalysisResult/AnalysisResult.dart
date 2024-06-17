@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:safety_report_guideline_service/CameraPage/CameraPage.dart';
 import 'package:safety_report_guideline_service/CameraPage/Timer.dart';
 import 'package:safety_report_guideline_service/CompletedForm/CompletedForm.dart';
-
 import 'package:safety_report_guideline_service/ImageDialog/ImageDialog.dart';
 import 'package:safety_report_guideline_service/util/common_check_list_data.dart';
 import '../CommonWidget/MainScaffold.dart';
 import '../ManageProvider.dart';
+import '../ReportTypeDialog/AllPopupPage.dart';
 import '../ReportTypeDialog/ReportTypeDialog.dart';
 import '../util/check_list_data.dart';
 import '../util/enums.dart';
@@ -25,21 +26,22 @@ class AnalysisResult extends StatefulWidget {
   State<AnalysisResult> createState() => _AnalysisResultState();
 }
 
-
 /* 분석 페이지 상태 클래스 */
 class _AnalysisResultState extends State<AnalysisResult> {
   // object detection 결과 라벨
   late List<TargetObject> _labels;
   // checklistData
   late CheckListData checkListData;
+  bool once_dialog = true;
 
   void _showReportTypeDialog(BuildContext context) {
-      showDialog(
-        barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
-        context: context,
-        builder: (context) {
-          return const ReportTypeDial();
-        });
+    showDialog(
+      barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
+      context: context,
+      builder: (context) {
+        return const ReportTypeDial();
+      },
+    );
   }
 
   void _showImageDialog(BuildContext context, File imageFile) {
@@ -52,16 +54,32 @@ class _AnalysisResultState extends State<AnalysisResult> {
     );
   }
 
+  void dialogs(BuildContext context){
+    final _prov = Provider.of<Prov>(context);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (_prov.origin_od_result.contains("car")) { // 세그멘테이션이 인식 됐으면
+        WidgetsBinding.instance!.addPostFrameCallback((_) { // 번호판 인식 확인
+          if (_prov.car_num == "인식X") { // 번호판 인식 안됐으면
+            no_license_popup(context);
+          }
+        });
+      }else{ // 인식 안됐으면
+        no_car_popup(context);
+      }
+    });
+  }
+
   // 체크 리스트 데이터 받아 오기
-  Future<List<dynamic>> getChecklistData(Prov prov) async{
+  Future<List<dynamic>> getChecklistData(Prov prov) async {
     // od_result 전역에서 참조하기
-    List<TargetObject> labels = prov.od_result;
+    // List<TargetObject> labels = prov.od_result;
     // checklist: 특정 유형 체크 항목 데이터 받아 오기
     CheckListData checkListData = CheckListData();
     await checkListData.initialize(prov.report_type);
-    await checkListData.checkObject(labels);
-    if(prov.report_type == ReportType.school_zone){
-      checkListData.checkTime(const TimeOfDay(hour: 9, minute: 00), const TimeOfDay(hour: 20, minute: 00), TimeOfDay(hour: prov.photo_time.hour, minute: prov.photo_time.minute));
+    await checkListData.checkObject(prov.od_result);
+    if (prov.report_type == ReportType.school_zone) {
+      checkListData.checkTime(const TimeOfDay(hour: 9, minute: 00), const TimeOfDay(hour: 20, minute: 00),
+          TimeOfDay(hour: prov.photo_time.hour, minute: prov.photo_time.minute));
     }
     List<dynamic> objectCheckListData = checkListData.objectCheckListData;
     List<dynamic> generalCheckListData = checkListData.generalCheckListData;
@@ -69,24 +87,28 @@ class _AnalysisResultState extends State<AnalysisResult> {
     // common checklist: 공통 체크항목 데이터
     CommonCheckListData commonCheckListData = CommonCheckListData();
     await commonCheckListData.initialize();
-    commonCheckListData.checkObject(labels);
+    commonCheckListData.checkObject(prov.od_result);
     await commonCheckListData.check1min2photo(prov.imagesList.length);
     await commonCheckListData.checkAngleSimilar(prov.imagesList);
     await commonCheckListData.checkBackgroundRatio(prov.check_backgroud);
+    await commonCheckListData.checkLisenceNumber(prov.car_num);
     List<dynamic> commonObjectCheckListData = commonCheckListData.objectCheckListData;
     List<dynamic> commonGeneralCheckListData = commonCheckListData.generalCheckListData;
 
     List<dynamic> result = [...objectCheckListData, ...commonObjectCheckListData, ...generalCheckListData, ...commonGeneralCheckListData];
+    log('이게 바뀌어야 한다고');
+    log(result.toString());
     return result;
   }
 
   Future<dynamic> _showReportTypeDial(BuildContext context) {
     return showDialog(
-        barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
-        context: context,
-        builder: (context) {
-          return ReportTypeDial();
-        });
+      barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부 결정
+      context: context,
+      builder: (context) {
+        return ReportTypeDial();
+      },
+    );
   }
 
   @override
@@ -94,9 +116,13 @@ class _AnalysisResultState extends State<AnalysisResult> {
     final _prov = Provider.of<Prov>(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (reportTypeToKorean(_prov.report_type) == '어린이 보호구역') {
-        showCustomDialog(context);
+        school_zone_popup(context);
       }
     });
+    if (once_dialog){
+      dialogs(context);
+      once_dialog = false;
+    }
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -151,7 +177,8 @@ class _AnalysisResultState extends State<AnalysisResult> {
                     const SizedBox(height: 16.0),
                     Center(
                       child: GestureDetector(
-                        onTap: () => _showImageDialog(context, prov.SegList.length == prov.imagesList.length ? prov.SegList.last :prov.imagesList.last),
+                        onTap: () => _showImageDialog(context,
+                            prov.SegList.length == prov.imagesList.length ? prov.SegList.last : prov.imagesList.last),
                         child: Image.file(
                           prov.imagesList.last,
                           width: 300,
@@ -208,9 +235,9 @@ class _AnalysisResultState extends State<AnalysisResult> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const MainScaffold(
+                                      builder: (context) => MainScaffold(
                                         title: '신고문 작성',
-                                        child: CompletePage(),
+                                        child: CompletePage(cameras: widget.cameras), // 여기를 수정했습니다.
                                       )),
                                 );
                               } else {
@@ -274,67 +301,4 @@ class _AnalysisResultState extends State<AnalysisResult> {
       ],
     );
   }
-
-  void showCustomDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.lightBlue[50], // 다이얼로그 배경색 변경
-          title: Text(
-            '어린이 보호구역 신고',
-            textAlign: TextAlign.center, // 제목 중앙 정렬
-            style: TextStyle(
-              fontWeight: FontWeight.bold, // 제목 글씨 굵게
-            ),
-          ),
-          content: Text(
-            '어린이 보호구역 불법 주정차는\n정문 주차 차량만 신고 대상입니다.\n정문에서 촬영된 사진인가요?',
-            textAlign: TextAlign.center, // 내용 중앙 정렬
-            style: TextStyle(
-              fontWeight: FontWeight.bold, // 내용 글씨 굵게
-            ),
-          ),
-          actionsAlignment: MainAxisAlignment.spaceAround, // 버튼을 고르게 배치
-          actions: <Widget>[
-            OutlinedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                print('Yes clicked');
-              },
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
-                backgroundColor: Colors.black, // 버튼의 배경 색상
-                foregroundColor: Colors.white, // 글씨 색상
-              ),
-              child: Text(
-                '예',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold, // 버튼 글씨 굵게
-                ),
-              ),
-            ),
-            OutlinedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                print('No clicked');
-              },
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.black), // 버튼의 테두리 색상
-                backgroundColor: Colors.black, // 버튼의 배경 색상
-                foregroundColor: Colors.white, // 글씨 색상
-              ),
-              child: Text(
-                '아니요',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold, // 버튼 글씨 굵게
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-  
 }

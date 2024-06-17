@@ -1,5 +1,5 @@
 import '../IntroOutroPage/OutroPage.dart';
-import 'package:flutter/gestures.dart';
+import 'package:camera/camera.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,7 +32,9 @@ class PhoneNumberFormatter extends TextInputFormatter {
 }
 
 class CompletePage extends StatefulWidget {
-  const CompletePage({super.key});
+  final List<CameraDescription> cameras;
+
+  const CompletePage({super.key, required this.cameras});
 
   @override
   State<CompletePage> createState() => _CompletePageState();
@@ -146,7 +148,7 @@ class _CompletePageState extends State<CompletePage> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
-                    onTap: () => _showImageDialog(context, _prov.imagesList[1]),
+                        onTap: () => _showImageDialog(context, _prov.imagesList[1]),
                         child: Stack(
                           children: [
                             Image.file(
@@ -177,14 +179,14 @@ class _CompletePageState extends State<CompletePage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    _buildLabelWithIcon('발생 지역', 'assets/images/logo.png'),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                const Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16, color: Colors.blue,)),
-                const SizedBox(height: 16),
+                // Row(
+                //   children: [
+                //     _buildLabelWithIcon('발생 지역', 'assets/images/logo.png'),
+                //   ],
+                // ),
+                // const SizedBox(height: 8),
+                // const Text('서울특별시 강북구 삼양로 지하 259', style: TextStyle(fontSize: 16, color: Colors.blue,)),
+                // const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildLabelWithIcon('내용', 'assets/images/logo.png'),
@@ -192,7 +194,8 @@ class _CompletePageState extends State<CompletePage> {
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
-                  controller: TextEditingController(text: '${reportTypeToKorean(_prov.report_type)} 불법주정차 신고합니다. 차량 번호 ${_prov.car_num.toString()}입니다.'),
+                  maxLines: 4,
+                  controller: TextEditingController(text: '${reportTypeToKorean(_prov.report_type)} 불법주정차 신고합니다.\n차량 번호 ${_prov.car_num.toString()}입니다.'),
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
@@ -253,7 +256,7 @@ class _CompletePageState extends State<CompletePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => OutroPage()),
+                                builder: (context) => OutroPage(cameras: widget.cameras)),
                           );
                         }:null,
                         style: ElevatedButton.styleFrom(

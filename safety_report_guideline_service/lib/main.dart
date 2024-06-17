@@ -18,9 +18,7 @@ import './util/enums.dart';
 
 Future<void> main() async {
   Future<void> _uploadImage(String str_uri) async {
-    print("upload 수행 시작");
-
-
+    print("모델 깨우기 시작");
     final uri = Uri.parse(str_uri);
     var request = http.MultipartRequest('POST', uri);
     // Read the image as bytes
@@ -43,14 +41,12 @@ Future<void> main() async {
     } else {
       print('Image upload failed with status: ${response.statusCode}');
     }
-    print("upload 끝");
+    print("모델 깨우기 끝");
   }
 
   List<String> API_LIST = [
     "https://api-inference.huggingface.co/models/facebook/mask2former-swin-large-cityscapes-panoptic",
-    "https://api-inference.huggingface.co/models/MG31/license_aug_380_200_",
-    "https://huggingface.co/MG31/V8_342",
-
+    "https://api-inference.huggingface.co/models/MG31/license_aug_380_200_"
   ];
   for (String apiUrl in API_LIST) {
     _uploadImage(apiUrl);
@@ -104,11 +100,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: IntroPage(cameras: cameras),
-      // home: CameraPage(cameras: cameras),
-      // home: CameraTimerPage(),
-      // home: AnalysisResult(),
-      // home: ReportForm(),
-      // home: CompletedForm(),
     );
 
   }
