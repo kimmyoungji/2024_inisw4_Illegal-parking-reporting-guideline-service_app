@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -71,11 +72,11 @@ class _AnalysisResultState extends State<AnalysisResult> {
   // 체크 리스트 데이터 받아 오기
   Future<List<dynamic>> getChecklistData(Prov prov) async {
     // od_result 전역에서 참조하기
-    List<TargetObject> labels = prov.od_result;
+    // List<TargetObject> labels = prov.od_result;
     // checklist: 특정 유형 체크 항목 데이터 받아 오기
     CheckListData checkListData = CheckListData();
     await checkListData.initialize(prov.report_type);
-    await checkListData.checkObject(labels);
+    await checkListData.checkObject(prov.od_result);
     if (prov.report_type == ReportType.school_zone) {
       checkListData.checkTime(const TimeOfDay(hour: 9, minute: 00), const TimeOfDay(hour: 20, minute: 00),
           TimeOfDay(hour: prov.photo_time.hour, minute: prov.photo_time.minute));
@@ -86,14 +87,17 @@ class _AnalysisResultState extends State<AnalysisResult> {
     // common checklist: 공통 체크항목 데이터
     CommonCheckListData commonCheckListData = CommonCheckListData();
     await commonCheckListData.initialize();
-    commonCheckListData.checkObject(labels);
+    commonCheckListData.checkObject(prov.od_result);
     await commonCheckListData.check1min2photo(prov.imagesList.length);
     await commonCheckListData.checkAngleSimilar(prov.imagesList);
     await commonCheckListData.checkBackgroundRatio(prov.check_backgroud);
+    await commonCheckListData.checkLisenceNumber(prov.car_num);
     List<dynamic> commonObjectCheckListData = commonCheckListData.objectCheckListData;
     List<dynamic> commonGeneralCheckListData = commonCheckListData.generalCheckListData;
 
     List<dynamic> result = [...objectCheckListData, ...commonObjectCheckListData, ...generalCheckListData, ...commonGeneralCheckListData];
+    log('이게 바뀌어야 한다고');
+    log(result.toString());
     return result;
   }
 

@@ -19,8 +19,6 @@ import './util/enums.dart';
 Future<void> main() async {
   Future<void> _uploadImage(String str_uri) async {
     print("모델 깨우기 시작");
-
-
     final uri = Uri.parse(str_uri);
     var request = http.MultipartRequest('POST', uri);
     // Read the image as bytes
@@ -48,9 +46,7 @@ Future<void> main() async {
 
   List<String> API_LIST = [
     "https://api-inference.huggingface.co/models/facebook/mask2former-swin-large-cityscapes-panoptic",
-    "https://api-inference.huggingface.co/models/MG31/license_aug_380_200_",
-    "https://huggingface.co/MG31/V8_342",
-
+    "https://api-inference.huggingface.co/models/MG31/license_aug_380_200_"
   ];
   for (String apiUrl in API_LIST) {
     _uploadImage(apiUrl);

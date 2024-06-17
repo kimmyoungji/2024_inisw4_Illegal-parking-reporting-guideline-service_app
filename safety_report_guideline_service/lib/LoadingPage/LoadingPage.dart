@@ -106,7 +106,7 @@ class _LoadingPageState extends State<LoadingPage> {
 
     try {
       Response response = await dio.post(
-          "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process", data: formData);
+          "https://asia-northeast3-inisw04-project.cloudfunctions.net/img_process_v2", data: formData);
 
       if (response.statusCode == 200) {
         print("200 response");
@@ -145,8 +145,8 @@ class _LoadingPageState extends State<LoadingPage> {
         List<dynamic> od_result = responseData['od_result']; // 라벨 값 [LABEL_1]
         _prov.set_result(od_result);
         print('od_result: ${_prov.origin_od_result}');
-        // print(od_result[0].runtimeType); // String
         LoadingToast(od_result.toString());
+        _prov.od_result = od_result;
         _prov.guess_report_type(od_result);
 
 
