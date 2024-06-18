@@ -7,6 +7,10 @@
 ## 앱 실행 방법
 [안드로이드스튜디오에서 플러터 실행 환경 구축하기](https://kmjoyit.tistory.com/183).
 
+## 앱 시연영상 & 발표영상
+시연영상: [https://youtu.be/csqNhQxBNcs]
+발표영상: [https://youtu.be/tSgFeegsLI8]
+
 ## 앱 설명
 1. 플러터 앱 초기 페이지   
  <img src = "https://github.com/kimmyoungji/2024_inisw4_Illegal-parking-reporting-guideline-service_app/assets/127651962/5006cb24-9ab2-49a3-8360-ce6b6ecd7956" width="30%" height="40%">
